@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 nigjo.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+  <head>
+    <title>🌳 Familienbaum</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Ahnentafel.css">
+    <script src="gedcomjs/gedcom.js"></script>
+    <script src="adjustspacingjs/adjustSpacing.js"></script>
+    <script src="gedview-base.js"></script>
+    <script src="Ahnentafel.js"></script>
+  </head>
+  <body>
+    <div id="baum">
+      <div id="smallLicense">
+        <div id="licProHeraldica" class="abdecker"></div>
+        <div id="licFamilienforscher" class="abdecker"></div>
+        <div id="licText">Baumgrafik &copy Pro Heraldica GmbH für "familienforscher.info", gedcom.js &copy; Jens Hofschröer</div>
+        <div class="extraChild child4"><div id="atI1-3" class="indi level0"></div></div>
+        <div class="extraChild child5"><div id="atI1-4" class="indi level0"></div></div>
+        <div class="extraChild child6"><div id="atI1-5" class="indi level0"></div></div>
+      </div>
+      <div id="famnam"></div>
+      <div id="atI1-0" class="indi level0"></div>
+      <div id="atI1-1" class="indi level0"></div>
+      <div id="atI1-2" class="indi level0"></div>
+      <script>
+        function addIndi(index,level){
+          let baum=document.getElementById('baum');
+          if(index>1){
+            let indi=baum.appendChild(document.createElement('div'));
+            indi.id="atI"+index;
+            indi.classList.add("level"+level);
+            indi.classList.add("indi");
+          }
+          if(index<16){
+            addIndi(index*2, level+1);
+            addIndi(index*2+1, level+1);
+          }
+        }
+        addIndi(1,0);
+      </script>
+    </div>
+  </body>
+</html>

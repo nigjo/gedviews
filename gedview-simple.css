@@ -1,0 +1,29 @@
+main{
+  font-family:monospace;
+}
+.attrCaption{
+  min-width:10em;
+  display:inline-block;
+}
+.gedview-parent{
+  margin-bottom:1em;
+  page-break-inside:avoid;
+}
+.gedview-child{
+  margin-top:1em;
+  page-break-inside:avoid;
+}
+.viewtoggle{position:absolute;top:1rem;right:1rem}
+.gedview-titlepage{display:none;}
+main a{text-decoration:none;color:inherit}
+@media print{
+  header{display:none;}
+  .gedview-titlepage{
+    margin-bottom:1em;
+    display:block
+  }
+  .gedview-titlepage p{    
+    margin:0;
+    display:inline-block;
+  }
+}

@@ -1,0 +1,201 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Aug 25, 2020, 7:04:13 PM
+    Author     : nigjo
+*/
+body{
+  margin:0px;
+}
+main{font-size:16pt;}
+header>h1{font-size:32pt;}
+
+header>h1[data-famid]:after{
+  content:' (' attr(data-famid) ')';
+  font-size: .33em;
+  font-family: monospace;
+}
+.viewtoggle {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}
+.gedview-page{
+  display:block;
+  font-family:sans-serif;
+  margin-left:.5em;
+  margin-right:.5em;
+  border-left:1px solid gray;
+  border-right:1px solid gray;
+}
+.gedview-titlepage{
+  display:none;
+}
+.gedview-page[data-num="1"] .gedview-parent:first-child .gedview-attr[data-key="name"]{
+  border-top:1px solid gray;
+}
+.gedview-parent,.gedview-child,.note{
+  display:flex;
+  flex-wrap:wrap;
+  padding-inline:0px;
+  margin-inline:0px;
+  /*! z-index: -1; */
+  position: relative;
+}
+.gedview-attr,.gedview-attr[data-view=half]{width:50%;}
+.gedview-attr[data-view=full],.note{width:100%;}
+.gedview-attr[data-view=quart]{width:25%;}
+.gedview-attr[data-view=threequart]{width:75%;}
+.gedview-attr[data-view=third]{width:calc(100% / 3);}
+.gedview-attr,.note,.gedview-attr>a{
+  display:block;
+  box-sizing:border-box;
+  border-bottom:1px solid gray;
+  margin: 0px;
+  position: relative;
+  padding-left: 4vw;
+  min-height: calc(2em);
+  padding-top: .66em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.gedview-attr>a{
+  text-decoration:none;
+  color:inherit;
+  border-bottom:none;
+}
+.gedview-attr[data-linkto]{padding:0px;}
+.gedview-attr[data-linkto] a {
+  z-index:0;
+}
+.gedview-attr[data-linkto]:hover a {
+  background-color: lightblue;
+}
+.gedview-attr[data-linkto]:empty:hover {
+  background-color:initial;
+}
+.note{
+  min-height: 10em;
+}
+.gedview-parent{
+  /*! border-top-left-radius:.175em; */
+  /*! border-top-right-radius:.175em; */
+}
+.gedview-parent>.gedview-attr[data-key=name]{
+  font-size: 1.25em;
+  background-color:lightgray;
+  z-index:-1;
+}
+.gedview-attr[data-key=name]:before{
+ display:inline-block;
+ width:5em;
+}
+.gedview-attr:after,.gedview-attr>.attrCaption{
+  font-family: Consolas,monospace;
+  position: absolute;
+  top: .1em;
+  font-size: .6em;
+  z-index:1;
+}
+.gedview-attr>.attrCaption{
+  left:0;
+}
+.gedview-attr[data-caption]:before {
+  content: attr(data-caption) ':';
+  left: .1em;
+  color:red;
+}
+.gedview-attr[data-hint]:after{
+  content: '('attr(data-hint) ')';
+  right: .1em;
+}
+.gedview-page[data-num="1"] .gedview-child:first-child:before{
+  background-color:lightgray;
+  content:'Kinder';
+  width:100%;
+  font-size:1.5em;
+}
+@media screen {
+  .gedview-page{max-width: 45em;}
+}
+
+@page{
+  size: portrait;
+  margin: 1cm 1.5cm 1.5cm 2cm;
+}
+@media print {
+  header,footer{display:none;}
+  body{
+    font-size:12pt;
+  }
+  .gedview-child,.gedview-child{z-index:-1}
+  .gedview-child:first-child:before{    
+    background-color:lightgray;
+    content:'Kinder';
+    width:100%;
+    font-size:1.5em;
+  }
+  .gedview-titlepage{
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+    height: 26cm;
+    position:relative;
+  }
+  .gedview-titlepage[data-famid]:after{
+    top: unset;
+    right: 1em;
+    bottom:1em;
+    left:unset;
+    content: 'ID:' attr(data-famid);
+  }
+  .gedview-titlepage>.centerer{
+    width:100%;
+  }
+  .gedview-titlepage p.title{
+    font-size:2cm;
+    margin-bottom:2cm;
+  }
+  .gedview-titlepage p{
+    margin:0px;
+    text-align: center;
+    font-size: 1cm;
+    font-family: Segoe Print,Arial;
+  }
+  .gedview-page{
+    counter-increment: pages;
+    top: calc(1cm - .5em);
+    position: relative;
+    page-break-inside: avoid;
+    border:.25em solid black;
+    border-radius:.5em;
+    box-sizing: border-box;
+    font-size: inherit;
+  }
+  .gedview-page:first-child{
+    border-top:.25em solid black;
+  }
+  .gedview-page:before,.gedview-page:after{
+    position: absolute;
+    top:-1.5em;
+    font-family: Segoe Print,Arial;
+    font-size: 1.5em;
+  }
+  .gedview-page:before{
+    content:'Familienbogen ';
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    left: 0;
+  }
+  .gedview-page:after {
+    font-family: sans-serif;
+    content: attr(data-famid);
+    right: 0px;
+    font-size: .75em;
+  }  
+}
