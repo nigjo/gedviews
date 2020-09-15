@@ -16,19 +16,25 @@ limitations under the License.
 -->
 <html>
   <head>
-    <title>Textbogen</title>
+    <title>GEDview Collection</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>.fname:first-child{display:inline-block;text-align:right;min-width: 45%;}h1[famid]:after{content:' - 'attr(famid);}</style>
-<style>
-html,body{margin:0px;height:100%}
-.box{display:flex;flex-direction:column;height:100%}
-header,nav,footer{flex:0 1 auto;}
-main{flex:1 1 auto;}
-nav ul{display:inline-block;padding:0;margin:.25em;}
-nav li{display:inline-block;}
-main>iframe{width:100%;height:100%;border:none;}
-</style>
+    <style>
+      html,body{margin:0px;height:100%}
+      .box{display:flex;flex-direction:column;height:100%}
+      header,nav,footer{flex:0 1 auto;}
+      main{flex:1 1 auto;}
+      nav ul{display:inline-block;padding:0;margin:.25em;}
+      nav li,nav li>*:not(a){display:inline-block;}
+      main>iframe{width:100%;height:100%;border:none;}
+      #dropzone{min-width:7em;height:2em;
+                border:1px dashed blue;background-color:lightskyblue;
+                text-align: center;vertical-align: middle;}
+      #dropzone>input{display:none;}
+      .targeted{background-color:lightgreen !important;}
+      .targeted.invalid{background-color:lightpink !important;}
+    </style>
     <script src="gedcomjs/gedcom.js"></script>
     <script src="gedview-base.js"></script>
     <script>
@@ -40,11 +46,6 @@ main>iframe{width:100%;height:100%;border:none;}
       function printGedviewFamily(viewfam, ged) {
         var allFams = ged.getFamilies();
         var selector = document.getElementById('families');
-        selector.addEventListener('change', function (evt) {
-          //printFamily(allFams[evt.target.selectedIndex]);
-          document.querySelector('#viewselect').dataset.famid =
-                  allFams[evt.target.selectedIndex].id.replace(/@/g, '');
-        });
         while (selector.firstChild) {
           selector.firstChild.remove();
         }
@@ -60,55 +61,120 @@ main>iframe{width:100%;height:100%;border:none;}
             selfam = option;
           }
         }
-        selfam.selected = true;
+        if (selfam)
+          selfam.selected = true;
+        else
+          document.querySelector('#view').src = 'about:blank';
       }
       function updateFamily(event) {
+        updateView(event.target.href);
+        return false;
+      }
+      function updateView(targetLocation) {
         let fam = document.querySelector('#viewselect').dataset.famid;
-        document.querySelector('#view').src=
-                event.target.href.replace(/\?.*/, '')
+        let nextLoc = targetLocation.replace(/\?.*/, '')
                 + '?' + (fam ? fam : '');
+        if (nextLoc !== document.querySelector('#view').contentWindow.location.href) {
+          document.querySelector('#view').src = nextLoc;
+        }
         //console.log(event.target);
         return false;
       }
-      window.addEventListener('DOMContentLoaded', function(){
+      window.addEventListener('DOMContentLoaded', function () {
         let links = document.querySelectorAll('#viewselect a');
-        for(let i=0;i<links.length;i++){
+        for (let i = 0; i < links.length; i++) {
           links[i].onclick = updateFamily;
         }
+        var selector = document.getElementById('families');
+        selector.addEventListener('change', function (evt) {
+          //printFamily(allFams[evt.target.selectedIndex]);
+          console.log(evt);
+          document.querySelector('#viewselect').dataset.famid =
+                  evt.target[evt.target.selectedIndex].value.replace(/@/g, '');
+          let currView = document.querySelector('#view').contentWindow.location.href;
+          if (currView !== 'about:blank') {
+            updateView(currView);
+          }
+        });
+
       });
-      function updateSelection(evt){
-        let subloc=evt.target.contentWindow.location;
+      function updateSelection(evt) {
+        let subloc = evt.target.contentWindow.location;
         console.log(evt.target.contentWindow.location);
         console.log(subloc.search);
-        if(subloc.search){
-          let famid = '@'+subloc.search.substring(1)+'@';
+        if (subloc.search) {
+          let famid = '@' + subloc.search.substring(1) + '@';
           document.getElementById('families')
                   .value = famid;
           var event = document.createEvent("HTMLEvents");
-          event.initEvent("change",true,false);
+          event.initEvent("change", true, false);
           document.getElementById('families').dispatchEvent(event);
+        }
+      }
+      function handleDragging(event) {
+        event.preventDefault();
+        if (event.target && event.target.classList) {
+          if (event.type === 'dragover') {
+            event.target.classList.add("targeted");
+            let dt = event.dataTransfer;
+            console.log(dt);
+            if (dt && dt.items.length === 1) {
+              event.target.classList.remove("invalid");
+            } else {
+              event.target.classList.add("invalid");
+            }
+          } else if (event.type === 'drop') {
+            event.target.classList.remove("targeted");
+            if (event.target.classList.contains("invalid")) {
+              event.target.classList.remove("invalid");
+            } else {
+              resetGedcom();
+              console.log(event);
+              let dt = event.dataTransfer;
+              console.log(dt);
+              loadGedfile(dt.files[0]);
+            }
+          } else {
+            console.log(event);
+            event.target.classList.remove("targeted");
+            event.target.classList.remove("invalid");
+          }
+        }
+      }
+      function viewfile(event) {
+        console.log(event);
+        if (event.target.files.length === 1) {
+          resetGedcom();
+          loadGedfile(event.target.files[0]);
         }
       }
     </script>
   </head>
   <body>
     <div class="box">
-    <header>
-      <select id="families" name="families"></select>
-    </header>
-    <nav>
-      <ul id="viewselect">
-        <li><a href="gedview.html">Familienbogen</a></li>
-        <li><a href="simpletext.html">Textansicht</a></li>
-        <li><a href="Ahnentafel.html">Ahnentafel</a></li>
-      </ul><ul>
-        <li><a href="#" onclick="window.location=document.getElementById('view').src">remove Frame</a></li>
-      </ul>
-    </nav>
-    <main>
-      <iframe id="view" src="about:blank" onload="updateSelection(event)"></iframe>
-    </main>
-    <footer>Gedview by Nigjo</footer>
+      <header>
+        <label>Select Family: <select id="families" name="families"></select></label>
+      </header>
+      <nav>
+        <ul id="viewselect">
+          <li><a href="gedview.html">Familienbogen</a></li>
+          <li><a href="simpletext.html">Textansicht</a></li>
+          <li><a href="Ahnentafel.html">Ahnentafel</a></li>
+        </ul>
+        <ul>
+          <li><a href="#" onclick="resetGedcom()">clear data</a></li>
+          <li><a href="#" onclick="window.location = document.getElementById('view').src">remove Frame</a></li>
+          <li><label id="dropzone"
+                     ondrop="handleDragging(event);"
+                     ondragover="handleDragging(event);"
+                     ondragleave="handleDragging(event);"
+                     >Datei wählen<input type="file" onchange="viewfile(event)" name="dropfile"></label></li>
+        </ul>
+      </nav>
+      <main>
+        <iframe id="view" src="about:blank" onload="updateSelection(event)"></iframe>
+      </main>
+      <footer>Gedview by Nigjo</footer>
     </div>
   </body>
 </html>
