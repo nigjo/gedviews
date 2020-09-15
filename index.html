@@ -25,6 +25,7 @@ html,body{margin:0px;height:100%}
 .box{display:flex;flex-direction:column;height:100%}
 header,nav,footer{flex:0 1 auto;}
 main{flex:1 1 auto;}
+nav ul{display:inline-block;padding:0;margin:.25em;}
 nav li{display:inline-block;}
 main>iframe{width:100%;height:100%;border:none;}
 </style>
@@ -100,6 +101,8 @@ main>iframe{width:100%;height:100%;border:none;}
         <li><a href="gedview.html">Familienbogen</a></li>
         <li><a href="simpletext.html">Textansicht</a></li>
         <li><a href="Ahnentafel.html">Ahnentafel</a></li>
+      </ul><ul>
+        <li><a href="#" onclick="window.location=document.getElementById('view').src">remove Frame</a></li>
       </ul>
     </nav>
     <main>
