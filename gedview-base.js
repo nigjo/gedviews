@@ -1,6 +1,16 @@
 "use strict";
 
 function loadGedviewGedcom() {
+
+  var storedData = window.localStorage.getItem('GEDview.gedfile');
+  if (storedData) {
+    var ged = new Gedcom();
+    ged.load(storedData);
+    console.log("from storage", ged);
+    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
+    return;
+  }
+
   var request = new XMLHttpRequest();
   request.open('GET', 'gedview.ged', true);
   request.overrideMimeType('text/plain');
@@ -9,11 +19,13 @@ function loadGedviewGedcom() {
 
     ged.load(request.responseText);
 
-    console.log(ged);
+    console.log("gedview.ged", ged);
+    window.localStorage.setItem('GEDview.gedfile', ged.print());
 
     window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
   };
-  request.onerror = function(){
+  request.onerror = function (evt) {
+    console.error(evt);
     window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: new Gedcom()}));
   };
   request.send();
@@ -21,7 +33,25 @@ function loadGedviewGedcom() {
 window.addEventListener('DOMContentLoaded', loadGedviewGedcom);
 window.addEventListener('gedcomLoaded', initGedcom);
 
-function initGedcom(evt){
+function loadGedfile(file) {
+  file.text().then(text => {
+    var ged = new Gedcom();
+    ged.load(text);
+    console.log("file", file.name, ged);
+    window.localStorage.setItem('GEDview.gedfile', ged.print());
+    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
+  }).catch(evt => {
+    console.error(evt);
+    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: new Gedcom()}));
+  });
+}
+
+function resetGedcom() {
+  window.localStorage.removeItem('GEDview.gedfile', null);
+  window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: new Gedcom()}));
+}
+
+function initGedcom(evt) {
   var ged = evt.detail;
   var allfams = ged.getFamilies();
 
@@ -31,9 +61,9 @@ function initGedcom(evt){
     fam = allfams[0];
   }
   var fam;
-  if(!fam){
+  if (!fam) {
     fam = new Family();
   }
- 
+
   printGedviewFamily(fam, ged);
 }
