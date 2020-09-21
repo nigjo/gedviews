@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Gedcom Family Viewer</title>
+    <link rel="stylesheet" href="famview.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="gedcomjs/gedcom.js"></script>
+    <script src="gedview-base.js"></script>
+    <script src="famview.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Familienansicht</h1>
+    </header>
+    <main>
+      <template id="indi">
+        <div class="indi">
+          <div class="row"><h2></h2></div>            
+          <div class="row">
+            <span data-gedpath="NAME-SURN"></span>, <span data-gedpath="NAME-GIVN"></span>
+          </div><div class="row">
+            <span class="label">geboren:</span>
+            <span data-gedpath="BIRT-DATE"></span> in <span data-gedpath="BIRT-PLAC"></span>
+          </div><div class="row">
+            <span class="label">gestorben:</span>
+            <span data-gedpath="DEAT-DATE"></span> in <span data-gedpath="DEAT-PLAC"></span>
+          </div>
+        </div>
+      </template>
+      <div class="indigroup" id="grandparents"></div>
+      <div class="indigroup" id="parents"></div>
+      <div class="indigroup" id="children"></div>
+    </main>
+    <footer>
+    </footer>
+  </body>
+</html>
