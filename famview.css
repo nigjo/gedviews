@@ -38,5 +38,6 @@ body{font-family:sans-serif;}
   #grandparents .indi,#children .indi{max-width:25vw;}
   #parents .indi{max-width:50vw;}
   .row span[data-gedpath]{max-width:20vw;}
+  #children{max-width:100vw;}
 }
 @media (max-width:640px){body{font-size:2.5vw}}
