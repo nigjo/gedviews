@@ -27,18 +27,31 @@ limitations under the License.
       header,nav,footer{flex:0 1 auto;}
       main{flex:1 1 auto;}
       nav ul{display:inline-block;padding:0;margin:.25em;}
-      nav li,nav li>*:not(a){display:inline-block;}
+      nav li,nav li>*{display:inline-block;box-sizing: border-box;}
       main>iframe{width:100%;height:100%;border:none;}
-      #dropzone{min-width:7em;height:2em;
-                border:1px dashed blue;background-color:lightskyblue;
-                text-align: center;vertical-align: middle;}
+      #dropzone{background-color:lightskyblue;}
       #dropzone>input{display:none;}
       .targeted{background-color:lightgreen !important;}
       .targeted.invalid{background-color:lightpink !important;}
+      nav li>*{min-width:8em;text-align:center;text-decoration:none; background-color:lightgray;padding:.33em .5em;width:100%}
+      nav li>*{border:1px dotted gray;}
     </style>
     <script src="gedcomjs/gedcom.js"></script>
     <script src="gedview-base.js"></script>
     <script src="index-selector.js"></script>
+    <!-- <script src="viewworker.js"></script> -->
+    <script >
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./viewworker.js')
+  .then((reg) => {
+    // registration worked
+    console.log('Registration succeeded. Scope is ' + reg.scope);
+  }).catch((error) => {
+    // registration failed
+    console.log('Registration failed with ' + error);
+  });
+}
+   </script>
   </head>
   <body>
     <div class="box">
