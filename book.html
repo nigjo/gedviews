@@ -9,35 +9,14 @@ and open the template in the editor.
     <title>Familienbogen</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="gedview.css" title="Familienbuch"/>
-    <link rel="alternate stylesheet" href="gedview-simple.css" title="Text"/>
+    <link rel="stylesheet" href="book.css" title="Familienbuch"/>
     <script src="gedcomjs/gedcom.js"></script>
-    <script src="gedview.js"></script>
     <script src="gedview-base.js"></script>
-    <script>
-    function togglecss(){
-      for(var css of document.styleSheets){
-        console.log(css);
-        if(css.disabled)
-          alt = css;
-        else
-          cur = css;
-      }
-      var cur;
-      var alt;
-      if(alt && cur){
-      alt.disabled = false;
-      cur.disabled = true;
-      }
-    }
-    </script>
+    <script src="book.js"></script>
   </head>
   <body>
     <header>
       <h1>Familienbogen</h1>
-      <div class="viewtoggle">
-        <a href="#" onclick="togglecss();return false;">Ansicht wechseln</a>
-      </div>
     </header>
     <template id="gedview-title">
       <div class="gedview-page gedview-titlepage">
