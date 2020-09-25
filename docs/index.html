@@ -20,28 +20,13 @@ limitations under the License.
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#99CC99"/>
+    <link rel="stylesheet" href="base.css"/>
     <link rel="apple-touch-icon" href="ScetchTree-192.png">
     <link rel="manifest" href="./pwa.json">
-    <style>.fname:first-child{display:inline-block;text-align:right;min-width: 45%;}h1[famid]:after{content:' - 'attr(famid);}</style>
-    <style>
-      html,body{margin:0px;height:100%}
-      .box{display:flex;flex-direction:column;height:100%}
-      header,nav,footer{flex:0 1 auto;}
-      main{flex:1 1 auto;}
-      nav ul{display:inline-block;padding:0;margin:.25em;}
-      nav li,nav li>*{display:inline-block;box-sizing: border-box;}
-      main>iframe{width:100%;height:100%;border:none;}
-      #dropzone{background-color:lightskyblue;}
-      #dropzone>input{display:none;}
-      .targeted{background-color:lightgreen !important;}
-      .targeted.invalid{background-color:lightpink !important;}
-      nav li>*{min-width:8em;text-align:center;text-decoration:none; background-color:lightgray;padding:.33em .5em;width:100%}
-      nav li>*{border:1px dotted gray;}
-    </style>
+    <style></style>
     <script src="gedcomjs/gedcom.js"></script>
     <script src="gedview-base.js"></script>
     <script src="index-selector.js"></script>
-    <!-- <script src="viewworker.js"></script> -->
     <script >
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./viewworker.js')
@@ -61,6 +46,8 @@ if ('serviceWorker' in navigator) {
         <label>Select Family: <select id="families" name="families"></select></label>
       </header>
       <nav>
+        <input type="checkbox" style="display:none" id="menuview" >
+        <label for="menuview">☰</label>
         <ul id="viewselect">
           <li><a href="book.html">Familienbogen</a></li>
           <li><a href="simpletext.html">Textansicht</a></li>
