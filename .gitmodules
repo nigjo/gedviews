@@ -1,6 +1,6 @@
 [submodule "gedcomjs"]
-	path = gedcomjs
+	path = htdocs/gedcomjs
 	url = https://gist.github.com/17281825e370cc8ea8916ef88c9e9c9e.git
 [submodule "adjustspacingjs"]
-	path = adjustspacingjs
+	path = htdocs/adjustspacingjs
 	url = https://gist.github.com/906578fa4cecd80f9c84e1b71f230c48.git
