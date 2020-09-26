@@ -40,7 +40,7 @@ class IndexPage {
     if (selfam)
       selfam.selected = true;
     else
-      document.querySelector('#view').src = 'about:blank';
+      document.querySelector('#view').src = 'welcome.html';
   }
   updateFamily(event) {
     this.updateView(event.target.href);
@@ -126,7 +126,7 @@ function initIndexSelector() {
     document.querySelector('#viewselect').dataset.famid =
             evt.target[evt.target.selectedIndex].value.replace(/@/g, '');
     let currView = document.querySelector('#view').contentWindow.location.href;
-    if (currView !== 'about:blank') {
+    if (currView !== 'welcome.html') {
       window.gedviewPage.updateView(currView);
     }
   });

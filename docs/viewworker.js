@@ -17,10 +17,17 @@ self.addEventListener('fetch', function(event) {
 self.addEventListener('install', (event)=>{
   event.waitUntil(
     caches.open('gedview1').then((cache) => {
+      cache.keys().then(names=>{
+        return Promise.all(names.map(name=>{
+          cache.delete(name);
+          }));
+      });      
       return cache.addAll([
         //main-site
         './index.html',
-        './index-selector.js',
+        './welcome.html',
+        './base.css',
+        './base.js',
         //View "Book"
         './book.html',
         './book.css',

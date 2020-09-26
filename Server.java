@@ -9,7 +9,8 @@ class Server
       "html", "text/html",
       "ged", "text/x-gedcom",
       "jpg", "image/jpeg",
-      "png", "image/png"
+      "png", "image/png",
+      "ico", "image/x-icon"
   );
 
   public static void main(String[] a) throws java.io.IOException
