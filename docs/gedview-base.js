@@ -65,5 +65,9 @@ function initGedcom(evt) {
     fam = new Family();
   }
 
-  printGedviewFamily(fam, ged);
+  if (window.gedviewPage) {
+    window.gedviewPage.printGedviewFamily(fam, ged);
+  } else {
+    printGedviewFamily(fam, ged);
+  }
 }
