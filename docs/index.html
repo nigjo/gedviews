@@ -23,22 +23,9 @@ limitations under the License.
     <link rel="stylesheet" href="base.css"/>
     <link rel="apple-touch-icon" href="ScetchTree-192.png">
     <link rel="manifest" href="./pwa.json">
-    <style></style>
     <script src="gedcomjs/gedcom.js"></script>
     <script src="gedview-base.js"></script>
-    <script src="index-selector.js"></script>
-    <script >
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./viewworker.js')
-  .then((reg) => {
-    // registration worked
-    console.log('Registration succeeded. Scope is ' + reg.scope);
-  }).catch((error) => {
-    // registration failed
-    console.log('Registration failed with ' + error);
-  });
-}
-   </script>
+    <script src="base.js"></script>
   </head>
   <body>
     <div class="box">
@@ -55,17 +42,17 @@ if ('serviceWorker' in navigator) {
           <li><a href="famview.html">Familie</a></li>
         </ul>
         <ul>
-          <li><a href="#" onclick="resetGedcom()">clear data</a></li>
+          <li><a href="#" onclick="gedviewPage.resetGedcom()">clear data</a></li>
           <li><a href="#" onclick="window.location = document.getElementById('view').src">remove Frame</a></li>
           <li><label id="dropzone"
-                     ondrop="handleDragging(event);"
-                     ondragover="handleDragging(event);"
-                     ondragleave="handleDragging(event);"
-                     >Datei wählen<input type="file" onchange="viewfile(event)" name="dropfile"></label></li>
+                     ondrop="gedviewPage.handleDragging(event);"
+                     ondragover="gedviewPage.handleDragging(event);"
+                     ondragleave="gedviewPage.handleDragging(event);"
+                     >Datei wählen<input type="file" onchange="gedviewPage.viewfile(event)" name="dropfile"></label></li>
         </ul>
       </nav>
       <main>
-        <iframe id="view" src="about:blank" onload="updateSelection(event)"></iframe>
+        <iframe id="view" src="about:blank" onload="gedviewPage.updateSelection(event)"></iframe>
       </main>
       <footer>Gedview by Nigjo</footer>
     </div>
