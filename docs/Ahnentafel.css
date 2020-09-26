@@ -23,15 +23,21 @@ body{
 @page{size:landscape;margin: 0;}
 
 #baum .extraChild>.level0{
-  top:24px;left:20px;width:260px;height:210px;
+  top:.7vw;left:.6vw;width:7.9vw;height:6.6vw;
 }
+body>div{/*! overflow:hidden; */width:100vw;height:100vh;}
 #baum{
   background-image: url(Ahnentafel.jpg);
   background-repeat: no-repeat;
   background-size: contain;
-  width: 3307px;
-  height: 2339px;
   position:relative;
+  width: 100%;
+  height: calc(100vw / 3303 * 2336);
+}
+@media print{
+  #baum{transform: none;}
+  body>div{xheight:initial;}
+  body>div{overflow:hidden;}
 }
 #baum div.indi,#famnam{
   position: absolute;
@@ -42,28 +48,28 @@ body{
 }
 #baum div.level0{
   width:8.0%;height:9%;
-  font-size:.65cm;
-  padding:2mm;
+  font-size:.7vw;
+  padding:.2vw;
 }
 #baum>div.level1{
   width:12.1%;height:10.5%;
-  font-size:1cm;
-  padding:2mm;
+  font-size:1.2vw;
+  padding:.2vw;
 }
 #baum>div.level2{
   width:10.8%;height:10.5%;
-  font-size:.9cm;
-  padding:1mm;
+  font-size:1.1vw;
+  padding:.1vw;
 }
 #baum>div.level3{
   width:8%;height:10.5%;
-  font-size:.8cm;
-  padding:1mm;
+  font-size:1vw;
+  padding:.1vw;
 }
 #baum>div.level4{
   width:8.2%;height:6.8%;
-  font-size:.6cm;
-  padding:1mm;
+  font-size:.8vw;
+  padding:.1vw;
 }
 .line{
   display:block;
@@ -87,32 +93,34 @@ body{
 }
 #licText{
   /*! display:none; */
-  font-size:5mm;color:gray;
+  font-size:.75vw;color:gray;
   bottom:5%;right:2.1%;
   transform: translate(50%) rotate(-90deg) translate(50%);
 }
 .extraChild {
   display:none;
   background-image: url(Ahnentafel.jpg);
-  background-position: -1860px -1852px;
   width: 300px;
-  height: 270px;
+  height: calc(11.5vw / 3303 * 2336);
   position:absolute;
+  width: calc(13vw / 3303 * 2336);
+  background-size: 100vw;
+  background-position: -48.2% -23.5%;
 }
 .extraChild:after{
   background-color:white;
   content:' ';
   position:absolute;
   display:block;
-  width:40px;height:7px;
-  right:67px;
+  width:8vw;height:.50vw;
+  right:1vw;top:-.2vw;
 }
 .child4{top:78%;left:66%;}
 .child5{top:75%;left:75.5%;}
 .child6{top:72%;left:85%;}
 #atI1d{/*Kind 2*//*! top:80.5%; *//*! left:56.7%; *//*! background-color:transparent !important; */}
 
-#famnam{top:85%;left:11.3%;width:20%;height:3.5%;font-size:4.5em;text-align:center;background-color:transparent;}
+#famnam{top:85%;left:11.3%;width:20%;height:3.5%;font-size:2.2vw;text-align:center;background-color:transparent;}
 #atI1-0{/*Kind 2*/top:80.5%;left:35.3%;}
 #atI1-1{/*Kind 2*/top:80.5%;left:46.0%;}
 #atI1-2{/*Kind 2*/top:80.5%;left:56.7%;}
