@@ -24,6 +24,29 @@ limitations under the License.
     <script>
       window.localStorage.setItem('localdebug', true);
       class FamSelector {
+
+        getListOption(fam, type) {
+          let listoption = document.createElement("option");
+          listoption.value = fam.id + "-" + type.toLowerCase();
+          listoption.append(fam.getPath([type, "NAME"]).toLocaleString()
+                  .replace(/\//g, '').trim());
+          let bdate = fam.getPath([type, "BIRT", "DATE"]);
+          let ddate = fam.getPath([type, "DEAT", "DATE"]);
+          if (bdate && !ddate) {
+            listoption.append(", *");
+            listoption.append(bdate.getYear());
+          } else if (!bdate && ddate) {
+            listoption.append(", +");
+            listoption.append(ddate.getYear());
+          } else if (bdate && ddate) {
+            listoption.append(", ");
+            listoption.append(bdate.getYear());
+            listoption.append("-");
+            listoption.append(ddate.getYear());
+          }
+          return listoption;
+        }
+
         printGedviewFamily(fam, ged) {
           //console.log(fam, ged);
           console.log(fam);
@@ -46,9 +69,7 @@ limitations under the License.
               husbspan.classList.add("indiname");
               husbspan.classList.add("husb");
               option.append(husbspan);
-              listoption = document.createElement("option");
-              listoption.value = allfams[i].id + "-husb";
-              listoption.append(husbspan.textContent);
+              listoption = this.getListOption(allfams[i], "HUSB");
               names.append(listoption);
 
               option.append(" - ");
@@ -58,9 +79,7 @@ limitations under the License.
               wifespan.classList.add("indiname");
               wifespan.classList.add("wife");
               option.append(wifespan);
-              listoption = document.createElement("option");
-              listoption.value = allfams[i].id + "-wife";
-              listoption.append(wifespan.textContent);
+              listoption = this.getListOption(allfams[i], "WIFE");
               names.append(listoption);
 
               //console.log(option.textContent);
