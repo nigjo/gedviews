@@ -13,27 +13,36 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+:root{
+  --bgcol:#AADDAA;
+  --menubg:#88BB88;
+  --menu:#669966;
+  --menuitem:#CFC;
+  --droptarget:lightskyblue;
+  --targeted:green;
+  --falsefile:lightpink;
+}
 .fname:first-child{display:inline-block;text-align:right;min-width:45%;}
 h1[famid]:after{content:' - 'attr(famid);}
-html,body{margin:0px;height:100%;background-color:#99CC99;}
+html,body{margin:0px;height:100%;background-color:var(--bgcol);}
 .box{display:flex;flex-direction:column;height:100%}
 header,nav,footer{flex:0 1 auto;}
 main{flex:1 1 auto;}
 nav ul{display:inline-block;padding:0;margin:.25em;}
 nav li,nav li>*{display:inline-block;box-sizing: border-box;}
 main>iframe{width:100%;height:100%;border:none;}
-#dropzone{background-color:lightskyblue;}
+#dropzone{background-color:var(--droptarget);}
 #dropzone>input{display:none;}
-.targeted{background-color:lightgreen !important;}
-.targeted.invalid{background-color:lightpink !important;}
+.targeted{background-color:var(--targeted) !important;}
+.targeted.invalid{background-color:var(--falsefile) !important;}
 nav li>*{min-width:8em;text-align:center;text-decoration:none;
-         background-color:lightgray;padding:.33em .5em;width:100%}
+         background-color:var(--menuitem);padding:.33em .5em;width:100%}
 nav li>*{border:1px dotted gray;}
 #menuview~label{display:none;}
 @media (max-width:40em){
   #menuview~label{
     display:block;
-    background-color:#696;
+    background-color:var(--menu);
     text-align: center;
     width:2em;
     height:2em;
@@ -55,7 +64,7 @@ nav li>*{border:1px dotted gray;}
   nav{
     position:absolute;
     right:0px;
-    background-color:#88BB88;
+    background-color:var(--menubg);
     max-width:9em;
     padding:.5em;
     padding-top:2em;
