@@ -51,7 +51,7 @@ class IndexPage {
   updateView(targetLocation) {
     let fam = document.querySelector('#famidmarker').dataset.famid;
     let nextLoc = targetLocation.replace(/\?.*/, '')
-            + '?' + (fam ? fam : '');
+            + '?' + (fam ? fam.replace(/@/g,'') : '');
     if (nextLoc !== document.querySelector('#view').contentWindow.location.href) {
       document.querySelector('#view').src = nextLoc;
     }
@@ -63,7 +63,7 @@ class IndexPage {
     console.log(evt.target.contentWindow.location);
     console.log(subloc.search);
     if (subloc.search) {
-      let famid = '@' + subloc.search.substring(1) + '@';
+      let famid = '@' + subloc.search.substring(1).replace(/@/g,'') + '@';
       document.querySelector('#famidmarker').dataset['famid'] = famid;
     }
   }
