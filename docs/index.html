@@ -31,7 +31,7 @@ limitations under the License.
   <body>
     <div class="box">
       <header>
-        <label>Select Family: <select id="families" name="families"></select></label>
+        <h1 id="famidmarker">Familie</h1>
       </header>
       <nav>
         <input type="checkbox" style="display:none" id="menuview" >
@@ -44,7 +44,7 @@ limitations under the License.
           <li><a href="Ahnentafel.html">Ahnenbaum</a></li>
         </ul>
         <ul>
-          <li><a href="#" onclick="gedviewPage.resetGedcom()">clear data</a></li>
+          <li><a href="#" onclick="resetGedcom()">clear data</a></li>
           <li><a href="#" onclick="window.location = document.getElementById('view').src">remove Frame</a></li>
           <li><label id="dropzone"
                      ondrop="gedviewPage.handleDragging(event);"

@@ -36,27 +36,12 @@ class IndexPage {
     return '';
   }
   printGedviewFamily(viewfam, ged) {
-    var allFams = ged.getFamilies();
-    var selector = document.getElementById('families');
-    while (selector.firstChild) {
-      selector.firstChild.remove();
-    }
-    var selfam;
-    for (var fam of allFams) {
-      var option = selector.appendChild(document.createElement('option'));
-      //option.id = 'famselection';
-      option.value = fam.id;
-      option.innerHTML = "<span class='fname'>" +
-              this.getIndiName(fam.getHusband()) + "</span> - <span class='fname'>"
-              + this.getIndiName(fam.getWife()) + "</span>";
-      if (fam === viewfam) {
-        selfam = option;
-      }
-    }
-    if (selfam)
-      selfam.selected = true;
-    else
+    if (viewfam.id)
+      document.querySelector('#view').src = 'famview.html?'+viewfam.id.replace(/@/g,'');
+    else {
       document.querySelector('#view').src = 'welcome.html';
+      delete document.querySelector('#famidmarker').dataset.famid;
+    }
   }
   updateFamily(event) {
     this.updateView(event.target.href);
@@ -64,7 +49,7 @@ class IndexPage {
     return false;
   }
   updateView(targetLocation) {
-    let fam = document.querySelector('#viewselect').dataset.famid;
+    let fam = document.querySelector('#famidmarker').dataset.famid;
     let nextLoc = targetLocation.replace(/\?.*/, '')
             + '?' + (fam ? fam : '');
     if (nextLoc !== document.querySelector('#view').contentWindow.location.href) {
@@ -79,11 +64,7 @@ class IndexPage {
     console.log(subloc.search);
     if (subloc.search) {
       let famid = '@' + subloc.search.substring(1) + '@';
-      document.getElementById('families')
-              .value = famid;
-      var event = document.createEvent("HTMLEvents");
-      event.initEvent("change", true, false);
-      document.getElementById('families').dispatchEvent(event);
+      document.querySelector('#famidmarker').dataset['famid'] = famid;
     }
   }
   handleDragging(event) {
@@ -139,7 +120,7 @@ function initIndexSelector() {
   selector.addEventListener('change', function (evt) {
     //printFamily(allFams[evt.target.selectedIndex]);
     console.log(evt);
-    document.querySelector('#viewselect').dataset.famid =
+    document.querySelector('#famidmarker').dataset.famid =
             evt.target[evt.target.selectedIndex].value.replace(/@/g, '');
     let currView = document.querySelector('#view').contentWindow.location.href;
     if (currView !== 'welcome.html') {
