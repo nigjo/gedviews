@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 nigjo.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+  <head>
+    <title>Family Selection</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="gedcomjs/gedcom.js"></script>
+    <script src="gedview-base.js"></script>
+    <script>
+      window.localStorage.setItem('localdebug', true);
+      class FamSelector {
+        printGedviewFamily(fam, ged) {
+          //console.log(fam, ged);
+          console.log(fam);
+          let select = document.getElementById("families");
+          while (select.firstElementChild)
+            select.firstElementChild.remove();
+          let names = document.getElementById("names");
+          while (names.firstElementChild)
+            names.firstElementChild.remove();
+          let allfams = ged.getFamilies();
+          if (allfams.length > 0) {
+            console.log(allfams.length, "Families");
+            var listoption;
+            for (var i = 0; i < allfams.length; i++) {
+              let option = document.createElement("option");
+              option.value = allfams[i].id;
+
+              let husbspan = document.createElement("span");
+              husbspan.append(allfams[i].getPath(["HUSB", "NAME"]).toLocaleString());
+              husbspan.classList.add("indiname");
+              husbspan.classList.add("husb");
+              option.append(husbspan);
+              listoption = document.createElement("option");
+              listoption.value = allfams[i].id + "-husb";
+              listoption.append(husbspan.textContent);
+              names.append(listoption);
+
+              option.append(" - ");
+
+              let wifespan = document.createElement("span");
+              wifespan.append(allfams[i].getPath(["WIFE", "NAME"]).toLocaleString());
+              wifespan.classList.add("indiname");
+              wifespan.classList.add("wife");
+              option.append(wifespan);
+              listoption = document.createElement("option");
+              listoption.value = allfams[i].id + "-wife";
+              listoption.append(wifespan.textContent);
+              names.append(listoption);
+
+              //console.log(option.textContent);
+              select.append(option);
+            }
+            select.value = fam.id;
+          }
+        }
+      }
+      window.gedviewPage = new FamSelector();
+      function updateSelection(context) {
+        let searchval = context.value;
+        let fams = document.getElementById("families");
+        fams.value = searchval.substring(0, searchval.lastIndexOf('-'));
+        updateLocation(fams);
+      }
+      function updateLocation(context) {
+        document.location = '?' + context.value.replace(/@/g, '');
+      }
+    </script>
+  </head>
+  <body>
+    <main>
+      <div>
+        <select size="10" id="families" name="families" onchange="updateLocation(this);return false;"></select>
+      </div><div>
+        <input type="search" size="40" name="filter" list="names" onchange="updateSelection(this);return false;">
+      </div>
+    </main>
+    <datalist id="names"></datalist>
+  </body>
+</html>
