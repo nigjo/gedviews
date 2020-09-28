@@ -142,9 +142,8 @@ limitations under the License.
       function updateSelection(context) {
         let searchval = context.value;
         sessionStorage.removeItem('gedview.search.scolltop');
-        let fams = document.getElementById("families");
-        fams.value = searchval.substring(0, searchval.lastIndexOf('-'));
-        document.location = '?' + context.value.replace(/@/g, '');        
+        let famid = searchval.substring(0, searchval.lastIndexOf('-'));
+        document.location = '?' + famid.replace(/@/g, '');        
       }
     </script>
   </head>
