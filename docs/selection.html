@@ -26,12 +26,17 @@ limitations under the License.
       class FamSelector {
 
         getListOption(fam, type) {
+          let indi = fam.getPath([type]);
+          return this.getIndiOption(fam, indi, type);
+        }
+
+        getIndiOption(fam, indi, type) {
           let listoption = document.createElement("option");
           listoption.value = fam.id + "-" + type.toLowerCase();
-          listoption.append(fam.getPath([type, "NAME"]).toLocaleString()
+          listoption.append(indi.getPath(["NAME"]).toLocaleString()
                   .replace(/\//g, '').trim());
-          let bdate = fam.getPath([type, "BIRT", "DATE"]);
-          let ddate = fam.getPath([type, "DEAT", "DATE"]);
+          let bdate = indi.getPath(["BIRT", "DATE"]);
+          let ddate = indi.getPath(["DEAT", "DATE"]);
           if (bdate && !ddate) {
             listoption.append(", *");
             listoption.append(bdate.getYear());
@@ -64,26 +69,38 @@ limitations under the License.
               let option = document.createElement("option");
               option.value = allfams[i].id;
 
-              let husbspan = document.createElement("span");
-              husbspan.append(allfams[i].getPath(["HUSB", "NAME"]).toLocaleString());
-              husbspan.classList.add("indiname");
-              husbspan.classList.add("husb");
-              option.append(husbspan);
-              listoption = this.getListOption(allfams[i], "HUSB");
-              names.append(listoption);
+              if (allfams[i].getHusband()) {
+                let husbspan = document.createElement("span");
+                husbspan.append(allfams[i].getPath(["HUSB", "NAME"]).toLocaleString());
+                husbspan.classList.add("indiname");
+                husbspan.classList.add("husb");
+                option.append(husbspan);
+                listoption = this.getListOption(allfams[i], "HUSB");
+                names.append(listoption);
+              } else {
+                option.append('???');
+              }
 
               option.append(" - ");
 
-              let wifespan = document.createElement("span");
-              wifespan.append(allfams[i].getPath(["WIFE", "NAME"]).toLocaleString());
-              wifespan.classList.add("indiname");
-              wifespan.classList.add("wife");
-              option.append(wifespan);
-              listoption = this.getListOption(allfams[i], "WIFE");
-              names.append(listoption);
-
+              if (allfams[i].getWife()) {
+                let wifespan = document.createElement("span");
+                wifespan.append(allfams[i].getPath(["WIFE", "NAME"]).toLocaleString());
+                wifespan.classList.add("indiname");
+                wifespan.classList.add("wife");
+                option.append(wifespan);
+                listoption = this.getListOption(allfams[i], "WIFE");
+                names.append(listoption);
+              } else {
+                option.append('???');
+              }
               //console.log(option.textContent);
               select.append(option);
+
+              for (let chil of allfams[i].getChildren()) {
+                listoption = this.getIndiOption(allfams[i], chil, "CHIL");
+                names.append(listoption);
+              }
             }
             select.value = fam.id;
           }
