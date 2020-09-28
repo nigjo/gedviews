@@ -22,6 +22,7 @@ self.addEventListener('fetch', function (event) {
     console.log("request", self.currentCache, cacheUrl, event.request.url);
     return cache.match(cacheUrl).then(function (response) {
       return response || fetch(event.request).then(function (response) {
+        console.log("update cache for ", cacheUrl);
         cache.put(cacheUrl, response.clone());
         return response;
       });
@@ -31,11 +32,12 @@ self.addEventListener('fetch', function (event) {
 
 //Cache name in format "gedview<year00><dayofyear000>"
 //update on file changes
-self.currentCache = "gedview20271c";
+self.currentCache = "gedview20272";
 self.deprecatedCaches = [
   "gedview1",
   "gedview20271",
-  "gedview20271b"
+  "gedview20271b",
+  "gedview20271c"
 ];
 
 function loadCacheContent(cache) {
