@@ -138,6 +138,7 @@ header>h1[data-famid]:after{
   body{
     font-size:12pt;
   }
+  main{font-size:inherit;}
   .gedview-child,.gedview-child{z-index:-1}
   .gedview-child:first-child:before{    
     background-color:lightgray;
@@ -149,8 +150,9 @@ header>h1[data-famid]:after{
     display:flex;
     align-items:center;
     overflow:hidden;
-    height: 26cm;
+    height: calc(100vh - 2.5cm);
     position:relative;
+    box-sizing: border-box;
   }
   .gedview-titlepage[data-famid]:after{
     top: unset;
@@ -191,17 +193,20 @@ header>h1[data-famid]:after{
     font-family: Segoe Print,Arial;
     font-size: 1.5em;
   }
+  /*
   .gedview-page:before{
     content:'Familienbogen ';
     text-align: center;
     width: 100%;
     margin: 0;
     left: 0;
+    top:-1.5em;
   }
   .gedview-page:after {
     font-family: sans-serif;
     content: attr(data-famid);
     right: 0px;
     font-size: .75em;
-  }  
+  }
+  */
 }
