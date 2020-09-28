@@ -25,6 +25,15 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+function printFrame(){
+  let view = document.getElementById("view");
+  if(view.contentWindow){
+    view.contentWindow.print();
+  }else{
+    console.warning("no view frame");
+  }
+}
+
 class IndexPage {
   constructor(){
     this.self = this;
