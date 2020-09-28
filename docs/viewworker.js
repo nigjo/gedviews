@@ -14,52 +14,75 @@
  * limitations under the License.
  */
 
-self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.open('gedview1').then(function(cache) {
-      let cacheUrl=event.request.url.replace(/\?.*$/, '');
-      console.log("creq", event.request.url, cacheUrl);
-      return cache.match(cacheUrl).then(function(response) {
-        return response || fetch(event.request).then(function(response) {
-          cache.put(cacheUrl, response.clone());
-          return response;
-        });
+/* global self, caches, Promise, fetch */
+
+self.addEventListener('fetch', function (event) {
+  event.respondWith(caches.open(self.currentCache).then(function (cache) {
+    let cacheUrl = event.request.url.replace(/\?.*$/, '');
+    console.log("request", self.currentCache, cacheUrl, event.request.url);
+    return cache.match(cacheUrl).then(function (response) {
+      return response || fetch(event.request).then(function (response) {
+        console.log("update cache for ", cacheUrl);
+        cache.put(cacheUrl, response.clone());
+        return response;
       });
-    })
-  );
+    });
+  }));
 });
 
-self.addEventListener('install', (event)=>{
+//Cache name in format "gedview<year00><dayofyear000>"
+//update on file changes
+self.currentCache = "gedview20272";
+self.deprecatedCaches = [
+  "gedview1",
+  "gedview20271",
+  "gedview20271b",
+  "gedview20271c"
+];
+
+function loadCacheContent(cache) {
+  return cache.addAll([
+    //main-site
+    './index.html',
+    './gedcomjs/gedcom.js',
+    './favicon.ico',
+    './welcome.html',
+    './base.css',
+    './base.js',
+    //View "Book"
+    './book.html',
+    './book.css',
+    './book.js',
+    //View "Familie"
+    './famview.html',
+    './famview.css',
+    './famview.js',
+    //View "Ahnentafel"
+    './Ahnentafel.html',
+    './Ahnentafel.css',
+    './Ahnentafel.js',
+    './Ahnentafel.jpg',
+    './adjustspacingjs/adjustSpacing.js',
+    //View "Text"
+    './simpletext.html',
+    './simpletext.js'
+  ]);
+}
+
+function installCurrentCache(event) {
+  console.log('installing', self.currentCache);
   event.waitUntil(
-    caches.open('gedview1').then((cache) => {
-      cache.keys().then(names=>{
-        return Promise.all(names.map(name=>{
-          cache.delete(name);
-          }));
-      });      
-      return cache.addAll([
-        //main-site
-        './index.html',
-        './welcome.html',
-        './base.css',
-        './base.js',
-        //View "Book"
-        './book.html',
-        './book.css',
-        './book.js',
-        //View "Familie"
-        './famview.html',
-        './famview.css',
-        './famview.js',
-        //View "Ahnentafel"
-        './Ahnentafel.html',
-        './Ahnentafel.css',
-        './Ahnentafel.js',
-        './Ahnentafel.jpg',
-        //View "Text"
-        './simpletext.html',
-        './simpletext.js'
-      ]);
-    })
-  );
-});
+          caches.open(self.currentCache).then(loadCacheContent)
+          );
+  event.waitUntil(self.deprecatedCaches.forEach((name) => {
+    console.log('removing cache ', name);
+    caches.delete(name);
+  }));
+  console.log('ok', self.currentCache);
+}
+
+//self.addEventListener('activate', (event) => {
+//  console.log('active', event);
+//  installCurrentCache(event);
+//});
+self.addEventListener('install', installCurrentCache);
