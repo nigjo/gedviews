@@ -21,6 +21,19 @@ limitations under the License.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="gedcomjs/gedcom.js"></script>
     <script src="gedview-base.js"></script>
+    <style>body {font-family:sans-serif;}
+      main{display:flex;flex-direction:column;max-height:calc(100vh - 1em);}
+      .famcontainer{flex-basis: 100%;overflow-y:auto;}
+      #families{max-width:40em;}
+      .family {display:flex;min-height:2em;padding:.25em 0;box-sizing:border-box;}
+      .family:nth-of-type(even){background-color:rgba(255,255,255,.25);}
+      .family:nth-of-type(odd){background-color:rgba(128,128,128,.25);}
+      .family.selected{background-color:steelblue;}
+      .family:hover{background-color:lightblue;cursor:pointer;}
+      .indiname{display:inline-block;flex-basis:50%;}
+      .wife{margin-left:.5em;}
+      .husb{margin-right:.5em;}
+    </style>
     <script>
       window.localStorage.setItem('localdebug', true);
       class FamSelector {
@@ -66,8 +79,18 @@ limitations under the License.
             console.log(allfams.length, "Families");
             var listoption;
             for (var i = 0; i < allfams.length; i++) {
-              let option = document.createElement("option");
-              option.value = allfams[i].id;
+              let option = document.createElement("div");
+              option.classList.add("family");
+              option.dataset['famid'] = allfams[i].id;
+              if (allfams[i].id === fam.id) {
+                option.classList.add("selected");
+              }
+              option.onclick = function (evt) {
+                sessionStorage.setItem('gedview.search.scolltop',
+                        document.querySelector(".famcontainer").scrollTop);
+                location.href = "?" + evt.currentTarget.dataset['famid'].replace(/@/g, '');
+                return false;
+              };
 
               if (allfams[i].getHusband()) {
                 let husbspan = document.createElement("span");
@@ -75,7 +98,7 @@ limitations under the License.
                 husbspan.classList.add("indiname");
                 husbspan.classList.add("husb");
                 option.append(husbspan);
-                listoption = this.getListOption(allfams[i], "HUSB");
+                listoption = this.getIndiOption(allfams[i], allfams[i].getHusband(), "Father");
                 names.append(listoption);
               } else {
                 option.append('???');
@@ -89,7 +112,7 @@ limitations under the License.
                 wifespan.classList.add("indiname");
                 wifespan.classList.add("wife");
                 option.append(wifespan);
-                listoption = this.getListOption(allfams[i], "WIFE");
+                listoption = this.getIndiOption(allfams[i], allfams[i].getWife(), "Mother");
                 names.append(listoption);
               } else {
                 option.append('???');
@@ -98,32 +121,42 @@ limitations under the License.
               select.append(option);
 
               for (let chil of allfams[i].getChildren()) {
-                listoption = this.getIndiOption(allfams[i], chil, "CHIL");
+                listoption = this.getIndiOption(allfams[i], chil, "Child");
                 names.append(listoption);
               }
             }
-            select.value = fam.id;
+            //select.value = fam.id;
+            let sel = document.querySelector("div.selected");
+            if (sel) {
+              let top = sessionStorage.getItem('gedview.search.scolltop');
+              if (top) {
+                document.querySelector(".famcontainer").scrollTop = top;
+              } else {
+                sel.scrollIntoView();
+              }
+            }
           }
         }
       }
       window.gedviewPage = new FamSelector();
       function updateSelection(context) {
         let searchval = context.value;
+        sessionStorage.removeItem('gedview.search.scolltop');
         let fams = document.getElementById("families");
         fams.value = searchval.substring(0, searchval.lastIndexOf('-'));
-        updateLocation(fams);
-      }
-      function updateLocation(context) {
-        document.location = '?' + context.value.replace(/@/g, '');
+        document.location = '?' + context.value.replace(/@/g, '');        
       }
     </script>
   </head>
   <body>
     <main>
       <div>
-        <select size="10" id="families" name="families" onchange="updateLocation(this);return false;"></select>
-      </div><div>
-        <input type="search" size="40" name="filter" list="names" onchange="updateSelection(this);return false;">
+        <label>Suche:
+          <input type="search" size="40" name="filter" list="names" onchange="updateSelection(this);return false;">
+        </label>
+      </div><div class="famcontainer">
+        <!--<select size="10" id="families" name="families" onchange="updateLocation(this);return false;"></select>-->
+        <div id="families"></div>
       </div>
     </main>
     <datalist id="names"></datalist>
