@@ -21,23 +21,25 @@ self.addEventListener('fetch', function (event) {
     let cacheUrl = event.request.url.replace(/\?.*$/, '');
     console.log("request", self.currentCache, cacheUrl, event.request.url);
     return cache.match(cacheUrl).then(function (response) {
-      return response || fetch(event.request).then(function (response) {
+      const refresh = fetch(event.request).then(function (response) {
         console.log("update cache for ", cacheUrl);
         cache.put(cacheUrl, response.clone());
         return response;
       });
+      return response || refresh;
     });
   }));
 });
 
 //Cache name in format "gedview<year00><dayofyear000>"
 //update on file changes
-self.currentCache = "gedview20272";
+self.currentCache = "gedview20272b";
 self.deprecatedCaches = [
   "gedview1",
   "gedview20271",
   "gedview20271b",
-  "gedview20271c"
+  "gedview20271c",
+  "gedview20272"
 ];
 
 function loadCacheContent(cache) {
