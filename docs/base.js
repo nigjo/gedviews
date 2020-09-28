@@ -109,23 +109,11 @@ class IndexPage {
 this.gedviewPage = new IndexPage();
 
 window.addEventListener('DOMContentLoaded', initIndexSelector);
-console.log("bla");
 function initIndexSelector() {
   console.log("updateing links");
   var links = document.querySelectorAll('#viewselect a');
   for (var i = 0; i < links.length; i++) {
     links[i].onclick = evt=>window.gedviewPage.updateFamily(evt);
   }
-  var selector = document.getElementById('families');
-  selector.addEventListener('change', function (evt) {
-    //printFamily(allFams[evt.target.selectedIndex]);
-    console.log(evt);
-    document.querySelector('#famidmarker').dataset.famid =
-            evt.target[evt.target.selectedIndex].value.replace(/@/g, '');
-    let currView = document.querySelector('#view').contentWindow.location.href;
-    if (currView !== 'welcome.html') {
-      window.gedviewPage.updateView(currView);
-    }
-  });
   console.log("update done");
 }
