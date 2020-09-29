@@ -27,12 +27,12 @@ body{
 }
 body>div{/*! overflow:hidden; */width:100vw;height:100vh;}
 #baum{
-  background-image: url(Ahnentafel.jpg);
-  background-repeat: no-repeat;
-  background-size: contain;
   position:relative;
   width: 100%;
   height: calc(100vw / 3303 * 2336);
+}
+#baum>img{
+  width:100%;
 }
 @media print{
   #baum{transform: none;}
