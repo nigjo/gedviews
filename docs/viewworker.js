@@ -21,7 +21,7 @@ self.addEventListener('fetch', function (event) {
     let cacheUrl = event.request.url.replace(/\?.*$/, '');
     console.log("request", self.currentCache, cacheUrl, event.request.url);
     return cache.match(cacheUrl).then(function (response) {
-      const refresh = fetch(event.request).then(function (response) {
+      const refresh = fetch(cacheUrl).then(function (response) {
         console.log("update cache for ", cacheUrl);
         cache.put(cacheUrl, response.clone());
         return response;
