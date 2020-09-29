@@ -12,9 +12,26 @@ class Server
       "png", "image/png",
       "ico", "image/x-icon"
   );
+  
+  private static int port = 8080;
+  private static String prefix = "/";
+  public static void args(String[] a){
+    for(int i=0;i<a.length;i++){
+      try{
+        port = Integer.parseInt(a[i]);
+      }catch(NumberFormatException ex){
+        prefix = a[i];
+        if(prefix.charAt(0)!='/')
+          prefix='/'+prefix;
+        if(prefix.charAt(prefix.length()-1)!='/')
+          prefix+='/';
+      }
+    }
+  }
 
   public static void main(String[] a) throws java.io.IOException
   {
+    args(a);
     java.net.InetSocketAddress host =
         new java.net.InetSocketAddress("localhost", 8080);
     com.sun.net.httpserver.HttpServer server =
@@ -23,21 +40,25 @@ class Server
     server.createContext("/", Server::handleRequest);
     server.start();
     System.out.println("Server is running at http://"
-        + host.getHostName() + ":" + host.getPort());
+        + host.getHostName() + ":" + host.getPort()+prefix);
   }
 
   private static void handleRequest(com.sun.net.httpserver.HttpExchange t)
       throws java.io.IOException
   {
     java.net.URI uri = t.getRequestURI();
-    if(uri.toString().equals("/"))
+    if(uri.toString().endsWith("/"))
     {
       uri = uri.resolve("index.html");
     }
-    java.io.File local = new java.io.File("." + uri.getPath());
+    String path=uri.getPath();
+    java.io.File local=null;
+    if(path.startsWith(prefix)){
+      local = new java.io.File("." , path.substring(prefix.length()));
+    }
     System.out.print(new java.util.Date().toString());
     System.out.print(" GET " + uri);
-    if(local.exists())
+    if(local!=null&&local.exists())
     {
       //String response = "This is the response of "+local.getAbsolutePath();
       String filename = local.getName();
