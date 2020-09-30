@@ -4,3 +4,6 @@
 [submodule "adjustspacingjs"]
 	path = docs/adjustspacingjs
 	url = https://gist.github.com/906578fa4cecd80f9c84e1b71f230c48.git
+[submodule "server"]
+	path = server
+	url = https://gist.github.com/9007e06c58f16aecafb7a423ea3c14d1.git
