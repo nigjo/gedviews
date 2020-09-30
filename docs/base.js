@@ -25,17 +25,17 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-function printFrame(){
+function printFrame() {
   let view = document.getElementById("view");
-  if(view.contentWindow){
+  if (view.contentWindow) {
     view.contentWindow.print();
-  }else{
+  } else {
     console.warning("no view frame");
   }
 }
 
 class IndexPage {
-  constructor(){
+  constructor() {
     this.self = this;
   }
 
@@ -46,7 +46,7 @@ class IndexPage {
   }
   printGedviewFamily(viewfam, ged) {
     if (viewfam.id)
-      document.querySelector('#view').src = 'famview.html?'+viewfam.id.replace(/@/g,'');
+      document.querySelector('#view').src = 'famview.html?' + viewfam.id.replace(/@/g, '');
     else {
       document.querySelector('#view').src = 'welcome.html';
       delete document.querySelector('#famidmarker').dataset.famid;
@@ -60,7 +60,7 @@ class IndexPage {
   updateView(targetLocation) {
     let fam = document.querySelector('#famidmarker').dataset.famid;
     let nextLoc = targetLocation.replace(/\?.*/, '')
-            + '?' + (fam ? fam.replace(/@/g,'') : '');
+            + '?' + (fam ? fam.replace(/@/g, '') : '');
     if (nextLoc !== document.querySelector('#view').contentWindow.location.href) {
       document.querySelector('#view').src = nextLoc;
     }
@@ -72,7 +72,7 @@ class IndexPage {
     console.log(evt.target.contentWindow.location);
     console.log(subloc.search);
     if (subloc.search) {
-      let famid = '@' + subloc.search.substring(1).replace(/@/g,'') + '@';
+      let famid = '@' + subloc.search.substring(1).replace(/@/g, '') + '@';
       document.querySelector('#famidmarker').dataset['famid'] = famid;
     }
   }
@@ -117,12 +117,20 @@ class IndexPage {
 
 this.gedviewPage = new IndexPage();
 
-window.addEventListener('DOMContentLoaded', initIndexSelector);
-function initIndexSelector() {
+document.addEventListener('pluginsLoaded', initIndexSelector);
+function initIndexSelector(evt) {
   console.log("updateing links");
-  var links = document.querySelectorAll('#viewselect a');
-  for (var i = 0; i < links.length; i++) {
-    links[i].onclick = evt=>window.gedviewPage.updateFamily(evt);
+  var container = document.querySelector('#viewselect');
+  while (container.firstElementChild)
+    container.firstElementChild.remove();
+  console.log("links", evt.detail);
+  for (let plugin of evt.detail) {
+    let a = container
+            .appendChild(document.createElement("li"))
+            .appendChild(document.createElement("a"));
+    a.href = plugin.name + '/' + plugin.target;
+    a.textContent = plugin.caption;
+    a.onclick = evt => window.gedviewPage.updateFamily(evt);
   }
   console.log("update done");
 }
