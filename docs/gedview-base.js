@@ -16,7 +16,6 @@
  */
 
 function loadGedviewGedcom() {
-
   var storedData = window.localStorage.getItem('GEDview.gedfile');
   if (storedData) {
     var ged = new Gedcom();
@@ -25,7 +24,11 @@ function loadGedviewGedcom() {
     window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
     return;
   }
-
+}
+/**
+ *@deprecated do not load any default file
+ */
+function loadDefaultGedcom(){
   var request = new XMLHttpRequest();
   request.open('GET', 'gedview.ged', true);
   request.overrideMimeType('text/plain');
