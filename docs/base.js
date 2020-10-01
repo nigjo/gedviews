@@ -46,7 +46,8 @@ class IndexPage {
   }
   printGedviewFamily(viewfam, ged) {
     if (viewfam.id)
-      document.querySelector('#view').src = 'famview.html?' + viewfam.id.replace(/@/g, '');
+      //TODO: get from plugins
+      document.querySelector('#view').src = 'simple/famview.html?' + viewfam.id.replace(/@/g, '');
     else {
       document.querySelector('#view').src = 'welcome.html';
       delete document.querySelector('#famidmarker').dataset.famid;
