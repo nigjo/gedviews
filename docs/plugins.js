@@ -26,19 +26,22 @@ function updateWorker(sw) {
   console.log("plugins", "updating worker cache");
   let data = localStorage.getItem("plugins");
   let plugins = JSON.parse(data);
-  if (!Array.isArray(plugins))
-    return;
-  var resources = [];
-  for (let plugin of plugins) {
-    resources.push(plugin.name + '/' + plugin.target);
+  var resources = {
+    type: "pluginfiles",
+    files: []
+  };
+  for (let pname in plugins) {
+    let plugin = plugins[pname];
+    resources.files.push(plugin.name + '/gedview.json');
+    resources.files.push(plugin.name + '/' + plugin.target);
     if (plugin.resources) {
       for (let res of plugin.resources) {
-        resources.push(plugin.name + '/' + res);
+        resources.files.push(plugin.name + '/' + res);
       }
     }
   }
-  if (resources.length > 0) {
-    sw.postMessage("plugins", resources);
+  if (resources.files.length > 0) {
+    sw.postMessage(resources);
   }
 }
 
@@ -112,10 +115,10 @@ function updatePlugins(loadedPlugins) {
       detail: loadedPlugins
     });
     document.dispatchEvent(evt);
-    if (navigator.serviceWorker) {
-      navigator.serviceWorker.ready.then(registration => {
-        updateWorker(registration.active);
-      });
-    }
+  }
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker.ready.then(registration => {
+      updateWorker(registration.active);
+    });
   }
 }
