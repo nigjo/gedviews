@@ -61,7 +61,7 @@ function updateWorker(sw) {
   };
   pluginQuery.onload = evt => {
     let names = JSON.parse(pluginQuery.responseText);
-    console.log("plugins", "loading", names);
+    console.log("plugins", "scan for", names);
     let nextPlugins = {};
     for (let pname of names) {
       nextPlugins[pname] = {};
