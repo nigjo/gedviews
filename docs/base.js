@@ -113,34 +113,35 @@ class IndexPage {
       loadGedfile(event.target.files[0]);
     }
   }
+
+  updateNavLinks(evt) {
+    console.log("updateing navigation");
+    var container = document.querySelector('#viewselect');
+    while (container.firstElementChild)
+      container.firstElementChild.remove();
+    console.log("links", evt.detail);
+    let a = container
+            .appendChild(document.createElement("li"))
+            .appendChild(document.createElement("a"));
+    a.href = "./welcome.html";
+    a.textContent = "Start";
+    a.onclick = evt => window.gedviewPage.updateFamily(evt);
+
+    for (let name in evt.detail) {
+      let plugin = evt.detail[name];
+      if (plugin.target) {
+        let a = container
+                .appendChild(document.createElement("li"))
+                .appendChild(document.createElement("a"));
+        a.href = plugin.name + '/' + plugin.target;
+        a.textContent = plugin.caption;
+        a.onclick = evt => window.gedviewPage.updateFamily(evt);
+      }
+    }
+    console.log("update done");
+  }
 }
 
 this.gedviewPage = new IndexPage();
 
-document.addEventListener('pluginsLoaded', initIndexSelector);
-function initIndexSelector(evt) {
-  console.log("updateing links");
-  var container = document.querySelector('#viewselect');
-  while (container.firstElementChild)
-    container.firstElementChild.remove();
-  console.log("links", evt.detail);
-  let a = container
-          .appendChild(document.createElement("li"))
-          .appendChild(document.createElement("a"));
-  a.href = "./welcome.html";
-  a.textContent = "Start";
-  a.onclick = evt => window.gedviewPage.updateFamily(evt);
-
-  for (let name in evt.detail) {
-    let plugin = evt.detail[name];
-    if (plugin.target) {
-      let a = container
-              .appendChild(document.createElement("li"))
-              .appendChild(document.createElement("a"));
-      a.href = plugin.name + '/' + plugin.target;
-      a.textContent = plugin.caption;
-      a.onclick = evt => window.gedviewPage.updateFamily(evt);
-    }
-  }
-  console.log("update done");
-}
+document.addEventListener('pluginsLoaded', gedviewPage.updateNavLinks);
