@@ -124,13 +124,23 @@ function initIndexSelector(evt) {
   while (container.firstElementChild)
     container.firstElementChild.remove();
   console.log("links", evt.detail);
-  for (let plugin of evt.detail) {
-    let a = container
-            .appendChild(document.createElement("li"))
-            .appendChild(document.createElement("a"));
-    a.href = plugin.name + '/' + plugin.target;
-    a.textContent = plugin.caption;
-    a.onclick = evt => window.gedviewPage.updateFamily(evt);
+  let a = container
+          .appendChild(document.createElement("li"))
+          .appendChild(document.createElement("a"));
+  a.href = "./welcome.html";
+  a.textContent = "Start";
+  a.onclick = evt => window.gedviewPage.updateFamily(evt);
+
+  for (let name in evt.detail) {
+    let plugin = evt.detail[name];
+    if (plugin.target) {
+      let a = container
+              .appendChild(document.createElement("li"))
+              .appendChild(document.createElement("a"));
+      a.href = plugin.name + '/' + plugin.target;
+      a.textContent = plugin.caption;
+      a.onclick = evt => window.gedviewPage.updateFamily(evt);
+    }
   }
   console.log("update done");
 }

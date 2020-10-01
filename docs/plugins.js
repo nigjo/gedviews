@@ -17,45 +17,62 @@ if (navigator.serviceWorker) {
   navigator.serviceWorker.addEventListener("message", function (evt) {
     console.log("plugins", "message", evt.data);
     if (evt.data === "resourcelist") {
-      let plugins = localStorage.getItem("plugins");
-      if (!Array.isArray(plugins))
-        return;
-      var resources = [];
-      for (let plugin of plugins) {
-        resources.push(plugin.name + '/' + plugin.target);
-        if (plugin.resources) {
-          for (let res of plugin.resources) {
-            resources.push(plugin.name + '/' + res);
-          }
-        }
-      }
-      if (resources.length > 0) {
-        event.source.postMessage("plugins", resources);
-      }
+      updateWorker(event.source);
     }
   });
 }
+
+function updateWorker(sw) {
+  console.log("plugins", "updating worker cache");
+  let data = localStorage.getItem("plugins");
+  let plugins = JSON.parse(data);
+  if (!Array.isArray(plugins))
+    return;
+  var resources = [];
+  for (let plugin of plugins) {
+    resources.push(plugin.name + '/' + plugin.target);
+    if (plugin.resources) {
+      for (let res of plugin.resources) {
+        resources.push(plugin.name + '/' + res);
+      }
+    }
+  }
+  if (resources.length > 0) {
+    sw.postMessage("plugins", resources);
+  }
+}
+
 (function () {
+  let stored = localStorage.getItem("plugins");
+  if (stored) {
+    document.addEventListener("DOMContentLoaded", () => {
+      let evt = new CustomEvent("pluginsLoaded", {
+        detail: JSON.parse(stored)
+      });
+      document.dispatchEvent(evt);
+    });
+  }
   let pluginQuery = new XMLHttpRequest();
   pluginQuery.open('GET', 'plugins.json', true);
   pluginQuery.overrideMimeType('application/json');
   pluginQuery.onerror = evt => {
     console.error("plugins", evt);
-    localStorage.setItem("plugins", "");
-    updatePlugins();
+    updatePlugins({});
   };
   pluginQuery.onload = evt => {
     let names = JSON.parse(pluginQuery.responseText);
     console.log("plugins", "loading", names);
-    localStorage.setItem("plugins", "");
+    let nextPlugins = {};
+    for (let pname of names) {
+      nextPlugins[pname] = {};
+    }
     let counter = names.length;
     let decrementCounter = () => {
       --counter;
       if (counter <= 0) {
-        updatePlugins();
+        updatePlugins(nextPlugins);
       }
     };
-    //let plugins = [];
     function getPlugin(pname) {
       let preq = new XMLHttpRequest();
       preq.open('GET', pname + '/gedview.json', true);
@@ -67,14 +84,7 @@ if (navigator.serviceWorker) {
         if (resp.target.status === 200) {
           let data = JSON.parse(preq.responseText);
           data.name = pname;
-          let sdata = localStorage.getItem("plugins");
-          var plugins;
-          if (!sdata)
-            plugins = [];
-          else
-            plugins = JSON.parse(sdata);
-          plugins.push(data);
-          localStorage.setItem("plugins", JSON.stringify(plugins));
+          nextPlugins[pname] = data;
         }
         decrementCounter();
       };
@@ -91,13 +101,21 @@ if (navigator.serviceWorker) {
 //  });
   pluginQuery.send();
 })();
-function updatePlugins() {
+function updatePlugins(loadedPlugins) {
   //localStorage.get
-  let storedData = localStorage.getItem("plugins");
-  let plugins = JSON.parse(storedData);
-  console.log("plugins", "loaded", plugins);
-  let evt = new CustomEvent("pluginsLoaded", {
-    detail: plugins
-  });
-  document.dispatchEvent(evt);
+  var loadedData = JSON.stringify(loadedPlugins);
+  var storedData = localStorage.getItem("plugins");
+  if (storedData !== loadedData) {
+    console.log("plugins", "updating plugin data", loadedPlugins);
+    localStorage.setItem("plugins", loadedData);
+    let evt = new CustomEvent("pluginsLoaded", {
+      detail: loadedPlugins
+    });
+    document.dispatchEvent(evt);
+    if (navigator.serviceWorker) {
+      navigator.serviceWorker.ready.then(registration => {
+        updateWorker(registration.active);
+      });
+    }
+  }
 }
