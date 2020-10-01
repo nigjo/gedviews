@@ -33,41 +33,39 @@ self.addEventListener('fetch', function (event) {
 
 //Cache name in format "gedview<year00><dayofyear000>"
 //update on file changes
-self.currentCache = "gedview20272b";
+self.currentCache = "gedview20275";
 self.deprecatedCaches = [
   "gedview1",
   "gedview20271",
   "gedview20271b",
   "gedview20271c",
-  "gedview20272"
+  "gedview20272",
+  "gedview20272b"
 ];
 
 function loadCacheContent(cache) {
+  self.clients.matchAll({type: "window"})
+          .then(clientList => {
+            console.log("reslist", "client list length:", clientList.length);
+            for (var i = 0; i < clientList.length; i++) {
+              clientList[i].postMessage("resourcelist");
+            }
+          });
   return cache.addAll([
     //main-site
     './index.html',
-    './gedcomjs/gedcom.js',
     './favicon.ico',
+    './pwa.json',
+    './ScetchTree-192.png',
+    './ScetchTree-512.png',
+    './gedview-base.js',
     './welcome.html',
     './base.css',
     './base.js',
-    //View "Book"
-    './book.html',
-    './book.css',
-    './book.js',
-    //View "Familie"
-    './famview.html',
-    './famview.css',
-    './famview.js',
-    //View "Ahnentafel"
-    './Ahnentafel.html',
-    './Ahnentafel.css',
-    './Ahnentafel.js',
-    './Ahnentafel.jpg',
-    './adjustspacingjs/adjustSpacing.js',
-    //View "Text"
-    './simpletext.html',
-    './simpletext.js'
+    './plugins.js',
+    './plugins.json',
+    './gedcomjs/gedcom.js',
+    './adjustspacingjs/adjustSpacing.js'
   ]);
 }
 
@@ -88,3 +86,12 @@ function installCurrentCache(event) {
 //  installCurrentCache(event);
 //});
 self.addEventListener('install', installCurrentCache);
+self.addEventListener('message', msgEvt => {
+  let resources = msgEvt.data;
+  if (resources && resources.type && resources.type === "pluginfiles") {
+    console.log("plugin files", self.currentCache, resources);
+    caches.open(self.currentCache).then(cache => {
+      cache.addAll(resources.files);
+    });
+  }
+});

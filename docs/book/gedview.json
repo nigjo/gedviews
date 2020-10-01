@@ -1,0 +1,8 @@
+{
+  "caption":"Familienbuch",
+  "target":"book.html",
+  "resources":[
+    "book.js",
+    "book.css"
+  ]
+}

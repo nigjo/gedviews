@@ -1,0 +1,10 @@
+
+
+[plantuml]
+....
+Site -> Worker: register
+Site --> Host :load `index.json`
+Site --> Site :collect PluginData
+Site -> Worker: updatePlugins();
+Worker -> Host: fetch Resources
+....
