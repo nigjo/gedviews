@@ -70,8 +70,8 @@ class IndexPage {
   }
   updateSelection(evt) {
     let subloc = evt.target.contentWindow.location;
-    console.log(evt.target.contentWindow.location);
-    console.log(subloc.search);
+    //console.log(evt.target.contentWindow.location);
+    //console.log(subloc.search);
     if (subloc.search) {
       let famid = '@' + subloc.search.substring(1).replace(/@/g, '') + '@';
       document.querySelector('#famidmarker').dataset['famid'] = famid;
@@ -83,7 +83,7 @@ class IndexPage {
       if (event.type === 'dragover') {
         event.target.classList.add("targeted");
         let dt = event.dataTransfer;
-        console.log(dt);
+        //console.log(dt);
         if (dt && dt.items.length === 1) {
           event.target.classList.remove("invalid");
         } else {
@@ -95,20 +95,20 @@ class IndexPage {
           event.target.classList.remove("invalid");
         } else {
           resetGedcom();
-          console.log(event);
+//          console.log(event);
           let dt = event.dataTransfer;
-          console.log(dt);
+//          console.log(dt);
           loadGedfile(dt.files[0]);
         }
       } else {
-        console.log(event);
+//        console.log(event);
         event.target.classList.remove("targeted");
         event.target.classList.remove("invalid");
       }
     }
   }
   viewfile(event) {
-    console.log(event);
+//    console.log(event);
     if (event.target.files.length === 1) {
       resetGedcom();
       loadGedfile(event.target.files[0]);
@@ -135,7 +135,7 @@ class IndexPage {
                 .appendChild(document.createElement("li"))
                 .appendChild(document.createElement("a"));
         a.href = plugin.name + '/' + plugin.target;
-        a.textContent = plugin.caption;
+        a.textContent = plugin.caption ? plugin.caption : plugin.name;
         a.onclick = evt => window.gedviewPage.updateFamily(evt);
       }
     }
