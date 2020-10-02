@@ -121,13 +121,6 @@ class IndexPage {
     while (container.firstElementChild)
       container.firstElementChild.remove();
     console.log("links", evt.detail);
-    let a = container
-            .appendChild(document.createElement("li"))
-            .appendChild(document.createElement("a"));
-    a.href = "./welcome.html";
-    a.textContent = "Start";
-    a.onclick = evt => window.gedviewPage.updateFamily(evt);
-
     for (let name in evt.detail) {
       let plugin = evt.detail[name];
       if (plugin.target) {
@@ -136,8 +129,11 @@ class IndexPage {
                 .appendChild(document.createElement("a"));
         a.href = plugin.name + '/' + plugin.target;
         a.textContent = plugin.caption ? plugin.caption : plugin.name;
-        a.onclick = evt => window.gedviewPage.updateFamily(evt);
       }
+    }
+    var navLinks = document.querySelectorAll('nav a:not([href="#"])');
+    for (let i = 0; i < navLinks.length; i++) {
+      navLinks[i].onclick = evt => window.gedviewPage.updateFamily(evt);
     }
     console.log("update done");
   }

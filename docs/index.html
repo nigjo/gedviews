@@ -37,25 +37,20 @@ limitations under the License.
       <nav>
         <input type="checkbox" style="display:none" id="menuview" >
         <label for="menuview">☰</label>
-        <ul id="viewselect">
-          <li><a href="welcome.html">Start</a></li>
-          <!--
-          <li><a href="selection.html">Suche</a></li>
-          <li><a href="famview.html">Übersicht</a></li>
-          <li><a href="book.html">Familienbuch</a></li>
-          <li><a href="simpletext.html">Textdatei</a></li>
-          <li><a href="Ahnentafel.html">Ahnenbaum</a></li>
-          -->
-        </ul>
         <ul>
-          <li><a href="#" onclick="printFrame()">drucken</a></li>
-          <li><a href="#" onclick="resetGedcom()">clear data</a></li>
-          <!--<li><a href="#" onclick="window.location = document.getElementById('view').src">remove Frame</a></li>-->
-          <li><label id="dropzone"
+          <li><a href="welcome.html">Start</a>
+          </li><li><label id="dropzone"
                      ondrop="gedviewPage.handleDragging(event);"
                      ondragover="gedviewPage.handleDragging(event);"
                      ondragleave="gedviewPage.handleDragging(event);"
-                     >Datei wählen<input type="file" onchange="gedviewPage.viewfile(event)" name="dropfile"></label></li>
+                     >Datei wählen<input type="file" onchange="gedviewPage.viewfile(event)" name="dropfile"></label>
+          </li>
+        </ul>
+        <ul id="viewselect"></ul>
+        <ul>
+          <li><a href="#" onclick="printFrame()">drucken</a>
+          </li><li><a href="#" onclick="resetGedcom()">clear data</a>
+          </li>
         </ul>
       </nav>
       <main>
