@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 nigjo.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+  <head>
+    <title>GEDCOM Events</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+.date{display:inline-block;vertical-align:baseline;min-width:6em;text-align:right;}
+#marriages .event{max-width:35em;}
+.event{display:flex;max-width:25em;line-height:1.5em;}
+main ul{padding-left:0;}
+.fams,.famc{flex-basis:10%;min-width:3.5em;}
+.name{flex-grow:1;margin-left:.5em;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
+    </style>
+    <script src="../gedcomjs/gedcom.js"></script>
+    <script src="../gedview-base.js"></script>
+    <script src="eventlist.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Ereignisse</h1>
+    </header>
+    <main>
+      <h2>Geburtstage</h2>
+      <h3>Heute</h3><div id="today">noch keine Ereignisse</div>
+      <h3>In den letzten Tagen</h3><div id="recent">noch keine Ereignisse</div>
+      <h3>In den kommenden Tagen</h3><div id="next">noch keine Ereignisse</div>
+      <h2>Sonstiges</h2>
+      <h3>Hochzeitstage</h3><div id="marriages">noch keine Ereignisse</div>
+      <h3>Todestage</h3><div id="deathdates">noch keine Ereignisse</div>
+    </main>
+  </body>
+</html>
