@@ -131,13 +131,13 @@ class GedEventsPage {
           item.append(" ");
           let husb = indi.getHusband();
           let wife = indi.getWife();
-          let name = item.appendChild(document.createElement("span"));
-          name.classList.add("name");
-          name.append(
-                  husb ? husb.getIndiName() : "???",
-                  " - ",
-                  wife ? wife.getIndiName() : "???"
-                  );
+          let fname = item.appendChild(document.createElement("span"));
+          fname.classList.add("name");
+          fname.appendChild(document.createElement("span"))
+            .textContent = (husb ? husb.getIndiName() : "???");
+          fname.append(" - ");
+          fname.appendChild(document.createElement("span"))
+            .textContent = (wife ? wife.getIndiName() : "???");
           item.append(" ");
           let link = item.appendChild(document.createElement("a"));
           link.classList.add("fams");
