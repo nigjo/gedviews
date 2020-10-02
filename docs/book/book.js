@@ -109,6 +109,9 @@ function flattenRecord(rec, result = {}, prefix = '') {
   if (rec.children) {
     for (var sub of rec.children) {
       var key = prefix + sub.tag.toLowerCase();
+      if(result.hasOwnProperty(key)){
+        continue;
+      }
       if (sub.value) {
         result[key] = sub.toLocaleString();
       }
