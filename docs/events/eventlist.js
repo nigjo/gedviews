@@ -112,12 +112,16 @@ class GedEventsPage {
           name.classList.add("name");
           name.append(indi.getIndiName());
           if (indi.getFirstSubRecord("FAMS")) {
-            item.append(" ");
-            let link = item.appendChild(document.createElement("a"));
-            link.classList.add("fams");
-            link.href = "?" + indi.getFirstSubRecord("FAMS")
-                    .toLocaleString().replace(/@/g, '');
-            link.append("Familie");
+            let allFams = indi.getSubRecords("FAMS");
+            for(let f=0;f<allFams.length;f++){
+              let fam = allFams[f];
+              item.append(" ");
+              let link = item.appendChild(document.createElement("a"));
+              link.classList.add("fams");
+              link.href = "?" + fam.toLocaleString().replace(/@/g, '');
+              link.title = "Familie";
+              link.append("👫");
+            }
           }
           if (indi.getFirstSubRecord("FAMC")) {
             item.append(" ");
@@ -125,7 +129,8 @@ class GedEventsPage {
             link.classList.add("famc");
             link.href = "?" + indi.getFirstSubRecord("FAMC")
                     .toLocaleString().replace(/@/g, '');
-            link.append("Eltern");
+            link.title = "Elternfamilie";
+            link.append("🧒");
           }
         } else if (indi instanceof Family) {
           item.append(" ");
@@ -142,7 +147,8 @@ class GedEventsPage {
           let link = item.appendChild(document.createElement("a"));
           link.classList.add("fams");
           link.href = "?" + indi.id.replace(/@/g, '');
-          link.append("Familie");
+          link.title = "Familie";
+          link.append("👫");
         }
       }
     } else {
