@@ -13,6 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+@import url("./fonts/fonts.css");
+
 :root{
   --bgcol:#AADDAA;
   --menubg:#88BB88;
@@ -23,7 +25,7 @@ limitations under the License.
   --falsefile:lightpink;
 }
 html,body{margin:0px;height:100%;background-color:var(--bgcol);}
-header h1{margin:0;}
+header h1{margin:0;font-family:Luminari,Arial,sans-serif}
 /*h1[data-famid]:after{content:' - 'attr(data-famid);font-family:monospace;}*/
 .box{display:flex;flex-direction:column;height:100%}
 header,nav,footer{flex:0 1 auto;}

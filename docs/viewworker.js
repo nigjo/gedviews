@@ -33,14 +33,15 @@ self.addEventListener('fetch', function (event) {
 
 //Cache name in format "gedview<year00><dayofyear000>"
 //update on file changes
-self.currentCache = "gedview20275";
+self.currentCache = "gedview20277";
 self.deprecatedCaches = [
   "gedview1",
   "gedview20271",
   "gedview20271b",
   "gedview20271c",
   "gedview20272",
-  "gedview20272b"
+  "gedview20272b",
+  "gedview20275"
 ];
 
 function loadCacheContent(cache) {
@@ -64,6 +65,8 @@ function loadCacheContent(cache) {
     './base.js',
     './plugins.js',
     './plugins.json',
+    './fonts/fonts.css',
+    './fonts/Luminari-Regular.woff',
     './gedcomjs/gedcom.js',
     './adjustspacingjs/adjustSpacing.js'
   ]);
