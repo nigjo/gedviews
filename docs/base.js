@@ -45,13 +45,28 @@ class IndexPage {
       return indi.getIndiName();
     return '';
   }
+  static hideHeader(iframe) {
+    let header;
+    if (iframe.contentDocument.readyState === 'loading')
+      iframe.contentDocument.addEventListener("DOMContentLoaded", () => {
+        IndexPage.hideHeader(iframe);
+      });
+    else {
+      header = iframe.contentDocument.querySelector("header");
+      if (header) {
+        header.style.display = "none";
+      }
+    }
+  }
   printGedviewFamily(viewfam, ged) {
     this.ged = ged;
+    let view = document.querySelector('#view');
+    IndexPage.hideHeader(view);
     if (viewfam.id)
       //TODO: get from plugins
-      document.querySelector('#view').src = 'simple/famview.html?' + viewfam.id.replace(/@/g, '');
+      view.src = 'simple/famview.html?' + viewfam.id.replace(/@/g, '');
     else {
-      document.querySelector('#view').src = 'welcome.html';
+      view.src = 'welcome.html';
       delete document.querySelector('#famidmarker').dataset.famid;
     }
   }
@@ -72,6 +87,8 @@ class IndexPage {
   }
   updateSelection(evt) {
     let subloc = evt.target.contentWindow.location;
+    IndexPage.hideHeader(evt.target);
+
     //console.log(evt.target.contentWindow.location);
     //console.log(subloc.search);
     let famname = document.querySelector("#famname");
@@ -80,19 +97,19 @@ class IndexPage {
       let famid = '@' + subloc.search.substring(1).replace(/@/g, '') + '@';
       document.querySelector('#famidmarker').dataset['famid'] = famid;
 
-      if(this.ged){
+      if (this.ged) {
         let famrec = this.ged.getFamily(famid);
-        if(famrec){
+        if (famrec) {
           let husb = famrec.getHusband();
-          let wife = famrec.getWife();        
+          let wife = famrec.getWife();
           famname.textContent = "";
           let fname = famname.appendChild(document.createElement("span"));
           fname.classList.add("name");
           fname.appendChild(document.createElement("span"))
-            .textContent = (husb ? husb.getIndiName() : "???");
+                  .textContent = (husb ? husb.getIndiName() : "???");
           fname.append(" - ");
           fname.appendChild(document.createElement("span"))
-            .textContent = (wife ? wife.getIndiName() : "???");
+                  .textContent = (wife ? wife.getIndiName() : "???");
         }
       }
     }
