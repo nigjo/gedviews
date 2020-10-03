@@ -36,7 +36,8 @@ function printFrame() {
 
 class IndexPage {
   constructor() {
-    this.self = this;
+    //this.self = this;
+    this.ged = null;
   }
 
   getIndiName(indi) {
@@ -45,6 +46,7 @@ class IndexPage {
     return '';
   }
   printGedviewFamily(viewfam, ged) {
+    this.ged = ged;
     if (viewfam.id)
       //TODO: get from plugins
       document.querySelector('#view').src = 'simple/famview.html?' + viewfam.id.replace(/@/g, '');
@@ -72,9 +74,27 @@ class IndexPage {
     let subloc = evt.target.contentWindow.location;
     //console.log(evt.target.contentWindow.location);
     //console.log(subloc.search);
+    let famname = document.querySelector("#famname");
+    famname.textContent = "Keine Familie gewählt";
     if (subloc.search) {
       let famid = '@' + subloc.search.substring(1).replace(/@/g, '') + '@';
       document.querySelector('#famidmarker').dataset['famid'] = famid;
+
+      if(this.ged){
+        let famrec = this.ged.getFamily(famid);
+        if(famrec){
+          let husb = famrec.getHusband();
+          let wife = famrec.getWife();        
+          famname.textContent = "";
+          let fname = famname.appendChild(document.createElement("span"));
+          fname.classList.add("name");
+          fname.appendChild(document.createElement("span"))
+            .textContent = (husb ? husb.getIndiName() : "???");
+          fname.append(" - ");
+          fname.appendChild(document.createElement("span"))
+            .textContent = (wife ? wife.getIndiName() : "???");
+        }
+      }
     }
   }
   handleDragging(event) {

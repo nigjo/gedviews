@@ -24,7 +24,7 @@ limitations under the License.
 }
 html,body{margin:0px;height:100%;background-color:var(--bgcol);}
 header h1{margin:0;}
-h1[data-famid]:after{content:' - 'attr(data-famid);font-family:monospace;}
+/*h1[data-famid]:after{content:' - 'attr(data-famid);font-family:monospace;}*/
 .box{display:flex;flex-direction:column;height:100%}
 header,nav,footer{flex:0 1 auto;}
 main{flex:1 1 auto;}
