@@ -6,3 +6,12 @@ font-style: normal;
 font-weight: normal;
 src: local('Luminari'), url('Luminari-Regular.woff') format('woff');
 }
+@font-face {
+  /* unifrakturmaguntia-regular - latin */
+  /**Source https://google-webfonts-helper.herokuapp.com/fonts/unifrakturmaguntia */
+  font-family: 'UnifrakturMaguntia';
+  font-style: normal;
+  font-weight: 400;
+  src: local('UnifrakturMaguntia'),
+  url('unifrakturmaguntia-v11-latin-regular.woff2') format('woff2');
+}

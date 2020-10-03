@@ -50,7 +50,6 @@ header>h1[data-famid]:after{
   flex-wrap:wrap;
   padding-inline:0px;
   margin-inline:0px;
-  /*! z-index: -1; */
   position: relative;
 }
 .gedview-attr,.gedview-attr[data-view=half]{width:50%;}
@@ -88,10 +87,6 @@ header>h1[data-famid]:after{
 }
 .note{
   min-height: 10em;
-}
-.gedview-parent{
-  /*! border-top-left-radius:.175em; */
-  /*! border-top-right-radius:.175em; */
 }
 .gedview-parent>.gedview-attr[data-key=name]{
   font-size: 1.25em;
@@ -174,7 +169,7 @@ header>h1[data-famid]:after{
     margin:0px;
     text-align: center;
     font-size: 1cm;
-    font-family: Luminari,Segoe Print,Arial,sans-serif;
+    font-family: UnifrakturMaguntia,Luminari,Segoe Print,Arial,sans-serif;
   }
   .gedview-page{
     counter-increment: pages;
@@ -192,23 +187,7 @@ header>h1[data-famid]:after{
   .gedview-page:before,.gedview-page:after{
     position: absolute;
     top:-1.5em;
-    font-family: Luminari,Segoe Print,Arial,sans-serif;
+    font-family: serif;
     font-size: 1.5em;
   }
-  /*
-  .gedview-page:before{
-    content:'Familienbogen ';
-    text-align: center;
-    width: 100%;
-    margin: 0;
-    left: 0;
-    top:-1.5em;
-  }
-  .gedview-page:after {
-    font-family: sans-serif;
-    content: attr(data-famid);
-    right: 0px;
-    font-size: .75em;
-  }
-  */
 }
