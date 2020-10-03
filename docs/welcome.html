@@ -16,9 +16,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <head>
+<meta charset="UTF-8">
 <title>GEDviewer Welcome Page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#99CC99"/>
+<style>main::before {
+  background-image: url(./ScetchTree-512.png);
+  background-position-x: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: .33;
+  content: "";
+  position: absolute;
+  width: 100vw;
+  height: 100%;
+  z-index: -1;
+  top: 0;
+  left: 0;
+}</style>
 </head>
 <body>
+<main>
 <h2>GEDCOM Viewer Collection</h2>
 <p>
 Diese Web-App erlaubt es die Daten einer
@@ -26,7 +44,7 @@ Diese Web-App erlaubt es die Daten einer
 unterschiedliche Art und Weise zu durchsuchen und zu visualisieren.
 Es ist nicht möglich bestehende Daten zu erweitern oder zu bearbeiten.
 </p><p>
-Es muss eine lokale GEDCOM Datei über den Menüpunkt "Datei laden"
+Es muss eine lokale GEDCOM Datei über den Menüpunkt "Datei wählen"
 importiert werden. Diese Datei wird nur in den
 Datenspeichern des Browsers selbst gespeichert und nicht auf irgendwelchen
 Servern hochgeladen. Die App speichert auch keine "Cookies". Weder eigene
@@ -36,5 +54,6 @@ möglich irgendwelche Mediendaten anzuzeigen.
 Die Quellen dieser Anwendung sind Open Source und können auf
 <a href="https://github.com/nigjo/gedview/" target="_blank">GitHub</a> eingesehen werden.
 </p>
+</main>
 </body>
 </html>
