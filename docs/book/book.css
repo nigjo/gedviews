@@ -13,6 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+@import url("../fonts/fonts.css");
+
 body{
   margin:0px;
 }
@@ -172,7 +174,7 @@ header>h1[data-famid]:after{
     margin:0px;
     text-align: center;
     font-size: 1cm;
-    font-family: Segoe Print,Arial;
+    font-family: Luminari,Segoe Print,Arial,sans-serif;
   }
   .gedview-page{
     counter-increment: pages;
@@ -190,7 +192,7 @@ header>h1[data-famid]:after{
   .gedview-page:before,.gedview-page:after{
     position: absolute;
     top:-1.5em;
-    font-family: Segoe Print,Arial;
+    font-family: Luminari,Segoe Print,Arial,sans-serif;
     font-size: 1.5em;
   }
   /*
