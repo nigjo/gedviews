@@ -43,6 +43,22 @@ nav li>*{min-width:8em;text-align:center;text-decoration:none;
          background-color:var(--menuitem);padding:.33em .5em;width:100%}
 nav li>*{border:1px dotted gray;}
 #menuview~label{display:none;}
+#updatenotifier:before{
+  content:'Hinweis';
+  display:block;
+  font-size:200%;
+  font-family:Luminari,Arial,sans-serif;  
+}
+#updatenotifier{
+  display:block;
+  position:absolute;
+  padding:1em;
+  top:33%;
+  left:25vw;
+  width:50vw;
+  border:4px solid var(--menu);
+  background-color:var(--menubg);
+}
 @media (max-width:41em), (max-height:30em){
   nav{display:block;}
   #menuview~label{

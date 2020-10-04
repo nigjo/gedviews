@@ -14,15 +14,32 @@
  * limitations under the License.
  */
 
-if ('serviceWorker' in navigator) {
+function handleServices() {
   navigator.serviceWorker.register('./viewworker.js')
           .then((reg) => {
             // registration worked
-            console.log('Registration succeeded. Scope is ' + reg.scope);
+            reg.onupdatefound = (evt) => {
+              let nextsw = reg.installing;
+              nextsw.onstatechange = () => {
+                if (nextsw.state === "installed") {
+                  notifyOfUpdate();
+                }
+              };
+            };
+            //console.log('Registration succeeded. Scope is ' + reg.scope);
           }).catch((error) => {
     // registration failed
     console.log('Registration failed with ' + error);
   });
+}
+function notifyOfUpdate() {
+  console.warn("update awailable");
+  let updatenotifier = document.getElementById("updatenotifier");
+  updatenotifier.style.display = "block";
+}
+
+if ('serviceWorker' in navigator) {
+  handleServices();
 }
 
 function printFrame() {

@@ -41,10 +41,10 @@ limitations under the License.
         <ul>
           <li><a href="welcome.html">Start</a>
           </li><li><label id="dropzone"
-                     ondrop="gedviewPage.handleDragging(event);"
-                     ondragover="gedviewPage.handleDragging(event);"
-                     ondragleave="gedviewPage.handleDragging(event);"
-                     >Datei wählen<input type="file" onchange="gedviewPage.viewfile(event)" name="dropfile"></label>
+                          ondrop="gedviewPage.handleDragging(event);"
+                          ondragover="gedviewPage.handleDragging(event);"
+                          ondragleave="gedviewPage.handleDragging(event);"
+                          >Datei wählen<input type="file" onchange="gedviewPage.viewfile(event)" name="dropfile"></label>
           </li>
         </ul>
         <ul id="viewselect"></ul>
@@ -57,7 +57,14 @@ limitations under the License.
       <main>
         <iframe id="view" src="welcome.html" onload="gedviewPage.updateSelection(event)"></iframe>
       </main>
-      <footer>Gedview by Nigjo</footer>
+      <footer><span>Gedview by Nigjo</span>
+        <div id="updatenotifier" style="display:none">
+          Es ist eine aktuellere Version der Anwendung verfügbar.
+          Die Anwendung sollte einmal neu gestartet werden.
+          <div><a href="#" onclick="window.close();">Anwendung schließen</a></div>
+          <div><a href="#" onclick="document.getElementById('updatenotifier').style.display='none'">Hinweis schließen</a></div>
+        </div>
+      </footer>
     </div>
   </body>
 </html>
