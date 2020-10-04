@@ -1,6 +1,6 @@
 {
   "caption":"Übersicht",
-  "target":"famview.html",
+  "target":"index.html",
   "resources":[
     "famview.js",
     "famview.css"

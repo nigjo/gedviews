@@ -1,6 +1,6 @@
 {
   "caption":"Familienbuch",
-  "target":"book.html",
+  "target":"index.html",
   "resources":[
     "book.js",
     "book.css"

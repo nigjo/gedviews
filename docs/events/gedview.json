@@ -1,5 +1,5 @@
 {
-  "target": "events.html",
+  "target": "index.html",
   "caption": "Ereignisse",
   "resources": [
     "eventlist.js"
