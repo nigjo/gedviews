@@ -57,7 +57,7 @@ self.addEventListener('fetch', function (event) {
 
 //Cache name in format "gedview-<year00><dayofyear000>-<counter>"
 //update on file changes
-self.currentCache = "gedview-20278-1324";
+self.currentCache = "gedview-20278-1908";
 
 function loadCacheContent(cache) {
   return cache.addAll([
