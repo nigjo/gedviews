@@ -34,6 +34,13 @@ limitations under the License.
       <header>
         <h1 id="famidmarker">Familieninfomationen</h1>
         <div id="famname">noch keine Familie gewählt</div>
+        <div id="updatenotifier" style="display:none">
+          Es ist eine aktuellere Version der Anwendung verfügbar.
+          Die Anwendung sollte einmal neu gestartet werden.
+          Für den Neustart ist eine aktive Internetverbindung notwendig.
+          <div><a href="#" onclick="window.close();">Anwendung schließen</a></div>
+          <div><a href="#" onclick="document.getElementById('updatenotifier').style.display='none'">Hinweis schließen</a></div>
+        </div>
       </header>
       <nav>
         <input type="checkbox" style="display:none" id="menuview" >
@@ -58,13 +65,6 @@ limitations under the License.
         <iframe id="view" src="welcome.html" onload="gedviewPage.updateSelection(event)"></iframe>
       </main>
       <footer><span>Gedview by Nigjo</span>
-        <div id="updatenotifier" style="display:none">
-          Es ist eine aktuellere Version der Anwendung verfügbar.
-          Die Anwendung sollte einmal neu gestartet werden.
-          Für den Neustart ist eine aktive Internetverbindung notwendig.
-          <div><a href="#" onclick="window.close();">Anwendung schließen</a></div>
-          <div><a href="#" onclick="document.getElementById('updatenotifier').style.display='none'">Hinweis schließen</a></div>
-        </div>
         <span id="version"></span>
       </footer>
     </div>
