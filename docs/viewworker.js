@@ -16,14 +16,34 @@
 
 /* global self, caches, Promise, fetch */
 
+// set this to true in development mode. DO NOT COMMIT a "true" value!
+self.disableCacheDelay = false;
+
 self.addEventListener('fetch', function (event) {
   event.respondWith(caches.open(self.currentCache).then(function (cache) {
     let cacheUrl = event.request.url.replace(/\?.*$/, '');
-    console.log(self.currentCache, "request", cacheUrl, event.request.url);
+    //console.log(self.currentCache, "request", cacheUrl, event.request.url);
     return cache.match(cacheUrl).then(function (response) {
+      if (response && !self.disableCacheDelay) {
+        let datehead = response.headers.get("date");
+        if (datehead) {
+          let cachedate = new Date(datehead);
+          let refdate = new Date();
+          refdate.setMinutes(refdate.getMinutes() - 10);
+          if (cachedate > refdate) {
+            console.log(self.currentCache, "skipped cache update for", cacheUrl);
+            // a nearly uptodate resource. to not refresh.
+            return response;
+          }
+        }
+      }else{
+        console.log(self.currentCache, "no cache item for", cacheUrl);
+      }
       const refresh = fetch(cacheUrl).then(function (response) {
-        console.log(self.currentCache, "update cache for ", cacheUrl);
-        cache.put(cacheUrl, response.clone());
+        if (response.status === 200) {
+          console.log(self.currentCache, "refreshing ", cacheUrl);
+          cache.put(cacheUrl, response.clone());
+        }
         return response;
       });
       return response || refresh;
@@ -31,12 +51,12 @@ self.addEventListener('fetch', function (event) {
   }));
 });
 
-//Cache name in format "gedview<year00><dayofyear000>"
+//Cache name in format "gedview-<year00><dayofyear000>-<counter>"
 //update on file changes
-self.currentCache = "gedview-20278-3";
+self.currentCache = "gedview-20278-1201";
 
 function loadCacheContent(cache) {
-  self.clients.matchAll({type: "window"})
+  self.clients.matchAll({type: "all"})
           .then(clientList => {
             console.log(self.currentCache,
                     "reslist", "client list length:", clientList.length);
@@ -46,20 +66,23 @@ function loadCacheContent(cache) {
           });
   return cache.addAll([
     //main-site
-    './index.html',
     './favicon.ico',
+    './index.html',
+    './base.css',
+    './base.js',
+    './gedview-base.js',
+    './plugins.js',
+    './plugins.json',
+    './welcome.html',
+    //PWA
     './pwa.json',
     './ScetchTree-192.png',
     './ScetchTree-512.png',
-    './gedview-base.js',
-    './welcome.html',
-    './base.css',
-    './base.js',
-    './plugins.js',
-    './plugins.json',
+    //all known fonts
     './fonts/fonts.css',
     './fonts/Luminari-Regular.woff',
     './fonts/unifrakturmaguntia-v11-latin-regular.woff2',
+    //external gists
     './gedcomjs/gedcom.js',
     './adjustspacingjs/adjustSpacing.js'
   ]);
@@ -90,7 +113,7 @@ self.addEventListener('install', installCurrentCache);
 self.addEventListener('message', msgEvt => {
   let resources = msgEvt.data;
   if (resources && resources.type && resources.type === "pluginfiles") {
-    console.log("plugin files", self.currentCache, resources);
+    console.log(self.currentCache, "caching plugin files", resources.files);
     caches.open(self.currentCache).then(cache => {
       cache.addAll(resources.files);
     });
