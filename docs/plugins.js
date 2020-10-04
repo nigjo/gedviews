@@ -15,15 +15,17 @@
  */
 if (navigator.serviceWorker) {
   navigator.serviceWorker.addEventListener("message", function (evt) {
-    console.log("plugins", "message", evt.data);
     if (evt.data === "resourcelist") {
+      console.log(PLUGINS_LOGGER, "message", evt.data);
       updateWorker(event.source);
     }
   });
 }
 
-function updateWorker(sw) {
-  console.log("plugins", "updating worker cache");
+const PLUGINS_LOGGER = "PluginsManager";
+
+function updateWorker() {
+  console.log(PLUGINS_LOGGER, "updating worker cache");
   let data = localStorage.getItem("plugins");
   let plugins = JSON.parse(data);
   var resources = {
@@ -41,7 +43,10 @@ function updateWorker(sw) {
     }
   }
   if (resources.files.length > 0) {
-    sw.postMessage(resources);
+    if ("swManager" in window) {
+      window.swManager.sendMessage("pluginfiles", resources.files);
+    }
+    //sw.postMessage(resources);
   }
 }
 
@@ -59,12 +64,12 @@ function updateWorker(sw) {
   pluginQuery.open('GET', 'plugins.json', true);
   pluginQuery.overrideMimeType('application/json');
   pluginQuery.onerror = evt => {
-    console.error("plugins", evt);
+    console.error(PLUGINS_LOGGER, evt);
     updatePlugins({});
   };
   pluginQuery.onload = evt => {
     let names = JSON.parse(pluginQuery.responseText);
-    console.log("plugins", "scan for", names);
+    console.log(PLUGINS_LOGGER, "scan for", names);
     let nextPlugins = {};
     for (let pname of names) {
       nextPlugins[pname] = {};
@@ -109,16 +114,12 @@ function updatePlugins(loadedPlugins) {
   var loadedData = JSON.stringify(loadedPlugins);
   var storedData = localStorage.getItem("plugins");
   if (storedData !== loadedData) {
-    console.log("plugins", "updating plugin data", loadedPlugins);
+    console.log(PLUGINS_LOGGER, "updating plugin data", loadedPlugins);
     localStorage.setItem("plugins", loadedData);
     let evt = new CustomEvent("pluginsLoaded", {
       detail: loadedPlugins
     });
     document.dispatchEvent(evt);
   }
-  if (navigator.serviceWorker) {
-    navigator.serviceWorker.ready.then(registration => {
-      updateWorker(registration.active);
-    });
-  }
+  updateWorker();
 }

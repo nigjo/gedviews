@@ -36,7 +36,7 @@ self.addEventListener('fetch', function (event) {
             return response;
           }
         }
-      }else{
+      } else {
         console.log(self.currentCache, "no cache item for", cacheUrl);
       }
       const refresh = fetch(cacheUrl).then(function (response) {
@@ -53,17 +53,9 @@ self.addEventListener('fetch', function (event) {
 
 //Cache name in format "gedview-<year00><dayofyear000>-<counter>"
 //update on file changes
-self.currentCache = "gedview-20278-1201";
+self.currentCache = "gedview-20278-1324";
 
 function loadCacheContent(cache) {
-  self.clients.matchAll({type: "all"})
-          .then(clientList => {
-            console.log(self.currentCache,
-                    "reslist", "client list length:", clientList.length);
-            for (var i = 0; i < clientList.length; i++) {
-              clientList[i].postMessage("resourcelist");
-            }
-          });
   return cache.addAll([
     //main-site
     './favicon.ico',
@@ -94,6 +86,7 @@ function installCurrentCache(event) {
           caches.open(self.currentCache).then(loadCacheContent)
           );
   console.log(self.currentCache, 'install done');
+  //sendClientMessage('state', "installed");
 }
 self.addEventListener('activate', function (event) {
   event.waitUntil(caches.keys().then(keyList => {
@@ -104,6 +97,7 @@ self.addEventListener('activate', function (event) {
       }
     }));
   }));
+  //sendClientMessage('state', "activated");
 });
 //self.addEventListener('activate', (event) => {
 //  console.log('active', event);
@@ -111,11 +105,37 @@ self.addEventListener('activate', function (event) {
 //});
 self.addEventListener('install', installCurrentCache);
 self.addEventListener('message', msgEvt => {
-  let resources = msgEvt.data;
-  if (resources && resources.type && resources.type === "pluginfiles") {
-    console.log(self.currentCache, "caching plugin files", resources.files);
-    caches.open(self.currentCache).then(cache => {
-      cache.addAll(resources.files);
-    });
+  let message = msgEvt.data;
+  if (message && message.type) {
+    switch (message.type) {
+      case "pluginfiles":
+        console.log(self.currentCache, "caching plugin files", message.data);
+        caches.open(self.currentCache).then(cache => {
+          cache.addAll(message.data);
+        });
+        break;
+      case "getVersion":
+        sendClientMessage("version", self.currentCache);
+        break;
+      default:
+        console.warn(self.currentCache, "unknown message type", message.type);
+    }
+  } else {
+    console.warn(self.currentCache, "unknown client message", message);
   }
 });
+
+function sendClientMessage(type, payload = null) {
+  console.log(self.currentCache, "sending client message", type);
+  self.clients.matchAll({type: "all"})
+          .then(clientList => {
+            console.log(self.currentCache,
+                    "client list length:", clientList.length);
+            for (var i = 0; i < clientList.length; i++) {
+              clientList[i].postMessage({
+                type: type, data: payload,
+                version: self.currentCache
+              });
+            }
+          });
+}
