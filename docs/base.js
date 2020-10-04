@@ -14,32 +14,65 @@
  * limitations under the License.
  */
 
-function handleServices() {
-  navigator.serviceWorker.register('./viewworker.js')
-          .then((reg) => {
-            // registration worked
-            reg.onupdatefound = (evt) => {
-              let nextsw = reg.installing;
-              nextsw.onstatechange = () => {
-                if (nextsw.state === "installed") {
-                  notifyOfUpdate();
-                }
-              };
-            };
-            //console.log('Registration succeeded. Scope is ' + reg.scope);
-          }).catch((error) => {
-    // registration failed
-    console.log('Registration failed with ' + error);
-  });
-}
-function notifyOfUpdate() {
-  console.warn("update awailable");
-  let updatenotifier = document.getElementById("updatenotifier");
-  updatenotifier.style.display = "block";
+class ServiceManager {
+  constructor() {
+    let self = this;
+    navigator.serviceWorker.register('./viewworker.js').then((reg) => {
+
+      // registration worked
+      reg.onupdatefound = (evt) => {
+        let nextsw = reg.installing;
+        nextsw.onstatechange = () => {
+          if (nextsw.state === "installed") {
+            self.notifyOfUpdate();
+          }
+        };
+      };
+      //console.log('Registration succeeded. Scope is ' + reg.scope);
+    }).catch((error) => {
+      // registration failed
+      console.log('Registration failed with ' + error);
+    });
+    navigator.serviceWorker.addEventListener("message", this.handleMessages);
+  }
+  sendMessage(type, payload = null) {
+    console.log("ServiceManager", "sending message", type);
+    navigator.serviceWorker.ready.then(registration => {
+      registration.active.postMessage({
+        version: 1,
+        type: type, data: payload
+      });
+    });
+  }
+
+  notifyOfUpdate() {
+    console.warn("update awailable");
+    let updatenotifier = document.getElementById("updatenotifier");
+    updatenotifier.style.display = "block";
+  }
+
+  handleMessages(evt) {
+    let message = evt.data;
+    if (message && message.type) {
+      switch (message.type) {
+        case "version":
+          document.getElementById("version")
+                  .textContent = message.data.toLocaleString();
+          break;
+        default:
+          console.warn("ServiceManager", "unknown message type", message.type);
+          break;
+      }
+    } else {
+      console.warn("ServiceManager", "unknown message", evt);
+    }
+  }
+
 }
 
+
 if ('serviceWorker' in navigator) {
-  handleServices();
+  window.swManager = new ServiceManager();
 }
 
 function printFrame() {
@@ -55,6 +88,10 @@ class IndexPage {
   constructor() {
     //this.self = this;
     this.ged = null;
+    document.addEventListener('pluginsLoaded', this.updateNavLinks);
+    window.addEventListener('load', () => {
+      window.swManager.sendMessage("getVersion");
+    });
   }
 
   getIndiName(indi) {
@@ -194,5 +231,3 @@ class IndexPage {
 }
 
 this.gedviewPage = new IndexPage();
-
-document.addEventListener('pluginsLoaded', gedviewPage.updateNavLinks);
