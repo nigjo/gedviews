@@ -21,6 +21,10 @@ self.disableCacheDelay = false;
 
 self.addEventListener('fetch', function (event) {
   event.respondWith(caches.open(self.currentCache).then(function (cache) {
+    if (event.request.url.includes("?debug")){
+      console.log(self.currentCache, "disable cache delay");
+      self.disableCacheDelay = true;
+    }
     let cacheUrl = event.request.url.replace(/\?.*$/, '');
     //console.log(self.currentCache, "request", cacheUrl, event.request.url);
     return cache.match(cacheUrl).then(function (response) {
