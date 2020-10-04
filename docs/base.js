@@ -99,6 +99,7 @@ class IndexPage {
       return indi.getIndiName();
     return '';
   }
+
   static hideHeader(iframe) {
     let header;
     if (iframe.contentDocument.readyState === 'loading')
@@ -112,23 +113,26 @@ class IndexPage {
       }
     }
   }
+
   printGedviewFamily(viewfam, ged) {
     this.ged = ged;
     let view = document.querySelector('#view');
     IndexPage.hideHeader(view);
     if (viewfam.id)
       //TODO: get from plugins
-      view.src = 'simple/famview.html?' + viewfam.id.replace(/@/g, '');
+      view.src = 'selection/index.html?' + viewfam.id.replace(/@/g, '');
     else {
       view.src = 'welcome.html';
       delete document.querySelector('#famidmarker').dataset.famid;
     }
   }
+
   updateFamily(event) {
     this.updateView(event.target.href);
     document.getElementById('menuview').checked = false;
     return false;
   }
+
   updateView(targetLocation) {
     let fam = document.querySelector('#famidmarker').dataset.famid;
     let nextLoc = targetLocation.replace(/\?.*/, '')
@@ -139,6 +143,7 @@ class IndexPage {
     //console.log(event.target);
     return false;
   }
+
   updateSelection(evt) {
     let subloc = evt.target.contentWindow.location;
     IndexPage.hideHeader(evt.target);
@@ -168,6 +173,7 @@ class IndexPage {
       }
     }
   }
+
   handleDragging(event) {
     event.preventDefault();
     if (event.target && event.target.classList) {
@@ -198,6 +204,7 @@ class IndexPage {
       }
     }
   }
+
   viewfile(event) {
 //    console.log(event);
     if (event.target.files.length === 1) {
