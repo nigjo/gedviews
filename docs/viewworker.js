@@ -19,10 +19,10 @@
 self.addEventListener('fetch', function (event) {
   event.respondWith(caches.open(self.currentCache).then(function (cache) {
     let cacheUrl = event.request.url.replace(/\?.*$/, '');
-    console.log("request", self.currentCache, cacheUrl, event.request.url);
+    console.log(self.currentCache, "request", cacheUrl, event.request.url);
     return cache.match(cacheUrl).then(function (response) {
       const refresh = fetch(cacheUrl).then(function (response) {
-        console.log("update cache for ", cacheUrl);
+        console.log(self.currentCache, "update cache for ", cacheUrl);
         cache.put(cacheUrl, response.clone());
         return response;
       });
@@ -33,22 +33,13 @@ self.addEventListener('fetch', function (event) {
 
 //Cache name in format "gedview<year00><dayofyear000>"
 //update on file changes
-self.currentCache = "gedview20277b";
-self.deprecatedCaches = [
-  "gedview1",
-  "gedview20271",
-  "gedview20271b",
-  "gedview20271c",
-  "gedview20272",
-  "gedview20272b",
-  "gedview20275",
-  "gedview20277"
-];
+self.currentCache = "gedview-20278-3";
 
 function loadCacheContent(cache) {
   self.clients.matchAll({type: "window"})
           .then(clientList => {
-            console.log("reslist", "client list length:", clientList.length);
+            console.log(self.currentCache,
+                    "reslist", "client list length:", clientList.length);
             for (var i = 0; i < clientList.length; i++) {
               clientList[i].postMessage("resourcelist");
             }
@@ -75,17 +66,22 @@ function loadCacheContent(cache) {
 }
 
 function installCurrentCache(event) {
-  console.log('installing', self.currentCache);
+  console.log(self.currentCache, 'installing');
   event.waitUntil(
           caches.open(self.currentCache).then(loadCacheContent)
           );
-  event.waitUntil(self.deprecatedCaches.forEach((name) => {
-    console.log('removing cache ', name);
-    caches.delete(name);
-  }));
-  console.log('ok', self.currentCache);
+  console.log(self.currentCache, 'install done');
 }
-
+self.addEventListener('activate', function (event) {
+  event.waitUntil(caches.keys().then(keyList => {
+    return Promise.all(keyList.map(key => {
+      if (key !== self.currentCache) {
+        console.log(self.currentCache, "remove old cache", key);
+        return caches.delete(key);
+      }
+    }));
+  }));
+});
 //self.addEventListener('activate', (event) => {
 //  console.log('active', event);
 //  installCurrentCache(event);
