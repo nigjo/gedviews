@@ -16,12 +16,41 @@
 
 /* global self, caches, Promise, fetch */
 
+//Cache name in format "gedview-<year00><dayofyear000>-<counter>"
+//update on file changes
+self.currentCache = "gedview-20279-1921";
+
+function loadCacheContent(cache) {
+  return cache.addAll([
+    //main-site
+    './favicon.ico',
+    './index.html',
+    './base.css',
+    './base.js',
+    './gedview-base.js',
+    './plugins.js',
+    './plugins.json',
+    './welcome.html',
+    //PWA
+    './pwa.json',
+    './ScetchTree-192.png',
+    './ScetchTree-512.png',
+    //all known fonts
+    './fonts/fonts.css',
+    './fonts/Luminari-Regular.woff',
+    './fonts/unifrakturmaguntia-v11-latin-regular.woff2',
+    //external gists
+    './gedcomjs/gedcom.js',
+    './adjustspacingjs/adjustSpacing.js'
+  ]);
+}
+
 // set this to true in development mode. DO NOT COMMIT a "true" value!
 self.disableCacheDelay = false;
 
 self.addEventListener('fetch', function (event) {
   event.respondWith(caches.open(self.currentCache).then(function (cache) {
-    if (event.request.url.includes("?debug")){
+    if (event.request.url.includes("?debug")) {
       console.log(self.currentCache, "disable cache delay");
       self.disableCacheDelay = true;
     }
@@ -54,35 +83,6 @@ self.addEventListener('fetch', function (event) {
     });
   }));
 });
-
-//Cache name in format "gedview-<year00><dayofyear000>-<counter>"
-//update on file changes
-self.currentCache = "gedview-20278-1908";
-
-function loadCacheContent(cache) {
-  return cache.addAll([
-    //main-site
-    './favicon.ico',
-    './index.html',
-    './base.css',
-    './base.js',
-    './gedview-base.js',
-    './plugins.js',
-    './plugins.json',
-    './welcome.html',
-    //PWA
-    './pwa.json',
-    './ScetchTree-192.png',
-    './ScetchTree-512.png',
-    //all known fonts
-    './fonts/fonts.css',
-    './fonts/Luminari-Regular.woff',
-    './fonts/unifrakturmaguntia-v11-latin-regular.woff2',
-    //external gists
-    './gedcomjs/gedcom.js',
-    './adjustspacingjs/adjustSpacing.js'
-  ]);
-}
 
 function installCurrentCache(event) {
   console.log(self.currentCache, 'installing');
