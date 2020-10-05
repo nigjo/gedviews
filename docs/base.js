@@ -15,28 +15,36 @@
  */
 
 class ServiceManager {
+  static LOGGER = "ServiceManager";
   constructor() {
     let self = this;
     navigator.serviceWorker.register('./viewworker.js').then((reg) => {
 
       // registration worked
       reg.onupdatefound = (evt) => {
+        let currentsw = reg.active;
         let nextsw = reg.installing;
         nextsw.onstatechange = () => {
           if (nextsw.state === "installed") {
-            self.notifyOfUpdate();
+            //console.log(ServiceManager.LOGGER, nextsw);
+            //console.log(ServiceManager.LOGGER, reg.active);
+            if (!currentsw) {
+              console.log(ServiceManager.LOGGER, "maybe first contact");
+            } else {
+              self.notifyOfUpdate();
+            }
           }
         };
       };
       //console.log('Registration succeeded. Scope is ' + reg.scope);
     }).catch((error) => {
       // registration failed
-      console.log('Registration failed with ' + error);
+      console.warn(ServiceManager.LOGGER, 'Registration failed with ' + error);
     });
     navigator.serviceWorker.addEventListener("message", this.handleMessages);
   }
   sendMessage(type, payload = null) {
-    console.log("ServiceManager", "sending message", type);
+    console.log(ServiceManager.LOGGER, "sending message", type);
     navigator.serviceWorker.ready.then(registration => {
       registration.active.postMessage({
         version: 1,
@@ -46,7 +54,7 @@ class ServiceManager {
   }
 
   notifyOfUpdate() {
-    console.warn("update awailable");
+    console.warn(ServiceManager.LOGGER, "update awailable");
     let updatenotifier = document.getElementById("updatenotifier");
     updatenotifier.style.display = "block";
   }
@@ -60,11 +68,11 @@ class ServiceManager {
                   .textContent = message.data.toLocaleString();
           break;
         default:
-          console.warn("ServiceManager", "unknown message type", message.type);
+          console.warn(ServiceManager.LOGGER, "unknown message type", message.type);
           break;
       }
     } else {
-      console.warn("ServiceManager", "unknown message", evt);
+      console.warn(ServiceManager.LOGGER, "unknown message", evt);
     }
   }
 
@@ -80,11 +88,12 @@ function printFrame() {
   if (view.contentWindow) {
     view.contentWindow.print();
   } else {
-    console.warning("no view frame");
+    console.warn(IndexPage.LOGGER, "no view frame");
   }
 }
 
 class IndexPage {
+  static LOGGER = "IndexPage";
   constructor() {
     //this.self = this;
     this.ged = null;
@@ -214,11 +223,11 @@ class IndexPage {
   }
 
   updateNavLinks(evt) {
-    console.log("updateing navigation");
+    console.log(IndexPage.LOGGER, "updateing navigation");
     var container = document.querySelector('#viewselect');
     while (container.firstElementChild)
       container.firstElementChild.remove();
-    console.log("links", evt.detail);
+    console.log(IndexPage.LOGGER, "links", evt.detail);
     for (let name in evt.detail) {
       let plugin = evt.detail[name];
       if (plugin.target) {
@@ -233,7 +242,7 @@ class IndexPage {
     for (let i = 0; i < navLinks.length; i++) {
       navLinks[i].onclick = evt => window.gedviewPage.updateFamily(evt);
     }
-    console.log("update done");
+    console.log(IndexPage.LOGGER, "update done");
   }
 }
 
