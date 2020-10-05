@@ -1,3 +1,5 @@
+/* global printGedviewFamily */
+
 "use strict";
 /* 
  * Copyright 2020 nigjo.
@@ -85,7 +87,19 @@ function initGedcom(evt) {
 
   if (window.gedviewPage) {
     window.gedviewPage.printGedviewFamily(fam, ged);
-  } else {
+  } else if(typeof printGedviewFamily === 'function'){
     printGedviewFamily(fam, ged);
+  } else{
+    let warning = document.body.appendChild(document.createElement("div"));
+    warning.textContent="keine 'gedviewPage.\u200BprintGedviewFamily()' methode definiert.";
+    warning.style.width="50vw";
+    warning.style.position="absolute";
+    warning.style.left="25vw";
+    warning.style.top="33%";
+    warning.style.padding="1em";
+    warning.style.color="red";
+    warning.style.border="4px solid red";
+    warning.style.backgroundColor="gold";
+    warning.style.fontSize="max(1em,min(5vh,5vw))";
   }
 }
