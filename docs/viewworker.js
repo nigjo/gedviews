@@ -18,7 +18,7 @@
 
 //Cache name in format "gedview-<year00><dayofyear000>-<counter>"
 //update on file changes
-self.currentCache = "gedview-20279-1921";
+self.currentCache = "gedview-20280-0809";
 
 function loadCacheContent(cache) {
   return cache.addAll([

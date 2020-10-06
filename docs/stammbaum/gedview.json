@@ -1,0 +1,8 @@
+{
+  "caption": "Stammbaum",
+  "target": "index.html",
+  "resources": [
+    "stammbaum.js",
+    "stammbaum.css"
+  ]
+}
