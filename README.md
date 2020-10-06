@@ -1,4 +1,4 @@
-# GED Viewer Collection
+# GEDCOM-Views Collection
 
 A collection of simple webpages to display gedcom data. This is not an editor (yet)!
 
