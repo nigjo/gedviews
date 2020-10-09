@@ -19,6 +19,7 @@ limitations under the License.
 */
 :root{
   --rand:1em;
+  --colwidth:calc(25vw - (var(--rand) / 4) - 5px);
 }
 body{
   margin:var(--rand);  
@@ -40,7 +41,7 @@ body{
   white-space:pre;
   line-height:1em;
   left:0;
-  max-width: calc(25vw - (var(--rand) / 4) - 1em);
+  max-width: calc(var(--colwidth) - 1em);
   /*! border-left:1px solid gray; */
 }
 .indi>div{
@@ -48,8 +49,11 @@ body{
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.indi>div:first-child:empty:after{
+  content:" ";
+}
 .indi>div:first-child{
-  width:calc(25vw - (var(--rand) / 4) - .5em);
+  width:calc(var(--colwidth) - .5em);
   font-weight:bold;
   border-bottom:1px solid gray;
   x-background-color:linen;
@@ -69,7 +73,7 @@ body{
 .generation{
   position:relative;
   min-height: 7em;
-  padding-left: calc(25vw - (var(--rand) / 4));
+  padding-left: var(--colwidth);
   xborder: 1px solid green;
   box-sizing: border-box;
 }
@@ -78,6 +82,12 @@ main{
   /*! width:calc(100% - 1em); */
   /*! height:100%; */
   display: block;
+}
+
+@media (max-device-width:41em){
+  :root{
+    --colwidth:calc(25vw - (var(--rand) / 4));
+  }
 }
 @media print {
   header{
