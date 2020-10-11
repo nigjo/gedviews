@@ -85,6 +85,7 @@ if ('serviceWorker' in navigator) {
 
 function printFrame() {
   let view = document.getElementById("view");
+  document.getElementById('menuview').checked = false;
   if (view.contentWindow) {
     view.contentWindow.print();
   } else {
