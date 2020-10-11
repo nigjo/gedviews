@@ -28,7 +28,8 @@ limitations under the License.
 main ul{padding-left:0;}
 .fams,.famc{min-width:1.5em;margin-left:.25em;}
 a.fams,a.famc{text-decoration:none;}
-.name{flex-grow:1;margin-left:.5em;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
+.event>span:not(:first-child){margin-left:.5em;}
+.name{flex-grow:1;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
     </style>
     <script src="../gedcomjs/gedcom.js"></script>
     <script src="../gedview-base.js"></script>
@@ -39,8 +40,8 @@ a.fams,a.famc{text-decoration:none;}
       <h1>Ereignisse</h1>
     </header>
     <main>
+      <h2>Heute</h2><div id="today">noch keine Ereignisse</div>
       <h2>Geburtstage</h2>
-      <h3>Heute</h3><div id="today">noch keine Ereignisse</div>
       <h3>In den letzten Tagen</h3><div id="recent">noch keine Ereignisse</div>
       <h3>In den kommenden Tagen</h3><div id="next">noch keine Ereignisse</div>
       <h2>Hochzeitstage</h2><div id="marriages">noch keine Ereignisse</div>
