@@ -17,6 +17,33 @@
  * limitations under the License.
  */
 
+/**
+ * Switch to the next family.
+ *
+ * @param {Family|HTMLElement|String} famRec a reference to the next family.
+ *    This can be a Family record or a HTMLElement with a "data-famid" attribute
+ *    or the family-id as a string.
+ * @returns {undefined}
+ */
+function switchFamily(famRec) {
+  let famid;
+  if (!famRec) {
+    return;
+  }
+  if (famRec instanceof Family) {
+    famid = famRec.id;
+  } else if (famRec instanceof HTMLElement) {
+    if (!"famid" in famRec.dataset)
+      return;
+    famid = famRec.dataset.famid;
+  } else {
+    if (!famRec.match(/^@?\w+\d+@?$/))
+      return;
+    famid = famRec;
+  }
+  window.location.href = '?' + famid.replace(/@/g, '');
+}
+
 function loadGedviewGedcom() {
   var storedData = window.localStorage.getItem('GEDview.gedfile');
   if (storedData) {
