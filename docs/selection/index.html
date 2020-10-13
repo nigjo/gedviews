@@ -33,6 +33,11 @@ limitations under the License.
       .indiname{display:inline-block;flex-basis:50%;}
       .wife{margin-left:.5em;}
       .husb{margin-right:.5em;}
+      @media print {
+        main>div:first-child{display:none;}
+        .famcontainer{flex-basis:initial;overflow-y:inherit;}
+        main:before{content:"Familienliste";margin:.5em 0;font-size:150%;}
+      }
     </style>
     <script>
       window.localStorage.setItem('localdebug', true);
@@ -88,7 +93,7 @@ limitations under the License.
               option.onclick = function (evt) {
                 sessionStorage.setItem('gedview.search.scolltop',
                         document.querySelector(".famcontainer").scrollTop);
-                location.href = "?" + evt.currentTarget.dataset['famid'].replace(/@/g, '');
+                switchFamily(evt.currentTarget);
                 return false;
               };
 
@@ -101,7 +106,10 @@ limitations under the License.
                 listoption = this.getIndiOption(allfams[i], allfams[i].getHusband(), "Father");
                 names.append(listoption);
               } else {
-                option.append('???');
+                let dummy = option.appendChild(document.createElement("span"));
+                dummy.classList.add("indiname");
+                dummy.classList.add("husb");
+                dummy.append('???');
               }
 
               option.append(" - ");
@@ -143,7 +151,7 @@ limitations under the License.
         let searchval = context.value;
         sessionStorage.removeItem('gedview.search.scolltop');
         let famid = searchval.substring(0, searchval.lastIndexOf('-'));
-        document.location = '?' + famid.replace(/@/g, '');        
+        switchFamily(famid);
       }
     </script>
   </head>
