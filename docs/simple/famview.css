@@ -13,7 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-body{font-family:sans-serif;}
+:root{
+  --bgcol:white;
+  --popupbg:var(--bgcol);
+  --popupcloser:rgba(192,192,192,.75);
+}
+body{font-family:sans-serif;position:relative;}
 .indi h2{margin:0;font-size:1.5em;}
 .indi{
   display:inline-block;
@@ -39,13 +44,48 @@ body{font-family:sans-serif;}
   width: 60em;
 }
 .indi{position:relative;}
-.indi.famc h2:after,.indi.fams h2:after{content:' +';text-align:right;  
-  position:absolute;right:.25em;top:0em;
-  font-size:.75em;color:gray;
+.indi.famc h2:after,.indi.fams h2:after{content:' \2192';text-align:right;  
+                                        position:absolute;right:.25em;top:0em;
+                                        font-size:.75em;color:gray;
 }
+.indi.moremarr h2:after{content:' \21C9'}
 .indi.famc:hover,.indi.fams:hover{
   background-color:lightblue;
   cursor:pointer;
+}
+
+.popup{
+  display:block;
+  position:absolute;
+  top:50%;
+  left:50%;
+  min-width:50%;
+  max-width:66%;
+  border:1px solid red;
+  background-color:var(--popupbg);
+  padding:1vmin;
+  transform:translate(-50%,-50%);
+  line-height:2em;
+}
+.popuprow:nth-child(odd) {
+  /*! line-height: 2em; */
+  background-color: rgba(128,128,128,.5);
+}
+.popuprow a {
+  width: 100%;
+  display: inline-block;
+  padding: 0 1vmin;
+  text-decoration: none;
+}
+.popup .closer{
+  position:absolute;
+  right:max(1vw,4px);
+  top:max(1vh,4px);
+  cursor:pointer;
+  border:1px solid var(--popupcloser);
+  color:var(--popupcloser);
+  line-height:1em;
+  padding:2px;
 }
 
 @media (max-width:60em) {
