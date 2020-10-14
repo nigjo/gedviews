@@ -78,3 +78,7 @@ This will also result in a page reload, so the plugin itself will be reinitializ
 The entry point is called with the "new" family.
 Do not `replace()` your windows location with the new location as this will break the
 "back" button in most browsers and mobile devices.
+
+Another method is to use the function `switchFamily()` from `gedview-base.js`. You
+can use a `Family` record, a `HTMLElement` with `famid` dataset entry or a string as
+a parameter. The method will create the correct new location.
