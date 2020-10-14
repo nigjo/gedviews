@@ -56,8 +56,23 @@ class ServiceManager {
   notifyOfUpdate() {
     console.warn(ServiceManager.LOGGER, "update awailable");
     let updatenotifier = document.getElementById("updatenotifier");
-    updatenotifier.style.display = "block";
+    if (updatenotifier) {
+      updatenotifier.style.display = "block";
+    }
   }
+  
+  static toggleInfos(){
+    let updatenotifier = document.getElementById("updatenotifier");
+    if(updatenotifier){
+      updatenotifier.style.display = "none";
+    }
+    let unabletoclose = document.getElementById("unabletoclose");
+    if(unabletoclose){
+      unabletoclose.style.display = "block";
+    }
+  }
+
+  
 
   handleMessages(evt) {
     let message = evt.data;

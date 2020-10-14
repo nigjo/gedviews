@@ -43,13 +43,13 @@ nav li>*{min-width:8em;text-align:center;text-decoration:none;
          background-color:var(--menuitem);padding:.33em .5em;width:100%}
 nav li>*{border:1px dotted gray;}
 #menuview~label{display:none;}
-#updatenotifier:before{
+.updateinfo:before{
   content:'Hinweis';
   display:block;
   font-size:200%;
   font-family:Luminari,Arial,sans-serif;  
 }
-#updatenotifier{
+.updateinfo{
   display:block;
   position:absolute;
   padding:1em;

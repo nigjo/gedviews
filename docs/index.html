@@ -34,12 +34,18 @@ limitations under the License.
       <header>
         <h1 id="famidmarker">Familieninfomationen</h1>
         <div id="famname">noch keine Familie gewählt</div>
-        <div id="updatenotifier" style="display:none">
+        <div id="updatenotifier" class="updateinfo" style="display:none">
           Es ist eine aktuellere Version der Anwendung verfügbar.
           Die Anwendung sollte einmal neu gestartet werden.
           Für den Neustart ist eine aktive Internetverbindung notwendig.
-          <div><a href="#" onclick="window.close();">Anwendung schließen</a></div>
+          <div><a href="#" onclick="window.close();ServiceManager.toggleInfos();">Anwendung schließen</a></div>
           <div><a href="#" onclick="document.getElementById('updatenotifier').style.display='none'">Hinweis schließen</a></div>
+        </div>
+        <div id="unabletoclose" class="updateinfo" style="display:none">
+          Die Anwendung konnte nicht automatisch geschlossen werden.
+          Bitte schließen sie einmal die Anwendung manuell und starten
+          Sie sie anschließend neu.
+          <div><a href="#" onclick="document.getElementById('unabletoclose').style.display='none'">Hinweis schließen</a></div>
         </div>
       </header>
       <nav>
