@@ -57,7 +57,7 @@ function loadGedviewGedcom() {
 /**
  *@deprecated do not load any default file
  */
-function loadDefaultGedcom(){
+function loadDefaultGedcom() {
   var request = new XMLHttpRequest();
   request.open('GET', 'gedview.ged', true);
   request.overrideMimeType('text/plain');
@@ -103,7 +103,17 @@ function initGedcom(evt) {
   var allfams = ged.getFamilies();
 
   if (location.search) {
-    fam = ged.getFamily('@' + location.search.substring(1) + '@');
+    let params = new URLSearchParams(location.search.substring(1));
+    if (params.has("fam")) {
+      fam = ged.getFamily("@" + params.get("fam") + "@");
+    } else {
+      for (const[key, value] of params) {
+        if (key !== "debug" && value === "") {
+          fam = ged.getFamily('@' + key + '@');
+          break;
+        }
+      }
+    }
   } else {
     fam = allfams[0];
   }
@@ -114,19 +124,19 @@ function initGedcom(evt) {
 
   if (window.gedviewPage) {
     window.gedviewPage.printGedviewFamily(fam, ged);
-  } else if(typeof printGedviewFamily === 'function'){
+  } else if (typeof printGedviewFamily === 'function') {
     printGedviewFamily(fam, ged);
-  } else{
+  } else {
     let warning = document.body.appendChild(document.createElement("div"));
-    warning.textContent="keine 'gedviewPage.\u200BprintGedviewFamily()' methode definiert.";
-    warning.style.width="50vw";
-    warning.style.position="absolute";
-    warning.style.left="25vw";
-    warning.style.top="33%";
-    warning.style.padding="1em";
-    warning.style.color="red";
-    warning.style.border="4px solid red";
-    warning.style.backgroundColor="gold";
-    warning.style.fontSize="max(1em,min(5vh,5vw))";
+    warning.textContent = "keine 'gedviewPage.\u200BprintGedviewFamily()' methode definiert.";
+    warning.style.width = "50vw";
+    warning.style.position = "absolute";
+    warning.style.left = "25vw";
+    warning.style.top = "33%";
+    warning.style.padding = "1em";
+    warning.style.color = "red";
+    warning.style.border = "4px solid red";
+    warning.style.backgroundColor = "gold";
+    warning.style.fontSize = "max(1em,min(5vh,5vw))";
   }
 }
