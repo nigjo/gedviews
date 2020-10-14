@@ -9,7 +9,7 @@ The Site is designed as PWA and will store no data on server side. Your Gedcom f
 The main structure of a GEDCOM file is defined in the v5.5.1 standard by
 the "Church of Jesus Christ of Latter-day Saints".
 A download link can be found on the german
-http://wiki-de.genealogy.net/Gedcom["genealoby.net"-wiki]. 
+["genealoby.net"-wiki](http://wiki-de.genealogy.net/Gedcom). 
 This site does not support any other format.
 
 Each line in a GEDCOM file is a record. By defining a specific "level" the
