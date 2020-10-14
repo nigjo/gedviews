@@ -4,6 +4,7 @@
 "resources":[
   "Ahnentafel.css",
   "Ahnentafel.js",
-  "Ahnentafel.jpg"
+  "Ahnentafel.jpg",
+  "../adjustspacingjs/adjustSpacing.js"
 ]
 }
