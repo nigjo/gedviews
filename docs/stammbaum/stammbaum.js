@@ -20,7 +20,7 @@ class StammBaum {
     while (main.firstChild)
       main.firstChild.remove();
     //fam.getChildren();
-    this.addGeneration(main, fam, 1);
+    this.addGeneration(main, fam, 2);
   }
 
   setVal(indi, path) {
@@ -44,24 +44,30 @@ class StammBaum {
             .append(indi ? indi.getIndiName() : "");
     data.appendChild(document.createElement("div"))
             .append("G:", this.setVal(indi, ["BIRT", "DATE"]), "\n");
-    data.appendChild(document.createElement("div"))
-            .append("O:", this.setVal(indi, ["BIRT", "PLAC"]), "\n");
-    if (num % 2 === 1) {
+    if (num < 16) {
       data.appendChild(document.createElement("div"))
-              .append("H:", this.setVal(indi, ["FAMS", "MARR","DATE"]), "\n");
+              .append("O:", this.setVal(indi, ["BIRT", "PLAC"]), "\n");
+    }
+    if (num % 2 === 0) {
       data.appendChild(document.createElement("div"))
-              .append("O:", this.setVal(indi, ["FAMS", "MARR","PLAC"]), "\n");
+              .append("H:", this.setVal(indi, ["FAMS", "MARR", "DATE"]), "\n");
+      if (num < 16) {
+        data.appendChild(document.createElement("div"))
+                .append("O:", this.setVal(indi, ["FAMS", "MARR", "PLAC"]), "\n");
+      }
     }
     data.appendChild(document.createElement("div"))
             .append("T:", this.setVal(indi, ["DEAT", "DATE"]), "\n");
-    data.appendChild(document.createElement("div"))
-            .append("O:", this.setVal(indi, ["DEAT", "PLAC"]), "\n");
-    this.addGeneration(husb, indi ? indi.getParentFamily() : false, num * 2 + 1);
+    if (num < 16) {
+      data.appendChild(document.createElement("div"))
+              .append("O:", this.setVal(indi, ["DEAT", "PLAC"]), "\n");
+    }
+    this.addGeneration(husb, indi ? indi.getParentFamily() : false, num * 2);
     return husb;
   }
 
   addGeneration(parentDiv, fam, husbNum) {
-    if (husbNum >= 30)
+    if (husbNum > 31)
       return;
     this.addIndi(parentDiv, fam ? fam.getHusband() : false, husbNum)
             .classList.add("husb");
