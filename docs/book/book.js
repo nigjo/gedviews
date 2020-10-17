@@ -74,7 +74,7 @@ function createParent(indi2, type, caption, hints) {
   applyAttributes(copy, viewdata);
 
   var acaption = copy.querySelector('*[data-key="name"]>.attrCaption');
-  acaption.innerHTML = caption + ': ';
+  acaption.textContent = caption + ': ';
 
   return copy;
 }
@@ -100,7 +100,7 @@ function createChild(indi, num) {
   applyAttributes(copy, viewdata);
 
   var acaption = copy.querySelector('*[data-key="name"]>.attrCaption');
-  acaption.innerHTML = num + '. Kind: ';
+  acaption.textContent = num + '. Kind: ';
 
   return copy;
 }
