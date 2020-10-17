@@ -132,62 +132,78 @@ header>h1[data-famid]:after{
 }
 @media print {
   header,footer{display:none;}
-  body{
-    font-size:12pt;
+  :root{
+    font-size:calc(99vh / 62);
   }
   main{font-size:inherit;}
   .gedview-child,.gedview-child{z-index:-1}
-  .gedview-child:first-child:before{    
-    background-color:lightgray;
+  .gedview-child:first-child:before{
     content:'Kinder';
+  }
+  .gedview-child:first-child:before{
+    background-color:lightgray;
     width:100%;
-    font-size:1.5em;
+    height:2rem;
+    font-size: 1.5rem;
   }
   .gedview-titlepage{
     display:flex;
     align-items:center;
     overflow:hidden;
-    height: calc(100vh - 2.5cm);
+    height: calc(100vh);
     position:relative;
     box-sizing: border-box;
   }
   .gedview-titlepage[data-famid]:after{
     top: unset;
-    right: 1em;
-    bottom:1em;
+    right: 1rem;
+    bottom:1rem;
     left:unset;
     content: 'ID:' attr(data-famid);
+    font-size:1rem;
   }
   .gedview-titlepage>.centerer{
     width:100%;
   }
   .gedview-titlepage p.title{
-    font-size:2cm;
-    margin-bottom:2cm;
+    font-size:4rem;
+    margin-bottom:1em;
   }
   .gedview-titlepage p{
     margin:0px;
     text-align: center;
-    font-size: 1cm;
+    font-size:2rem;
     font-family: UnifrakturMaguntia,Luminari,Segoe Print,Arial,sans-serif;
   }
   .gedview-page{
     counter-increment: pages;
-    top: calc(1cm - .5em);
+    top: 0;
     position: relative;
     page-break-inside: avoid;
-    border:.25em solid black;
-    border-radius:.5em;
+    border:.5vh solid black;
+    border-radius:.5rem;
     box-sizing: border-box;
     font-size: inherit;
   }
   .gedview-page:first-child{
-    border-top:.25em solid black;
+    border-top:.5vh solid black;
   }
   .gedview-page:before,.gedview-page:after{
     position: absolute;
-    top:-1.5em;
+    top:-1.5rem;
     font-family: serif;
-    font-size: 1.5em;
+    font-size: 1.5rem;
+  }
+  .gedview-attr, .gedview-attr>a{
+    min-height:initial;
+    vertical-align:bottom;
+    height: 2rem;
+  }
+  .note{
+    height: 12rem;
+  }
+  .gedview-parent > .gedview-attr[data-key="name"]{
+    font-size: 1rem;
+    background-color: initial;
   }
 }
