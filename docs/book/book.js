@@ -94,6 +94,9 @@ class FamilyBookPage {
         sex: this.getCleanId(indi.id),
         'fams-spou-name': this.getCleanId(viewdata['fams'])
       };
+      if ("fams" in viewdata) {
+        this.findMarriages(indi, viewdata['fams']);
+      }
     }
 
     copy.firstElementChild.setAttribute('data-num', num);
@@ -106,6 +109,7 @@ class FamilyBookPage {
     return copy;
   }
 
+  //this was before rec.getPath() exists.
   flattenRecord(rec, result = {}, prefix = '') {
     if (rec.children) {
       for (var sub of rec.children) {
@@ -122,6 +126,7 @@ class FamilyBookPage {
     return result;
   }
 
+  //this was before rec.getPath() exists.
   flattenIndividual(indi) {
     var result = this.flattenRecord(indi, {});
     if (result['fams']) {
@@ -185,10 +190,14 @@ class FamilyBookPage {
       page.setAttribute('data-famid', this.getCleanId(fam.id));
     }
 
+    this.moreInformations = [];
+
     parentdiv.appendChild(this.createParent(fam.getHusband(),
             'husb', 'Ehemann'));
+    this.findMarriages(fam.getHusband(), fam.id);
     parentdiv.appendChild(this.createParent(fam.getWife(),
             'wife', 'Ehefrau'));
+    this.findMarriages(fam.getWife(), fam.id);
 
     var childdiv = page.appendChild(document.createElement('div'));
     var children = fam.getChildren();
@@ -223,7 +232,37 @@ class FamilyBookPage {
     notediv.classList.add('note');
     var caption = notediv.appendChild(document.createElement('span'));
     caption.classList.add('attrCaption');
-    caption.appendChild(document.createTextNode('Sonstige Informationen:'));
+    caption.append('Sonstige Informationen:');
+    for (let entry of this.moreInformations) {
+      let line = notediv.appendChild(document.createElement("p"));
+      if ("fam" in entry) {
+        let link = line.appendChild(document.createElement("a"));
+        link.href = "?" + entry.fam.replace(/@/g, "");
+        link.append(entry.text);
+      } else {
+        line.append(entry.text);
+      }
+    }
+  }
+
+  findMarriages(indi, thisFam) {
+    if (indi) {
+      for (let fam of indi.getFamilies()) {
+        if (fam.id !== thisFam) {
+          let item = {indi: indi.id, fam: fam.id,
+            text: indi.id + " hat eine weitere Familie " + fam.id};
+          if (fam.getHusband() === indi) {
+            item.text = indi.getIndiName() + " hat eine weitere Familie mit "
+                    + fam.getWife().getIndiName();
+          } else if (fam.getWife() === indi) {
+            item.text = indi.getIndiName() + " hat eine weitere Familie mit "
+                    + fam.getHusband().getIndiName();
+          }
+
+          this.moreInformations.push(item);
+        }
+      }
+    }
   }
 
   printGedviewFamily(fam, ged) {

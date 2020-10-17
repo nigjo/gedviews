@@ -88,14 +88,21 @@ header>h1[data-famid]:after{
 .note{
   min-height: 10em;
 }
+.note>p{
+  font-size:1rem;
+  margin:.25rem 0;
+}
+.note a{
+  text-decoration:none;
+}
 .gedview-parent>.gedview-attr[data-key=name]{
   font-size: 1.25em;
   background-color:lightgray;
   z-index:-1;
 }
 .gedview-attr[data-key=name]:before{
- display:inline-block;
- width:5em;
+  display:inline-block;
+  width:5em;
 }
 .gedview-attr:after,.gedview-attr>.attrCaption{
   font-family: Consolas,monospace;
