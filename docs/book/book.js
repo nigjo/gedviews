@@ -58,7 +58,7 @@ function getCleanId(idvalue) {
 function createParent(indi2, type, caption, hints) {
   var copy = getTemplate('gedview-parent');
   copy.firstElementChild.setAttribute('data-type', type);
-  if (type !== 'husb') {
+  if (type !== 'wife') {
     removeAttribute(copy, 'fams-marr-date');
     removeAttribute(copy, 'fams-marr-plac');
   }
