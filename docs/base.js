@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {resetGedcom} from "./gedview-base.js";
+
 class ServiceManager {
   static LOGGER = "ServiceManager";
   constructor() {
@@ -117,6 +119,7 @@ class IndexPage {
     window.addEventListener('load', () => {
       window.swManager.sendMessage("getVersion");
     });
+    console.log(IndexPage.LOGGER, "page initialized");
   }
 
   getIndiName(indi) {
@@ -262,4 +265,4 @@ class IndexPage {
   }
 }
 
-this.gedviewPage = new IndexPage();
+window.gedviewPage = new IndexPage();

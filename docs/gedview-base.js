@@ -1,6 +1,3 @@
-/* global printGedviewFamily */
-
-"use strict";
 /* 
  * Copyright 2020 nigjo.
  *
@@ -16,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+"use strict";
+import {Gedcom, Family, Individual} from "./gedcomjs/gedcom.js";
 
 /**
  * Switch to the next family.
@@ -53,29 +52,6 @@ function loadGedviewGedcom() {
     window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
     return;
   }
-}
-/**
- *@deprecated do not load any default file
- */
-function loadDefaultGedcom() {
-  var request = new XMLHttpRequest();
-  request.open('GET', 'gedview.ged', true);
-  request.overrideMimeType('text/plain');
-  request.onload = function () {
-    var ged = new Gedcom();
-
-    ged.load(request.responseText);
-
-    console.log("gedview.ged", ged);
-    window.localStorage.setItem('GEDview.gedfile', ged.print());
-
-    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
-  };
-  request.onerror = function (evt) {
-    console.error(evt);
-    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: new Gedcom()}));
-  };
-  request.send();
 }
 window.addEventListener('DOMContentLoaded', loadGedviewGedcom);
 window.addEventListener('gedcomLoaded', initGedcom);
@@ -140,3 +116,5 @@ function initGedcom(evt) {
     warning.style.fontSize = "max(1em,min(5vh,5vw))";
   }
 }
+
+export {loadGedfile, resetGedcom, switchFamily};

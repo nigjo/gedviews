@@ -24,10 +24,23 @@ limitations under the License.
     <link rel="apple-touch-icon" href="ScetchTree-192.png">
     <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
     <link rel="manifest" href="./pwa.json">
-    <script src="gedcomjs/gedcom.js"></script>
-    <script src="gedview-base.js"></script>
-    <script src="base.js"></script>
-    <script src="plugins.js"></script>
+    <script type="module" src="gedview-base.js"></script>
+    <script type="module" src="base.js"></script>
+    <script type="module" src="plugins.js"></script>
+    <script type="text/javascript">
+      function updateSelection(event) {
+        if ("gedviewPage" in window) {
+          console.log("index.html", "updating selection");
+          window.gedviewPage.updateSelection(event);
+        } else {
+          console.log("index.html", "deplaying selection update");
+          window.addEventListener("load", evt => {
+            console.log("index.html", "resend event");
+            updateSelection(event);            
+          });
+        }
+      }
+    </script>
   </head>
   <body>
     <div class="box">
@@ -39,13 +52,13 @@ limitations under the License.
           Die Anwendung sollte einmal neu gestartet werden.
           Für den Neustart ist eine aktive Internetverbindung notwendig.
           <div><a href="#" onclick="window.close();ServiceManager.toggleInfos();">Anwendung schließen</a></div>
-          <div><a href="#" onclick="document.getElementById('updatenotifier').style.display='none'">Hinweis schließen</a></div>
+          <div><a href="#" onclick="document.getElementById('updatenotifier').style.display = 'none'">Hinweis schließen</a></div>
         </div>
         <div id="unabletoclose" class="updateinfo" style="display:none">
           Die Anwendung konnte nicht automatisch geschlossen werden.
           Bitte schließen sie einmal die Anwendung manuell und starten
           Sie sie anschließend neu.
-          <div><a href="#" onclick="document.getElementById('unabletoclose').style.display='none'">Hinweis schließen</a></div>
+          <div><a href="#" onclick="document.getElementById('unabletoclose').style.display = 'none'">Hinweis schließen</a></div>
         </div>
       </header>
       <nav>
@@ -54,10 +67,10 @@ limitations under the License.
         <ul>
           <li><a href="welcome.html">Start</a>
           </li><li><label id="dropzone"
-                          ondrop="gedviewPage.handleDragging(event);"
-                          ondragover="gedviewPage.handleDragging(event);"
-                          ondragleave="gedviewPage.handleDragging(event);"
-                          >Datei wählen<input type="file" onchange="gedviewPage.viewfile(event)" name="dropfile"></label>
+                          ondrop="window.gedviewPage.handleDragging(event);"
+                          ondragover="window.gedviewPage.handleDragging(event);"
+                          ondragleave="window.gedviewPage.handleDragging(event);"
+                          >Datei wählen<input type="file" onchange="window.gedviewPage.viewfile(event)" name="dropfile"></label>
           </li>
         </ul>
         <ul id="viewselect"></ul>
@@ -68,7 +81,7 @@ limitations under the License.
         </ul>
       </nav>
       <main>
-        <iframe id="view" src="welcome.html" onload="gedviewPage.updateSelection(event)"></iframe>
+        <iframe id="view" src="welcome.html" onload="updateSelection(event);"></iframe>
       </main>
       <footer><span>Gedview by Nigjo</span>
         <span id="version"></span>
