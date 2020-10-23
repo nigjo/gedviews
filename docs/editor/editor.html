@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--
+Copyright 2020 nigjo.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>GEDCOM Family Editor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="editor.css"/>
+<script src="../gedcomjs/gedcom.js"></script>
+<script src="editor.js"></script>
+</head>
+<body>
+<header><h1>Simple GEDCOM Editor</h1></header>
+<main>
+<p>
+Dieser Editor erstellt nur eine einzelne Familie im GEDCOM Format. Es
+soll keinen vollständigen Editor ersetzten, wie es ihn zuhauf im
+Internet gibt.
+</p>
+<div id="editor">
+<form onsubmit="updateGedcom(event.target);return false;">
+<input type="submit" value="aktualisieren">
+<div class="fam propgroup">
+<div class="prop"><span>Familien-ID</span><input name="FAMS" pattern="^@[^@]+@$" placeholder="@F1@"/></div>
+<div class="prop"><span>Hochzeitsdatum</span><input name="FAMS-MARR-DATE"/></div>
+<div class="prop"><span>Hochzeitsort</span><input name="FAMS-MARR-PLAC"/></div>
+</div>
+<div class="parents">
+<div class="indi husb propgroup"><h3>Ehemann</h3>
+<div class="prop"><span>ID</span><input name="HUSB" pattern="^@[^@]+@$" placeholder="@I1@"/></div>
+<div class="prop"><span>Vorname(n)</span><input name="HUSB-NAME-GIVN"/></div>
+<div class="prop"><span>Geburtsname</span><input name="HUSB-NAME-SURN"/></div>
+<div class="prop"><span>Geburtstag</span><input name="HUSB-BIRT-DATE"/></div>
+<div class="prop"><span>Geburtsort</span><input name="HUSB-BIRT-PLAC"/></div>
+<div class="prop"><span>Sterbetag</span><input name="HUSB-DEAT-DATE"/></div>
+<div class="prop"><span>Sterbeort</span><input name="HUSB-DEAT-PLAC"/></div>
+<div class="prop"><span>Elternfamilie</span><input name="HUSB-FAMC" pattern="^@[^@]+@$" placeholder="@F2@"/></div>
+</div>
+<div class="indi wife propgroup"><h3>Ehefrau</h3>
+<div class="prop"><span>ID</span><input name="WIFE" pattern="^@[^@]+@$" placeholder="@I2@"/></div>
+<div class="prop"><span>Vorname(n)</span><input name="WIFE-NAME-GIVN"/></div>
+<div class="prop"><span>Geburtsname</span><input name="WIFE-NAME-SURN"/></div>
+<div class="prop"><span>Geburtstag</span><input name="WIFE-BIRT-DATE"/></div>
+<div class="prop"><span>Geburtsort</span><input name="WIFE-BIRT-PLAC"/></div>
+<div class="prop"><span>Sterbetag</span><input name="WIFE-DEAT-DATE"/></div>
+<div class="prop"><span>Sterbeort</span><input name="WIFE-DEAT-PLAC"/></div>
+<div class="prop"><span>Elternfamilie</span><input name="WIFE-FAMC" pattern="^@[^@]+@$" placeholder="@F3@"/></div>
+</div>
+</div><h3>Kinder</h3><div id="children">
+</div>
+<input type="button" value="weiteres Kind" onclick="addChild()">
+</form>
+</div>
+<template id="childblock">
+<div class="indi child propgroup">
+<div class="prop"><span>ID</span><input name="CHIL" pattern="^@[^@]+@$" placeholder="@I3@"/></div>
+<div class="prop"><span>Vorname(n)</span><input name="CHIL-NAME-GIVN"/></div>
+<div class="prop"><span>Geburtsname</span><input name="CHIL-NAME-SURN"/></div>
+<div class="prop"><span>Geburtstag</span><input name="CHIL-BIRT-DATE"/></div>
+<div class="prop"><span>Geburtsort</span><input name="CHIL-BIRT-PLAC"/></div>
+<div class="prop"><span>Sterbetag</span><input name="CHIL-DEAT-DATE"/></div>
+<div class="prop"><span>Sterbeort</span><input name="CHIL-DEAT-PLAC"/></div>
+<div class="prop"><span>Ehefamilie</span><input name="CHIL-FAMS" pattern="^@[^@]+@$" placeholder="@F3@"/></div>
+</div>
+</template>
+<pre id="result">Die Ausgabe wird durch den Button "aktualisieren" erzeugt
+</pre>
+</main>
+</body>
+</html>

@@ -1,0 +1,22 @@
+div>span:first-child {
+ min-width:7em;
+ display:inline-block;
+}
+.parents{display:flex;}
+.propgroup{margin:.5em;}
+.prop{margin:.2em 0;}
+main{position:relative;}
+#editor{float:left;}
+#children{display:flex;flex-wrap:wrap;max-width:40em;}
+input:not([type]){width: 13em;}
+pre{
+  background-color:lightgray;
+  border:1px dashed gray;
+  display: inline-block;
+  padding:1em;
+  column-count: 3;
+  column-fill:  auto;
+  max-height: 15rem;
+  margin: 0;
+  max-width: 50%;
+}
