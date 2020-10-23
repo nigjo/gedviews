@@ -68,9 +68,22 @@ function updateWorker() {
     updatePlugins({});
   };
   pluginQuery.onload = evt => {
-    let names = JSON.parse(pluginQuery.responseText);
-    console.log(PLUGINS_LOGGER, "scan for", names);
+    let settings = JSON.parse(pluginQuery.responseText);
+    let names = [];
+    if (Array.isArray(settings)) {
+      names = settings;
+    } else if ("active" in settings) {
+      names = settings.active;
+    }
     let nextPlugins = {};
+    if ("known" in settings) {
+      nextPlugins.start = settings.start;
+    }
+
+    console.log(PLUGINS_LOGGER, "scan for", names);
+    if ("start" in settings) {
+      nextPlugins.start = settings.start;
+    }
     for (let pname of names) {
       nextPlugins[pname] = {};
     }

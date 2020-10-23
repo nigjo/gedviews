@@ -1,9 +1,12 @@
-[
-  "events",
-  "selection",
-  "simple",
-  "book",
-  "textfile",
-  "Ahnentafel",
-  "stammbaum"
-]
+{
+  "start":"events",
+  "active": [
+    "events",
+    "selection",
+    "simple",
+    "book",
+    "textfile",
+    "Ahnentafel",
+    "stammbaum"
+  ]
+}
