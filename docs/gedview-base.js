@@ -1,6 +1,3 @@
-/* global printGedviewFamily */
-
-"use strict";
 /* 
  * Copyright 2020 nigjo.
  *
@@ -16,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* global printGedviewFamily, Family, HTMLElement */
 
+"use strict";
 /**
  * Switch to the next family.
  *
@@ -49,53 +48,52 @@ function loadGedviewGedcom() {
   if (storedData) {
     var ged = new Gedcom();
     ged.load(storedData);
+    ged.hash = getHash(storedData);
     console.log("from storage", ged);
     window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
     return;
   }
 }
-/**
- *@deprecated do not load any default file
- */
-function loadDefaultGedcom() {
-  var request = new XMLHttpRequest();
-  request.open('GET', 'gedview.ged', true);
-  request.overrideMimeType('text/plain');
-  request.onload = function () {
-    var ged = new Gedcom();
 
-    ged.load(request.responseText);
-
-    console.log("gedview.ged", ged);
-    window.localStorage.setItem('GEDview.gedfile', ged.print());
-
-    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
-  };
-  request.onerror = function (evt) {
-    console.error(evt);
-    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: new Gedcom()}));
-  };
-  request.send();
-}
 window.addEventListener('DOMContentLoaded', loadGedviewGedcom);
 window.addEventListener('gedcomLoaded', initGedcom);
+
+function getHash(message) {
+  //(c) https://stackoverflow.com/users/313177/joelpt
+  //see https://stackoverflow.com/a/3276730
+  var chk = 0x12345678;
+  var len = message.length;
+  for (var i = 0; i < len; i++) {
+    chk += (message.charCodeAt(i) * (i + 1));
+  }
+
+  return (chk & 0xffffffff).toString(16);
+}
+
+function getEmptyGedcomData() {
+  let gedcom = new Gedcom();
+  gedcom.hash = -1;
+  return gedcom;
+}
 
 function loadGedfile(file) {
   file.text().then(text => {
     var ged = new Gedcom();
     ged.load(text);
     console.log("file", file.name, ged);
-    window.localStorage.setItem('GEDview.gedfile', ged.print());
+    let storageContent = ged.print();
+    window.localStorage.setItem('GEDview.gedfile', storageContent);
+    ged.hash = getHash(storageContent);
     window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
   }).catch(evt => {
     console.error(evt);
-    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: new Gedcom()}));
+    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: getEmptyGedcomData()}));
   });
 }
 
 function resetGedcom() {
   window.localStorage.removeItem('GEDview.gedfile', null);
-  window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: new Gedcom()}));
+  window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: getEmptyGedcomData()}));
 }
 
 function initGedcom(evt) {
@@ -122,7 +120,7 @@ function initGedcom(evt) {
     fam = new Family();
   }
 
-  if (window.gedviewPage) {
+  if ("gedviewPage" in window && "printGedviewFamily" in window.gedviewPage) {
     window.gedviewPage.printGedviewFamily(fam, ged);
   } else if (typeof printGedviewFamily === 'function') {
     printGedviewFamily(fam, ged);
