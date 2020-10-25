@@ -70,7 +70,14 @@ class FamSelector {
         option.onclick = function (evt) {
           sessionStorage.setItem('gedviewer.selection.scolltop',
                   document.querySelector(".famcontainer").scrollTop);
-          switchFamily(evt.currentTarget);
+          let oldsel = document.querySelector("div.selected");
+          if (evt.currentTarget !== oldsel) {
+            if (oldsel) {
+              oldsel.classList.remove("selected");
+            }
+            evt.currentTarget.classList.add("selected");
+            switchFamily(evt.currentTarget, true);
+          }
           return false;
         };
 
