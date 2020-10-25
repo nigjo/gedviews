@@ -49,12 +49,13 @@ class FamSelector {
 
   printGedviewFamily(fam, ged) {
     console.log(fam);
-    let select = document.getElementById("families");
-    while (select.firstElementChild)
-      select.firstElementChild.remove();
-    let names = document.getElementById("names");
-    while (names.firstElementChild)
-      names.firstElementChild.remove();
+    let oldselect = document.getElementById("families");
+    let select = document.createElement(oldselect.tagName);
+    select.id = oldselect.id;
+  
+    let oldnames = document.getElementById("names");
+    let names = document.createElement(oldnames.tagName);
+    names.id = oldnames.id;
 
     let list = this.collectFamilies(ged);
     console.log(FamSelector.LOGGER, list.length, "Families");
@@ -106,6 +107,8 @@ class FamSelector {
         }
       }
     }
+    oldselect.parentNode.replaceChild(select, oldselect);
+    oldnames.parentNode.replaceChild(names, oldnames);
   }
 
   collectFamilies(ged) {
