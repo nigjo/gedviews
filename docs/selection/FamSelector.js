@@ -168,7 +168,7 @@ class FamSelector {
         let children = allfams[i].getChildren();
         for (let c = 0; c < children.length; c++) {
           let listoption = this.getIndiOption(allfams[i], children[c], "Child");
-          item.names[listoption.value + c] = listoption.text;
+          item.names[listoption.value + (c + 1)] = listoption.text;
         }
       }
       //select.value = fam.id;
