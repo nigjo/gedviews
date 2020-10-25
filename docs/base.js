@@ -161,15 +161,20 @@ class IndexPage {
   }
 
   updateSelection(evt) {
-    let subloc = evt.target.contentWindow.location;
+    //let subloc = evt.target.contentWindow.location;
     IndexPage.hideHeader(evt.target);
 
+    let famid = findFamilyId(evt.target.contentWindow.location);
+    this.setFamilyName(famid);
+  }
+
+  setFamilyName(famid) {
     //console.log(evt.target.contentWindow.location);
     //console.log(subloc.search);
     let famname = document.querySelector("#famname");
     famname.textContent = "Keine Familie gewählt";
-    if (subloc.search) {
-      let famid = '@' + subloc.search.substring(1).replace(/@/g, '') + '@';
+    if (famid) {
+      //let famid = '@' + subloc.search.substring(1).replace(/@/g, '') + '@';
       document.querySelector('#famidmarker').dataset['famid'] = famid;
 
       if (this.ged) {
