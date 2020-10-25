@@ -52,7 +52,7 @@ class FamSelector {
     let oldselect = document.getElementById("families");
     let select = document.createElement(oldselect.tagName);
     select.id = oldselect.id;
-  
+
     let oldnames = document.getElementById("names");
     let names = document.createElement(oldnames.tagName);
     names.id = oldnames.id;
@@ -68,7 +68,7 @@ class FamSelector {
           option.classList.add("selected");
         }
         option.onclick = function (evt) {
-          sessionStorage.setItem('gedview.search.scolltop',
+          sessionStorage.setItem('gedviewer.selection.scolltop',
                   document.querySelector(".famcontainer").scrollTop);
           switchFamily(evt.currentTarget);
           return false;
@@ -97,9 +97,15 @@ class FamSelector {
           names.append(listoption);
         }
       }
+    }
+
+    oldselect.parentNode.replaceChild(select, oldselect);
+    oldnames.parentNode.replaceChild(names, oldnames);
+
+    if (list.length > 0) {
       let sel = document.querySelector("div.selected");
       if (sel) {
-        let top = sessionStorage.getItem('gedview.search.scolltop');
+        let top = sessionStorage.getItem('gedviewer.selection.scolltop');
         if (top) {
           document.querySelector(".famcontainer").scrollTop = top;
         } else {
@@ -107,8 +113,6 @@ class FamSelector {
         }
       }
     }
-    oldselect.parentNode.replaceChild(select, oldselect);
-    oldnames.parentNode.replaceChild(names, oldnames);
   }
 
   collectFamilies(ged) {
@@ -154,9 +158,10 @@ class FamSelector {
           item.wife = '???';
         }
 
-        for (let chil of allfams[i].getChildren()) {
-          let listoption = this.getIndiOption(allfams[i], chil, "Child");
-          item.names[listoption.value] = listoption.text;
+        let children = allfams[i].getChildren();
+        for (let c = 0; c < children.length; c++) {
+          let listoption = this.getIndiOption(allfams[i], children[c], "Child");
+          item.names[listoption.value + c] = listoption.text;
         }
       }
       //select.value = fam.id;
