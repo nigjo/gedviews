@@ -43,22 +43,63 @@ function switchFamily(famRec) {
   window.location.href = '?' + famid.replace(/@/g, '');
 }
 
-function loadGedviewGedcom() {
-  var storedData = window.localStorage.getItem('GEDview.gedfile');
-  if (storedData) {
+/**
+ * Loades a external file as GEDCOM. After loading the file content a
+ * "gedcomLoaded" event is fired. On any error that event contains an empty
+ * Gedcom structure.
+ * 
+ * @param {File} file
+ */
+function loadGedfile(file) {
+  file.text().then(text => {
     var ged = new Gedcom();
-    ged.load(storedData);
-    ged.hash = getHash(storedData);
-    console.log("from storage", ged);
+    ged.load(text);
+    console.log("file", file.name, ged);
+    let storageContent = ged.print();
+    window.localStorage.setItem('GEDview.gedfile', storageContent);
+    ged.hash = _getHash(storageContent);
     window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
-    return;
-  }
+  }).catch(evt => {
+    console.error(evt);
+    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: _getEmptyGedcomData()}));
+  });
 }
 
-window.addEventListener('DOMContentLoaded', loadGedviewGedcom);
-window.addEventListener('gedcomLoaded', initGedcom);
+/**
+ * Clears all stored GEDCOM data. This function will fire a "gedcomLoaded" event
+ * with an empty "Gedcom" structure.
+ * 
+ * @returns {void} 
+ */
+function resetGedcom() {
+  window.localStorage.removeItem('GEDview.gedfile', null);
+  window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: _getEmptyGedcomData()}));
+}
 
-function getHash(message) {
+function setPage(GedviewPage) {
+  window.gedviewPage = GedviewPage;
+}
+
+function getPage() {
+  return window.gedviewPage;
+}
+
+(function () {
+  window.addEventListener('DOMContentLoaded', () => {
+    var storedData = window.localStorage.getItem('GEDview.gedfile');
+    if (storedData) {
+      var ged = new Gedcom();
+      ged.load(storedData);
+      ged.hash = _getHash(storedData);
+      console.log("from storage", ged);
+      window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
+      return;
+    }
+  });
+  window.addEventListener('gedcomLoaded', _initGedcom);
+})();
+
+function _getHash(message) {
   //(c) https://stackoverflow.com/users/313177/joelpt
   //see https://stackoverflow.com/a/3276730
   var chk = 0x12345678;
@@ -70,33 +111,19 @@ function getHash(message) {
   return (chk & 0xffffffff).toString(16);
 }
 
-function getEmptyGedcomData() {
+function _getEmptyGedcomData() {
   let gedcom = new Gedcom();
   gedcom.hash = -1;
   return gedcom;
 }
 
-function loadGedfile(file) {
-  file.text().then(text => {
-    var ged = new Gedcom();
-    ged.load(text);
-    console.log("file", file.name, ged);
-    let storageContent = ged.print();
-    window.localStorage.setItem('GEDview.gedfile', storageContent);
-    ged.hash = getHash(storageContent);
-    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
-  }).catch(evt => {
-    console.error(evt);
-    window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: getEmptyGedcomData()}));
-  });
-}
-
-function resetGedcom() {
-  window.localStorage.removeItem('GEDview.gedfile', null);
-  window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: getEmptyGedcomData()}));
-}
-
-function initGedcom(evt) {
+/**
+ * handles any change in the loaded Gedcom structure and will call the
+ * current "gedviewPage.printGedviewFamily()" function.
+ * 
+ * @param {type} evt
+ */
+function _initGedcom(evt) {
   var ged = evt.detail;
   var allfams = ged.getFamilies();
 
@@ -106,7 +133,7 @@ function initGedcom(evt) {
       fam = ged.getFamily("@" + params.get("fam") + "@");
     } else {
       for (const[key, value] of params) {
-        if (key !== "debug" && value === "") {
+        if (key !== "debug" && key !== "nocache" && value === "") {
           fam = ged.getFamily('@' + key + '@');
           break;
         }
@@ -120,8 +147,8 @@ function initGedcom(evt) {
     fam = new Family();
   }
 
-  if ("gedviewPage" in window && "printGedviewFamily" in window.gedviewPage) {
-    window.gedviewPage.printGedviewFamily(fam, ged);
+  if ("gedviewPage" in window && "printGedviewFamily" in getPage()) {
+    getPage().printGedviewFamily(fam, ged);
   } else if (typeof printGedviewFamily === 'function') {
     printGedviewFamily(fam, ged);
   } else {

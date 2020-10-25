@@ -60,19 +60,17 @@ class ServiceManager {
       updatenotifier.style.display = "block";
     }
   }
-  
-  static toggleInfos(){
+
+  static toggleInfos() {
     let updatenotifier = document.getElementById("updatenotifier");
-    if(updatenotifier){
+    if (updatenotifier) {
       updatenotifier.style.display = "none";
     }
     let unabletoclose = document.getElementById("unabletoclose");
-    if(unabletoclose){
+    if (unabletoclose) {
       unabletoclose.style.display = "block";
     }
   }
-
-  
 
   handleMessages(evt) {
     let message = evt.data;
@@ -96,16 +94,6 @@ class ServiceManager {
 
 if ('serviceWorker' in navigator) {
   window.swManager = new ServiceManager();
-}
-
-function printFrame() {
-  let view = document.getElementById("view");
-  document.getElementById('menuview').checked = false;
-  if (view.contentWindow) {
-    view.contentWindow.print();
-  } else {
-    console.warn(IndexPage.LOGGER, "no view frame");
-  }
 }
 
 class IndexPage {
@@ -153,16 +141,19 @@ class IndexPage {
   }
 
   updateFamily(event) {
+    console.log(IndexPage.LOGGER, "updateFamily");
     this.updateView(event.target.href);
     document.getElementById('menuview').checked = false;
     return false;
   }
 
   updateView(targetLocation) {
+    console.log(IndexPage.LOGGER, "updateView");
     let fam = document.querySelector('#famidmarker').dataset.famid;
     let nextLoc = targetLocation.replace(/\?.*/, '')
             + '?' + (fam ? fam.replace(/@/g, '') : '');
     if (nextLoc !== document.querySelector('#view').contentWindow.location.href) {
+      console.log(IndexPage.LOGGER, "set next view to", nextLoc);
       document.querySelector('#view').src = nextLoc;
     }
     //console.log(event.target);
@@ -260,6 +251,17 @@ class IndexPage {
     }
     console.log(IndexPage.LOGGER, "update done");
   }
+
+  printFrame() {
+    let view = document.getElementById("view");
+    document.getElementById('menuview').checked = false;
+    if (view && "contentWindow" in view) {
+      view.contentWindow.print();
+    } else {
+      console.warn(IndexPage.LOGGER, "no view frame");
+    }
+  }
+
 }
 
-this.gedviewPage = new IndexPage();
+window.gedviewPage = new IndexPage();

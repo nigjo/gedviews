@@ -1,8 +1,8 @@
 # GEDCOM-Views Collection
 
-A collection of simple webpages to display gedcom data. This is not an editor (yet)!
+A collection of simple webpages to display GEDCOM data. This is not an editor (yet)!
 
-The Site is designed as PWA and will store no data on server side. Your Gedcom file is stored in yours browsers local storage.
+The Site is designed as PWA and will store no data on server side. Your GEDCOM file is stored in yours browsers local storage.
 
 ## gedcom.js
 
@@ -41,7 +41,7 @@ The order in the array will be the same as in the applications' menu.
 
 Each plugin should create a "`gedviewPage`" instance with a
 `printGedviewFamily(fam, ged)` method. This is called as soon as all
-data from the stored gedcom file is loaded and ready. This may be called
+data from the stored GEDCOM file is loaded and ready. This may be called
 more than once.
 
 The `fam` Parameter is the current selected `Family` record.
@@ -56,9 +56,9 @@ The `ged` parameter is a link to the current `Gedcom` instance.
 Every plugin must include at least two script files.
 
     <script src="../gedcomjs/gedcom.js"></script>
-    <script src="../gedview-base.js"></script>
+    <script src="../gedviewer.js"></script>
 
-The `gedview-base.js` file will handle the stored gedcom file and the call
+The `gedviewer.js` file will handle the stored GEDCOM file and the call
 to the entry point.
 
 
