@@ -54,7 +54,7 @@ class ServiceManager {
   }
 
   notifyOfUpdate() {
-    console.warn(ServiceManager.LOGGER, "update awailable");
+    console.warn(ServiceManager.LOGGER, "update available");
     let updatenotifier = document.getElementById("updatenotifier");
     if (updatenotifier) {
       updatenotifier.style.display = "block";
