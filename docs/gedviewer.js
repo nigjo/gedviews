@@ -22,9 +22,11 @@
  * @param {Family|HTMLElement|String} famRec a reference to the next family.
  *    This can be a Family record or a HTMLElement with a "data-famid" attribute
  *    or the family-id as a string.
+ * @param {boolean} softswitch do a normal switch via query string or only
+ * by trying to send a new id to the "parent" window.
  * @returns {undefined}
  */
-function switchFamily(famRec) {
+function switchFamily(famRec, softswitch = false) {
   let famid;
   if (!famRec) {
     return;
@@ -39,6 +41,14 @@ function switchFamily(famRec) {
     if (!famRec.match(/^@?\w+\d+@?$/))
       return;
     famid = famRec;
+  }
+  if (softswitch) {
+    if (window.parent 
+            && "gedviewPage" in window.parent
+            && "setFamilyName" in window.parent.gedviewPage) {
+      window.parent.gedviewPage.setFamilyName(famid);
+      return;
+    }
   }
   window.location.href = '?' + famid.replace(/@/g, '');
 }
@@ -118,6 +128,30 @@ function _getEmptyGedcomData() {
 }
 
 /**
+ * Tries to determinate the familiy id from a URL.
+ * 
+ * @param {Location} docLocation the location of a document
+ * @returns {String|false} The familiy id (with @-chars) or false.
+ */
+function findFamilyId(docLocation) {
+  var famid = false;
+  if (docLocation.search) {
+    let params = new URLSearchParams(docLocation.search);
+    if (params.has("fam")) {
+      famid = "@" + params.get("fam") + "@";
+    } else {
+      for (const[key, value] of params) {
+        if (key !== "debug" && key !== "nocache" && value === "") {
+          famid = '@' + key + '@';
+          break;
+        }
+      }
+    }
+  }
+  return famid;
+}
+
+/**
  * handles any change in the loaded Gedcom structure and will call the
  * current "gedviewPage.printGedviewFamily()" function.
  * 
@@ -127,18 +161,9 @@ function _initGedcom(evt) {
   var ged = evt.detail;
   var allfams = ged.getFamilies();
 
-  if (location.search) {
-    let params = new URLSearchParams(location.search.substring(1));
-    if (params.has("fam")) {
-      fam = ged.getFamily("@" + params.get("fam") + "@");
-    } else {
-      for (const[key, value] of params) {
-        if (key !== "debug" && key !== "nocache" && value === "") {
-          fam = ged.getFamily('@' + key + '@');
-          break;
-        }
-      }
-    }
+  let famid = findFamilyId(location);
+  if (famid) {
+    fam = ged.getFamily(famid);
   } else {
     fam = allfams[0];
   }
