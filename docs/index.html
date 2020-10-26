@@ -25,7 +25,7 @@ limitations under the License.
     <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
     <link rel="manifest" href="./pwa.json">
     <script src="gedcomjs/gedcom.js"></script>
-    <script src="gedview-base.js"></script>
+    <script src="gedviewer.js"></script>
     <script src="base.js"></script>
     <script src="plugins.js"></script>
   </head>
@@ -62,7 +62,7 @@ limitations under the License.
         </ul>
         <ul id="viewselect"></ul>
         <ul>
-          <li><a href="#" onclick="printFrame()">drucken</a>
+          <li><a href="#" onclick="gedviewPage.printFrame()">drucken</a>
           </li><li><a href="#" onclick="resetGedcom()">clear data</a>
           </li>
         </ul>
