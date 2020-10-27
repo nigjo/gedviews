@@ -149,6 +149,7 @@ header>h1[data-famid]:after{
   .gedview-child:first-child:before{
     content:'Kinder';
     border-bottom:1px solid gray;
+    box-sizing:border-box;
   }
   .gedview-child:first-child:before,.gedview-parent:first-child:before{
     background-color:lightgray;
