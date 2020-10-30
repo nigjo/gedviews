@@ -43,7 +43,7 @@ function switchFamily(famRec, softswitch = false) {
     famid = famRec;
   }
   if (softswitch) {
-    if (window.parent 
+    if (window.parent
             && "gedviewPage" in window.parent
             && "setFamilyName" in window.parent.gedviewPage) {
       window.parent.gedviewPage.setFamilyName(famid);
@@ -64,7 +64,7 @@ function loadGedfile(file) {
   file.text().then(text => {
     var ged = new Gedcom();
     ged.load(text);
-    console.log("file", file.name, ged);
+    console.log("gedviewer", file.name, ged);
     let storageContent = ged.print();
     window.localStorage.setItem('GEDview.gedfile', storageContent);
     ged.hash = _getHash(storageContent);
@@ -101,7 +101,7 @@ function getPage() {
       var ged = new Gedcom();
       ged.load(storedData);
       ged.hash = _getHash(storedData);
-      console.log("from storage", ged);
+      console.log("gedviewer", "loaded from storage", ged);
       window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
       return;
     }
