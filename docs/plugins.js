@@ -15,6 +15,73 @@
  */
 
 /**
+ * List of {PluginData}. The Keys are the plugins' names
+ */
+class Plugins {
+  constructor() {
+
+  }
+
+  getAllFiles() {
+    let files = [];
+    for (let pname in this) {
+      /**@type PluginData*/
+      let plugin = this[pname];
+      files.push(plugin.name + '/gedview.json');
+      files.push(plugin.name + '/' + plugin.target);
+      if (plugin.resources) {
+        for (let res of plugin.resources) {
+          files.push(plugin.name + '/' + res);
+        }
+      }
+    }
+    return files;
+  }
+
+  /**
+   * @returns {Plugins}
+   */
+  static loadStored() {
+    var storedData = localStorage.getItem("plugins");
+    return Plugins.load(storedData);
+  }
+
+  static load(storedData) {
+    let data = new Plugins();
+    if (storedData) {
+      let parsed = JSON.parse(storedData);
+      let names = Object.getOwnPropertyNames(parsed);
+      for (let key of names) {
+        data[key] = new PluginData();
+        Object.assign(data[key], parsed[key]);
+      }
+    }
+    return data;
+  }
+}
+
+class PluginData {
+  constructor() {
+    /**@type String*/
+    this.name = null;
+    /**@type String*/
+    this.target = "index.html";
+    /**@type String*/
+    this.caption = null;
+    /**@type Array*/
+    this.resources = [];
+  }
+
+  getTarget() {
+    return this.isValid() ? this.name + '/' + this.target : false;
+  }
+
+  isValid() {
+    return this.name && this.target;
+  }
+}
+
+/**
  * Manageclass for the plugins.
  */
 class PluginManager {
@@ -30,88 +97,85 @@ class PluginManager {
         }
       });
     }
+    this.data = null;
     this._initializePlugins();
   }
 
-  _initializePlugins() {
+  _sendStoredData() {
     let stored = localStorage.getItem("plugins");
     if (stored) {
       document.addEventListener("DOMContentLoaded", () => {
         let evt = new CustomEvent("pluginsLoaded", {
-          detail: JSON.parse(stored)
+          detail: Plugins.load(stored)
         });
         document.dispatchEvent(evt);
       });
     }
+  }
+
+  _initializePlugins() {
+    this._sendStoredData();
     let manager = this;
-    let pluginQuery = new XMLHttpRequest();
+    var pluginQuery = new XMLHttpRequest();
     pluginQuery.open('GET', 'plugins.json', true);
     pluginQuery.overrideMimeType('application/json');
-    pluginQuery.onerror = evt => {
+    pluginQuery.addEventListener("error", evt => {
       console.error(PluginManager.LOGGER, evt);
-      manager.updatePlugins({});
-    };
-    pluginQuery.onload = evt => {
+      manager.updatePlugins(new Plugins());
+    });
+    pluginQuery.addEventListener("load", evt => {
       let names = JSON.parse(pluginQuery.responseText);
-      console.log(PluginManager.LOGGER, "scan for", names);
-      let nextPlugins = {};
-      for (let pname of names) {
-        nextPlugins[pname] = {};
-      }
-      let counter = names.length;
-      let decrementCounter = () => {
-        --counter;
-        if (counter <= 0) {
-          manager.updatePlugins(nextPlugins);
-        }
-      };
-      function getPlugin(pname) {
-        let preq = new XMLHttpRequest();
-        preq.open('GET', pname + '/gedview.json', true);
-        preq.overrideMimeType('application/json');
-        preq.onerror = ex => {
-          decrementCounter();
-        };
-        preq.onload = resp => {
-          if (resp.target.status === 200) {
-            let data = JSON.parse(preq.responseText);
-            data.name = pname;
-            nextPlugins[pname] = data;
-          }
-          decrementCounter();
-        };
-        preq.send();
-      }
-      for (let name of names) {
-        getPlugin(name);
+      manager._loadPlugins(names);
+    });
+    pluginQuery.send();
+  }
+
+  _loadPlugins(names) {
+    console.log(PluginManager.LOGGER, "scan for", names);
+    let nextPlugins = new Plugins();
+    for (let pname of names) {
+      nextPlugins[pname] = new PluginData();
+    }
+    /**@type int*/
+    let counter = names.length;
+    let decrementCounter = () => {
+      --counter;
+      if (counter <= 0) {
+        this.updatePlugins(nextPlugins);
       }
     };
-//          .catch(ex => {
-//    console.error("plugins", ex);
-//    localStorage.setItem("plugins", []);
-//    manager.updatePlugins();
-//  });
-    pluginQuery.send();
+    let queryPlugin = (pname) => {
+      let preq = new XMLHttpRequest();
+      preq.open('GET', pname + '/gedview.json', true);
+      preq.overrideMimeType('application/json');
+      preq.addEventListener("error", ex => {
+        decrementCounter();
+      });
+      preq.addEventListener("load", resp => {
+        if (resp.target.status === 200) {
+          let parsed = JSON.parse(preq.responseText);
+          let data = new PluginData();
+          Object.assign(data, parsed);
+          data.name = pname;
+          nextPlugins[pname] = data;
+        }
+        decrementCounter();
+      });
+      preq.send();
+    };
+    for (let name of names) {
+      queryPlugin(name);
+    }
   }
 
   updateWorker() {
     console.log(PluginManager.LOGGER, "updating worker cache");
-    let data = localStorage.getItem("plugins");
-    let plugins = JSON.parse(data);
+    let plugins = Plugins.loadStored();
     var resources = {
       type: "pluginfiles",
-      files: []
+      files: plugins.getAllFiles()
     };
-    for (let pname in plugins) {
-      let plugin = plugins[pname];
-      resources.files.push(plugin.name + '/gedview.json');
-      resources.files.push(plugin.name + '/' + plugin.target);
-      if (plugin.resources) {
-        for (let res of plugin.resources) {
-          resources.files.push(plugin.name + '/' + res);
-        }
-      }
-    }
+
     if (resources.files.length > 0) {
       if ("swManager" in window) {
         window.swManager.sendMessage("pluginfiles", resources.files);
@@ -120,6 +184,9 @@ class PluginManager {
     }
   }
 
+  /**
+   * @param {Plugins} loadedPlugins
+   */
   updatePlugins(loadedPlugins) {
     //localStorage.get
     var loadedData = JSON.stringify(loadedPlugins);
@@ -133,6 +200,19 @@ class PluginManager {
       document.dispatchEvent(evt);
     }
     this.updateWorker();
+  }
+
+  _ensureData() {
+    if (this.data === null) {
+      this.data = Plugins.loadStored();
+    }
+  }
+
+  getTarget(pluginname) {
+    this._ensureData();
+    if (pluginname in this.data)
+      return this.data[pluginname].getTarget();
+    return false;
   }
 }
 
