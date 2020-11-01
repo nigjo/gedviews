@@ -22,11 +22,12 @@ limitations under the License.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../gedcomjs/gedcom.js"></script>
     <script src="../gedviewer.js"></script>
+    <script src="../gvlocale.js"></script>
     <script src="famview.js"></script>
   </head>
   <body>
     <header>
-      <h1>Familienansicht</h1>
+      <h1 data-gvlocale="famview.title">Familienansicht</h1>
     </header>
     <main>
       <template id="indi">
@@ -35,10 +36,10 @@ limitations under the License.
           <div class="row">
             <span data-gedpath="NAME-SURN"></span>, <span data-gedpath="NAME-GIVN"></span>
           </div><div class="row">
-            <span class="label">geboren:</span>
+            <span class="label"><span data-gvlocale="famview.born">geboren</span>:</span>
             <span data-gedpath="BIRT-DATE"></span> in <span data-gedpath="BIRT-PLAC"></span>
           </div><div class="row">
-            <span class="label">gestorben:</span>
+            <span class="label"><span data-gvlocale="famview.died">gestorben</span>:</span>
             <span data-gedpath="DEAT-DATE"></span> in <span data-gedpath="DEAT-PLAC"></span>
           </div>
         </div>
@@ -47,7 +48,7 @@ limitations under the License.
       <div class="indigroup" id="parents"></div>
       <div class="indigroup" id="children"></div>
     </main>
-    <footer>
+    <footer data-gvlocale="famview.testtext" data-gvlocale-args="Hallo">
     </footer>
   </body>
 </html>
