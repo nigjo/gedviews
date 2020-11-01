@@ -99,8 +99,13 @@ if ('serviceWorker' in navigator) {
 class IndexPage {
   static LOGGER = "IndexPage";
   constructor() {
-    //this.self = this;
+
+    /**@type Gedcom*/
     this.ged = null;
+
+    this.startPage = 'welcome.html';
+    this.defaultPlugin = 'events';
+
     document.addEventListener('pluginsLoaded', this.updateNavLinks);
     window.addEventListener('load', () => {
       window.swManager.sendMessage("getVersion");
@@ -127,15 +132,21 @@ class IndexPage {
     }
   }
 
+  /**
+   * @param {Family} viewfam 
+   * @param {Gedcom} ged 
+   */
   printGedviewFamily(viewfam, ged) {
     this.ged = ged;
     let view = document.querySelector('#view');
     IndexPage.hideHeader(view);
-    if (viewfam.id)
+    if (viewfam.id) {
       //TODO: get from plugins
-      view.src = 'selection/index.html?' + viewfam.id.replace(/@/g, '');
-    else {
-      view.src = 'welcome.html';
+      let target = window.gvplugins.getTarget(this.defaultPlugin)
+              || 'selection/index.html';
+      view.src = target + '?' + viewfam.id.replace(/@/g, '');
+    } else {
+      view.src = this.startPage;
       delete document.querySelector('#famidmarker').dataset.famid;
     }
   }
@@ -239,14 +250,16 @@ class IndexPage {
     var container = document.querySelector('#viewselect');
     while (container.firstElementChild)
       container.firstElementChild.remove();
-    console.log(IndexPage.LOGGER, "links", evt.detail);
-    for (let name in evt.detail) {
-      let plugin = evt.detail[name];
-      if (plugin.target) {
+    let plugins = evt.detail;
+    console.log(IndexPage.LOGGER, "links", plugins);
+    for (let name in plugins) {
+      /**@type PluginData*/
+      let plugin = plugins[name];
+      if (plugin.isValid()) {
         let a = container
                 .appendChild(document.createElement("li"))
                 .appendChild(document.createElement("a"));
-        a.href = plugin.name + '/' + plugin.target;
+        a.href = plugin.getTarget();
         a.textContent = plugin.caption ? plugin.caption : plugin.name;
       }
     }
