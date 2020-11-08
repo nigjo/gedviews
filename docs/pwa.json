@@ -1,6 +1,6 @@
 {
-  "name": "GEDCOM Viewer Collection",
-  "short_name": "GEDview",
+  "name": "GEDCOM Views",
+  "short_name": "GEDviews",
   "description":"A collection of views for a GEDCOM file. No data is stored on any server.",
   "icons": [{
     "src": "./res/ScetchTree-192.png",
