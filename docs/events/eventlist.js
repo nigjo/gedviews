@@ -199,4 +199,5 @@ class GedEventsPage {
     }
   }
 }
-window.gedviewPage = new GedEventsPage();
+
+GedViews.setPage(new GedEventsPage());

@@ -41,12 +41,12 @@ limitations under the License.
       }
     </style>
     <script>
-      window.gedviewPage = new FamSelector();
+      GedViews.setPage(new FamSelector());
       function updateSelection(context) {
         let searchval = context.value;
         sessionStorage.removeItem('gedview.search.scolltop');
         let famid = searchval.substring(0, searchval.lastIndexOf('-'));
-        switchFamily(famid);
+        GedViews.switchFamily(famid, false);
       }
     </script>
   </head>

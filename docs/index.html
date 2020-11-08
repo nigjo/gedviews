@@ -54,21 +54,21 @@ limitations under the License.
         <ul>
           <li><a href="welcome.html">Start</a>
           </li><li><label id="dropzone"
-                          ondrop="gedviewPage.handleDragging(event);"
-                          ondragover="gedviewPage.handleDragging(event);"
-                          ondragleave="gedviewPage.handleDragging(event);"
-                          >Datei wählen<input type="file" onchange="gedviewPage.viewfile(event)" name="dropfile"></label>
+                          ondrop="GedViews.getPage().handleDragging(event);"
+                          ondragover="GedViews.getPage().handleDragging(event);"
+                          ondragleave="GedViews.getPage().handleDragging(event);"
+                          >Datei wählen<input type="file" onchange="GedViews.getPage().viewfile(event)" name="dropfile"></label>
           </li>
         </ul>
         <ul id="viewselect"></ul>
         <ul>
-          <li><a href="#" onclick="gedviewPage.printFrame()">drucken</a>
-          </li><li><a href="#" onclick="resetGedcom()">clear data</a>
+          <li><a href="#" onclick="GedViews.getPage().printFrame()">drucken</a>
+          </li><li><a href="#" onclick="GedViews.resetGedcom()">clear data</a>
           </li>
         </ul>
       </nav>
       <main>
-        <iframe id="view" src="welcome.html" onload="gedviewPage.updateSelection(event)"></iframe>
+        <iframe id="view" src="welcome.html" onload="GedViews.getPage().updateSelection(event)"></iframe>
       </main>
       <footer><span>GEDCOM Views by Nigjo</span>
         <span id="version"></span>

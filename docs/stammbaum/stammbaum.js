@@ -76,4 +76,4 @@ class StammBaum {
   }
 }
 
-gedviewPage = new StammBaum();
+GedViews.setPage(new StammBaum());

@@ -303,4 +303,4 @@ class FamilyBookPage {
   }
 }
 
-gedviewPage = new FamilyBookPage();
+GedViews.setPage(new FamilyBookPage());

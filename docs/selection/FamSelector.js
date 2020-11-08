@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* global GedViews */
+
 class FamSelector {
 
   static LOGGER = "FamSelector";
@@ -76,7 +78,7 @@ class FamSelector {
               oldsel.classList.remove("selected");
             }
             evt.currentTarget.classList.add("selected");
-            switchFamily(evt.currentTarget, true);
+            GedViews.switchFamily(evt.currentTarget, true);
           }
           return false;
         };

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* global GedViews */
+
 gvlocale.register("famview", null, {
   title: "Familienansicht",
   husb: "Vater",
@@ -116,7 +118,7 @@ class FamilyView {
             child.classList.add("fams");
             let famid = allFams[0];
             child.addEventListener('click', function () {
-              switchFamily(famid);
+              GedViews.switchFamily(famid);
               return false;
             });
           }
@@ -124,7 +126,7 @@ class FamilyView {
           child.classList.add("fams");
           child.classList.add("moremarr");
           child.addEventListener('click', function () {
-            window.gedviewPage.openFamSelector(indi, allFams);
+            GedViews.getPage().openFamSelector(indi, allFams);
             return false;
           });
         }
@@ -162,4 +164,4 @@ class FamilyView {
 
 }
 
-window.gedviewPage = new FamilyView();
+GedViews.setPage(new FamilyView());

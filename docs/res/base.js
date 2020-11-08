@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/* global GedViews */
+
 class ServiceManager {
   static LOGGER = "ServiceManager";
   constructor() {
@@ -151,14 +153,14 @@ class IndexPage {
     }
   }
 
-  updateFamily(event) {
+  static updateFamily(event) {
     console.log(IndexPage.LOGGER, "updateFamily");
-    this.updateView(event.target.href);
+    IndexPage.updateView(event.target.href);
     document.getElementById('menuview').checked = false;
     return false;
   }
 
-  updateView(targetLocation) {
+  static updateView(targetLocation) {
     console.log(IndexPage.LOGGER, "updateView");
     let fam = document.querySelector('#famidmarker').dataset.famid;
     let nextLoc = targetLocation.replace(/\?.*/, '')
@@ -175,7 +177,7 @@ class IndexPage {
     //let subloc = evt.target.contentWindow.location;
     IndexPage.hideHeader(evt.target);
 
-    let famid = findFamilyId(evt.target.contentWindow.location);
+    let famid = GedViews.findFamilyId(evt.target.contentWindow.location);
     this.setFamilyName(famid);
   }
 
@@ -223,11 +225,11 @@ class IndexPage {
         if (event.target.classList.contains("invalid")) {
           event.target.classList.remove("invalid");
         } else {
-          resetGedcom();
+          GedViews.resetGedcom();
 //          console.log(event);
           let dt = event.dataTransfer;
 //          console.log(dt);
-          loadGedfile(dt.files[0]);
+          GedViews.loadGedfile(dt.files[0]);
         }
       } else {
 //        console.log(event);
@@ -240,8 +242,8 @@ class IndexPage {
   viewfile(event) {
 //    console.log(event);
     if (event.target.files.length === 1) {
-      resetGedcom();
-      loadGedfile(event.target.files[0]);
+      GedViews.resetGedcom();
+      GedViews.loadGedfile(event.target.files[0]);
     }
   }
 
@@ -265,7 +267,9 @@ class IndexPage {
     }
     var navLinks = document.querySelectorAll('nav a:not([href="#"])');
     for (let i = 0; i < navLinks.length; i++) {
-      navLinks[i].onclick = evt => window.gedviewPage.updateFamily(evt);
+      navLinks[i].onclick = evt => {
+        return IndexPage.updateFamily(evt);
+      };
     }
     console.log(IndexPage.LOGGER, "update done");
   }
@@ -282,4 +286,4 @@ class IndexPage {
 
 }
 
-window.gedviewPage = new IndexPage();
+GedViews.setPage(new IndexPage());

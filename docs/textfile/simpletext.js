@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* global GedViews */
 
-var TAB_TITLES = 15;
-var TAB_DATES = 12;
-var THICKLINE = '='.repeat(80);
-var THINLINE = '-'.repeat(80);
-var LINE = THINLINE;
 var System = {
   out: {
     clear: function () {
@@ -42,191 +38,198 @@ var System = {
     }
   }
 };
-function getIndiName(indi) {
-  if (indi)
-    return indi.getIndiName();
-  return '';
-}
 
-function printGedviewFamily(viewfam, ged) {
+class TextFileView {
 
-  if (viewfam && viewfam.id) {
-    document.querySelector('h1')
-            .dataset['famid'] = viewfam.id;
-  }
+  static TAB_TITLES = 15;
+  static TAB_DATES = 12;
+  static THICKLINE = '='.repeat(80);
+  static THINLINE = '-'.repeat(80);
+  static LINE = TextFileView.THINLINE;
 
-  System.out.clear();
-  System.out.addPage();
-  System.out.println(THICKLINE);
-  printSpouceOfFamily(viewfam, "HUSB", "Ehemann", true);
-  System.out.println(THICKLINE);
-  printSpouceOfFamily(viewfam, "WIFE", "Ehefrau", false);
-  System.out.println(THICKLINE);
-  System.out.println();
-  System.out.println(THINLINE);
-  System.out.println("    | Kinder");
-  System.out.println(THINLINE);
-  var counter = 0;
-  for (var child of viewfam.getChildren())
-  {
-    //Kinder-Infos
-    if ((counter - 7) % 10 === 0)
+  printGedviewFamily(viewfam, ged) {
+
+    if (viewfam && viewfam.id) {
+      document.querySelector('h1')
+              .dataset['famid'] = viewfam.id;
+    }
+
+    System.out.clear();
+    System.out.addPage();
+    System.out.println(TextFileView.THICKLINE);
+    this.printSpouceOfFamily(viewfam, "HUSB", "Ehemann", true);
+    System.out.println(TextFileView.THICKLINE);
+    this.printSpouceOfFamily(viewfam, "WIFE", "Ehefrau", false);
+    System.out.println(TextFileView.THICKLINE);
+    System.out.println();
+    System.out.println(TextFileView.THINLINE);
+    System.out.println("    | Kinder");
+    System.out.println(TextFileView.THINLINE);
+    var counter = 0;
+    for (var child of viewfam.getChildren())
     {
-      System.out.addPage();
-      System.out.println(LINE);
+      //Kinder-Infos
+      if ((counter - 7) % 10 === 0)
+      {
+        System.out.addPage();
+        System.out.println(TextFileView.LINE);
+      }
+
+      this.printChild(child, ++counter);
+      System.out.println(TextFileView.LINE);
     }
 
-    printChild(child, ++counter);
-    System.out.println(LINE);
-  }
-
-  while (counter < 7)
-  {
-    printChild(new Individual("@NONE@"), ++counter);
-    System.out.println(LINE);
-  }
-}
-
-function printChild(child, num)
-{
-  System.out.print(' ' + num.toString().padStart(2, ' ') + ' | ');
-  printFormatted(-TAB_TITLES, "Name: ");
-  System.out.println(child.getIndiName());
-  System.out.print("    | ");
-  printDateAndPlace(child, "BIRT", "Geboren");
-  System.out.print("  " + child.getSubValue("SEX", " ") + " | ");
-  var fams = child.getReferencedFamily('FAMS');
-  printDateAndPlace(fams, "MARR", "Verheiratet");
-  System.out.print("    | ");
-  printDateAndPlace(child, "DEAT", "Gestorben");
-  System.out.print("    | ");
-  printFormatted(-TAB_TITLES, "Ehepartner: ");
-  if (fams) {
-    var spouse = fams.getHusband();
-    if (spouse === child)
-      spouse = fams.getWife();
-    if (spouse)
-      System.out.print(spouse.getIndiName());
-  }
-  System.out.println();
-}
-
-function printDateAndPlace(husb, type, title)
-{
-  printFormatted(-TAB_TITLES, title + ": ");
-  var typeref = husb ? husb.getFirstSubRecord(type) : false;
-  var date = '';
-  var place = '';
-  if (typeref)
-  {
-    var daterec = typeref.getFirstSubRecord('DATE');
-    if (daterec)
-      date = daterec.toLocaleString();
-    var placrec = typeref.getFirstSubRecord('PLAC');
-    if (placrec)
-      place = placrec.toLocaleString();
-  }
-  printFormatted(TAB_DATES, date);
-  System.out.println(" in: " + place);
-}
-
-/**
- * @param {Family} f
- * @param {String} type 
- * @param {String} title
- * @param {Boolean} withMarriage
- */
-function printSpouceOfFamily(f, type, title, withMarriage)
-{
-  var husb = type === 'HUSB' ? f.getHusband(type) : f.getWife(type);
-  printFormatted(-TAB_TITLES, title + ": ");
-  if (!husb) {
-    husb = new Record();
-  }
-  let surn = '';
-  var name = husb.getFirstSubRecord('NAME');
-  if (name) {
-    System.out.print(name.toLocaleString());
-    let surnrec = husb.getPath(['NAME', 'SURN']);
-    if (surnrec) {
-      surn = surnrec.toLocaleString();
-    }
-  }
-  document.getElementById('textfile').dataset[type.toLowerCase()] = surn;
-
-  System.out.println('');
-  System.out.println(THICKLINE);
-  printDateAndPlace(husb, "BIRT", "Geboren");
-  if (withMarriage)
-  {
-    var fams = husb.getReferencedFamily('FAMS');
-    printDateAndPlace(fams, "MARR", "Verheiratet");
-  }
-  printDateAndPlace(husb, "DEAT", "Gestorben");
-  var famc = husb.getReferencedFamily('FAMC');
-  var famchusb = '';
-  var famcwife = '';
-  if (famc) {
-    var ihusb = famc.getReferencedIndividual('HUSB');
-    if (ihusb)
-      famchusb = ihusb.getIndiName();
-    var iwife = famc.getReferencedIndividual('WIFE');
-    if (iwife)
-      famcwife = iwife.getIndiName();
-  }
-
-  printFormatted(-TAB_TITLES, "Vater: ");
-  System.out.println(famchusb);
-  printFormatted(-TAB_TITLES, "Mutter: ");
-  System.out.println(famcwife);
-  //*/
-}
-
-/**
- * 
- * @param {int} size
- * @param {String} content
- * @returns {undefined}
- */
-function printFormatted(size, content)
-{
-  var padSize = size < 0 ? -size : size;
-  if (content.length < padSize)
-  {
-    var padding = ' '.repeat(padSize - content.length);
-    if (size < 0)
+    while (counter < 7)
     {
-      System.out.print(padding);
+      this.printChild(new Individual("@NONE@"), ++counter);
+      System.out.println(TextFileView.LINE);
     }
-    System.out.print(content);
-    if (size > 0)
-    {
-      System.out.print(padding);
-    }
-  } else
+  }
+
+  printChild(child, num)
   {
-    System.out.print(content);
+    System.out.print(' ' + num.toString().padStart(2, ' ') + ' | ');
+    this.printFormatted(-TextFileView.TAB_TITLES, "Name: ");
+    System.out.println(child.getIndiName());
+    System.out.print("    | ");
+    this.printDateAndPlace(child, "BIRT", "Geboren");
+    System.out.print("  " + child.getSubValue("SEX", " ") + " | ");
+    var fams = child.getReferencedFamily('FAMS');
+    this.printDateAndPlace(fams, "MARR", "Verheiratet");
+    System.out.print("    | ");
+    this.printDateAndPlace(child, "DEAT", "Gestorben");
+    System.out.print("    | ");
+    this.printFormatted(-TextFileView.TAB_TITLES, "Ehepartner: ");
+    if (fams) {
+      var spouse = fams.getHusband();
+      if (spouse === child)
+        spouse = fams.getWife();
+      if (spouse)
+        System.out.print(spouse.getIndiName());
+    }
+    System.out.println();
   }
+
+  printDateAndPlace(husb, type, title)
+  {
+    this.printFormatted(-TextFileView.TAB_TITLES, title + ": ");
+    var typeref = husb ? husb.getFirstSubRecord(type) : false;
+    var date = '';
+    var place = '';
+    if (typeref)
+    {
+      var daterec = typeref.getFirstSubRecord('DATE');
+      if (daterec)
+        date = daterec.toLocaleString();
+      var placrec = typeref.getFirstSubRecord('PLAC');
+      if (placrec)
+        place = placrec.toLocaleString();
+    }
+    this.printFormatted(TextFileView.TAB_DATES, date);
+    System.out.println(" in: " + place);
+  }
+
+  /**
+   * @param {Family} f
+   * @param {String} type 
+   * @param {String} title
+   * @param {Boolean} withMarriage
+   */
+  printSpouceOfFamily(f, type, title, withMarriage)
+  {
+    var husb = type === 'HUSB' ? f.getHusband(type) : f.getWife(type);
+    this.printFormatted(-TextFileView.TAB_TITLES, title + ": ");
+    if (!husb) {
+      husb = new Record();
+    }
+    let surn = '';
+    var name = husb.getFirstSubRecord('NAME');
+    if (name) {
+      System.out.print(name.toLocaleString());
+      let surnrec = husb.getPath(['NAME', 'SURN']);
+      if (surnrec) {
+        surn = surnrec.toLocaleString();
+      }
+    }
+    document.getElementById('textfile').dataset[type.toLowerCase()] = surn;
+
+    System.out.println('');
+    System.out.println(TextFileView.THICKLINE);
+    this.printDateAndPlace(husb, "BIRT", "Geboren");
+    if (withMarriage)
+    {
+      var fams = husb.getReferencedFamily('FAMS');
+      this.printDateAndPlace(fams, "MARR", "Verheiratet");
+    }
+    this.printDateAndPlace(husb, "DEAT", "Gestorben");
+    var famc = husb.getReferencedFamily('FAMC');
+    var famchusb = '';
+    var famcwife = '';
+    if (famc) {
+      var ihusb = famc.getReferencedIndividual('HUSB');
+      if (ihusb)
+        famchusb = ihusb.getIndiName();
+      var iwife = famc.getReferencedIndividual('WIFE');
+      if (iwife)
+        famcwife = iwife.getIndiName();
+    }
+
+    this.printFormatted(-TextFileView.TAB_TITLES, "Vater: ");
+    System.out.println(famchusb);
+    this.printFormatted(-TextFileView.TAB_TITLES, "Mutter: ");
+    System.out.println(famcwife);
+    //*/
+  }
+
+  /**
+   * 
+   * @param {int} size
+   * @param {String} content
+   * @returns {undefined}
+   */
+  printFormatted(size, content)
+  {
+    var padSize = size < 0 ? -size : size;
+    if (content.length < padSize)
+    {
+      var padding = ' '.repeat(padSize - content.length);
+      if (size < 0)
+      {
+        System.out.print(padding);
+      }
+      System.out.print(content);
+      if (size > 0)
+      {
+        System.out.print(padding);
+      }
+    } else
+    {
+      System.out.print(content);
+    }
+  }
+
+  static updateData() {
+
+    let famid = document.querySelector('h1').dataset['famid'];
+    if (famid) {
+      let link = document.getElementById('textfile');
+      link.download =
+              'familienbogen-' + famid.replace(/@/g, '')
+              + '-' + link.dataset.husb
+              + '-' + link.dataset.wife
+              + '.txt';
+    }
+
+    let content = document.getElementById('console').textContent;
+    if (content.length > 0) {
+      let data = new Blob([content], {type: 'text/plain'});
+      let dlfile = window.URL.createObjectURL(data);
+      document.getElementById('textfile').href = dlfile;
+    } else {
+      document.getElementById('textfile').href = '';
+    }
+  }
+
 }
 
-function updateData() {
-
-  let famid = document.querySelector('h1').dataset['famid'];
-  if (famid) {
-    let link = document.getElementById('textfile');
-    link.download =
-            'familienbogen-' + famid.replace(/@/g, '')
-            + '-'+link.dataset.husb
-            + '-'+link.dataset.wife
-            + '.txt';
-  }
-
-  let content = document.getElementById('console').textContent;
-  if (content.length > 0) {
-    let data = new Blob([content], {type: 'text/plain'});
-    let dlfile = window.URL.createObjectURL(data);
-    document.getElementById('textfile').href = dlfile;
-  } else {
-    document.getElementById('textfile').href = '';
-  }
-}
+GedViews.setPage(new TextFileView());
