@@ -24,7 +24,9 @@ class GedviewLocalizer {
   constructor(docContext) {
     let that = this;
     this.doc = docContext;
-    docContext.addEventListener("DOMContentLoaded", that.findI18nElements);
+    docContext.addEventListener("DOMContentLoaded", evt => {
+      return that.findI18nElements();
+    });
     docContext.addEventListener("readystatechange", evt => {
       console.log("GedviewLocalizer", "statecheck", that.doc.readyState);
       if (that.doc.readyState === "interactive") {
