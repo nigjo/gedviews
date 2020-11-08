@@ -40,7 +40,14 @@ header>h1[data-famid]:after{
   border-right:1px solid gray;
 }
 .gedview-titlepage{
-  display:none;
+  /*"show" with zero height by default. Only to force chrome to load the font for <p>.*/
+  /*see https://stackoverflow.com/a/54575419*/
+  /*display:none*/
+  visibility:hidden;
+  height:0;
+}
+.gedview-titlepage p{
+  font-family: UnifrakturMaguntia,Luminari,Segoe Print,Arial,sans-serif;
 }
 .gedview-page[data-num="1"] .gedview-parent:first-child .gedview-attr[data-key="name"]{
   border-top:1px solid gray;
@@ -159,6 +166,7 @@ header>h1[data-famid]:after{
   }
   .gedview-titlepage{
     display:flex;
+    visibility:visible;/*see workaround above*/
     align-items:center;
     overflow:hidden;
     height: calc(100vh);
