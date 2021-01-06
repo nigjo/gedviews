@@ -1,1 +1,2 @@
 *.cmd linguist-vendored
+docs/* -linguist-documentation
