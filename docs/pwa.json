@@ -2,6 +2,7 @@
   "name": "GEDCOM Views",
   "short_name": "GEDviews",
   "description":"A collection of views for a GEDCOM file. No data is stored on any server.",
+  "id":"/gedviews/index.html",
   "icons": [{
     "src": "./res/ScetchTree-192.png",
       "sizes": "192x192",
