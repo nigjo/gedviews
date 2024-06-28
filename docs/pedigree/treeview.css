@@ -1,0 +1,203 @@
+/* 
+    Created on : Jun 28, 2024, 11:12:43 PM
+    Author     : nigjo
+*/
+:root{
+  --leftstart:0rem;
+  --rightstart:0rem;
+  --line:1.5rem;
+  --rectWidth:11rem;
+  --rectSpace:.25rem;
+  --border:.2rem;
+  --size:16pt;
+  font-size: var(--size);
+}
+body{
+  font-family: Seguoe UI, sans-serif;
+  font-size:initial;
+  display: inline-block;
+}
+main{
+  font-size: var(--size);
+}
+footer{
+  font-size:10pt;
+  color:gray;
+  a {
+    text-decoration: none;
+    color:inherit;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  text-align: right;
+}
+
+#content {
+  position: relative;
+  display: inline-block;
+}
+.background {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+  opacity: .25;
+  height:100%;
+  width:100%;
+  min-width: 100vw;
+  filter:grayscale(1);
+}
+.family{
+  display:inline-block;
+  /*! margin-inline-end: 1rem; */
+  &.withChildren{
+    >.parents:after{
+      content:' ';
+    }
+  }
+}
+.children{
+  position: relative;
+  margin:auto;
+  display: inline-flex;
+  flex-wrap:nowrap;
+  flex-direction: row;
+  justify-content:center;
+  box-sizing: border-box;
+  min-width: 100%;
+  &:not(.nopartners):after{
+    position:absolute;
+    top:-1.1rem;
+    content:'';
+    display:block;
+    left:var(--leftstart);
+    right:var(--rightstart);
+    border-top:.2rem solid black;
+    box-sizing: border-box;
+  }
+  &.nopartners{
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.parents{
+  position: relative;
+  margin:auto;
+  margin-bottom: 2rem;
+  width:calc(2.25 * var(--rectWidth) + 2 * var(--rectSpace) + 2 * var(--border) );
+  box-sizing: border-box;
+  --background-color: rgba(255,0,0,.25);
+  .individual:first-child{
+    margin-right: calc(.25 * var(--rectWidth));
+  }
+  &.married:before{
+    content:'\26AD';
+  }
+  &.divorced:before{
+    content:'\26AE';
+  }
+  &:before{
+    content:'\26AF';
+    font-size:1.25rem;
+    position: absolute;
+    left:40%;
+    bottom:50%;
+    width:20%;
+    text-align: center;
+    border-bottom: .2rem solid black;
+    box-sizing: border-box;
+    z-index:-1;
+  }
+  &:after{
+    font-size:20pt;
+    position: absolute;
+    border-left: .2rem solid black;
+    --border-top: .2rem solid black;
+    box-sizing: border-box;    
+    z-index: 1;
+    bottom:-1rem;
+    left:50%;
+    height:calc(50% + 1rem);
+    --background-color: #F99;
+  }
+}
+
+.individual{
+  display:inline-block;
+  position: relative;
+  margin:.25rem;
+  padding:.25rem;
+  width:var(--rectWidth);
+  height:calc(var(--line) * 5 + .75rem);
+  text-align: center;
+  line-height: var(--line);
+  border:.2rem solid black;
+  border-radius: .5rem;
+  box-sizing: border-box;
+  background-color:lightgoldenrodyellow;
+  div:after{
+    content:'';
+    width:0px;
+    display: inline-block;
+    box-sizing: border-box;
+  }
+  &.famc:after{
+    content:'';
+    font-size:20pt;
+    position: absolute;
+    border-left: .2rem solid black;
+    box-sizing: border-box;
+    width:100%;
+    z-index:-1;
+    left:50%;
+    top:-1.5rem;
+    height:2rem;    
+  }
+}
+.male{
+  background-color:lightsteelblue;
+}
+.female{
+  background-color:lightpink;
+}
+.givenName, .familyName {
+  font-weight: bold;
+  font-size: 1.1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height:var(--line);
+  letter-spacing: -.05em;
+}
+.birthName{
+  font-style: italic;
+  font-size: .9em;
+  height:var(--line);
+}
+.birthName:not(:empty):before{
+  content:'geb. '
+}
+.date{
+  font-size: .8em;
+  letter-spacing: .1em;
+  height:var(--line);
+  width: 9em;
+  text-align: left;
+  /*! border:1px dotted gray; */
+  box-sizing: border-box;
+  margin: auto;
+  span{
+    width:100%;
+  }
+}
+.dateOfBirth:not(:empty):before{
+  content:'*';
+  width:1rem;
+  display: inline-block;
+}
+.dateOfDeath:not(:empty):before{
+  content:'†';
+  width:1rem;
+  display: inline-block;
+} 

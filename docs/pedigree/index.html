@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+  <head>
+    <title>Nachfahrenbaum</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="treeview.css"/>
+    <script src="../gedcomjs/gedcom.js"></script>
+    <script src="../gedviews.js"></script>
+    <script src="treeview.js" type="module"></script>
+  </head>
+  <body>
+    <header>
+    </header>
+    <main>
+      <div id="content"></div>
+      <template id="individual">
+        <div class="individual">
+          <div class="givenName"></div>
+          <div class="familyName"></div>
+          <div class="birthName"></div>
+          <div class="date"><span class="dateOfBirth"></span></div>
+          <div class="date"><span class="dateOfDeath"></span></div>
+<!--          <div class="dateOfBirth"></div>
+          <div class="dateOfDeath"></div>-->
+        </div>
+      </template>
+      <template id="bgimg">
+        <img class="background" src="freepik-oak.png" alt="a tree"/>
+      </template>
+    </main>
+    <footer>background image by <a href="https://www.freepik.com/free-vector/flat-design-oak-tree-silhouette_45123029.htm">Freepik</a> - Software by Jens Hofschröer</footer>
+  </body>
+</html>

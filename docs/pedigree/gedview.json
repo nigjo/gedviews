@@ -1,0 +1,9 @@
+{
+  "target": "index.html",
+  "caption": "Nachfahrenbaum",
+  "resources": [
+    "treeview.js",
+    "treeview.css",
+    "freepik-oak.png"
+  ]
+}
