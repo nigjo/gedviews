@@ -265,11 +265,21 @@ class IndexPage {
         a.textContent = plugin.caption ? plugin.caption : plugin.name;
       }
     }
+    let params = new URLSearchParams(window.location.search);
     var navLinks = document.querySelectorAll('nav a:not([href="#"])');
     for (let i = 0; i < navLinks.length; i++) {
       navLinks[i].onclick = evt => {
         return IndexPage.updateFamily(evt);
       };
+      if (params.has('view')
+              && navLinks[i].getAttribute('href')
+              .startsWith(params.get('view') + '/')) {
+        const viewLoc = navLinks[i].href;
+        setTimeout(() => {
+          console.debug(IndexPage.LOGGER, 'defaultview', viewLoc);
+          IndexPage.updateView(viewLoc);
+        }, 0);
+      }
     }
     console.log(IndexPage.LOGGER, "update done");
   }
