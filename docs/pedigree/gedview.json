@@ -1,6 +1,6 @@
 {
   "target": "index.html",
-  "caption": "Nachfahrenbaum",
+  "caption": "Nachfahren",
   "resources": [
     "treeview.js",
     "treeview.css",
