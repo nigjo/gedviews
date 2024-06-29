@@ -116,18 +116,16 @@ class PluginManager {
   _initializePlugins() {
     this._sendStoredData();
     let manager = this;
-    var pluginQuery = new XMLHttpRequest();
-    pluginQuery.open('GET', 'plugins.json', true);
-    pluginQuery.overrideMimeType('application/json');
-    pluginQuery.addEventListener("error", evt => {
+    fetch('plugins.json').then(r=>{
+      if(r.ok)
+        return r.json();
+      throw r;
+    }).then(names=>{
+      manager._loadPlugins(names);
+    }).catch(evt => {
       console.error(PluginManager.LOGGER, evt);
       manager.updatePlugins(new Plugins());
     });
-    pluginQuery.addEventListener("load", evt => {
-      let names = JSON.parse(pluginQuery.responseText);
-      manager._loadPlugins(names);
-    });
-    pluginQuery.send();
   }
 
   _loadPlugins(names) {
@@ -145,23 +143,18 @@ class PluginManager {
       }
     };
     let queryPlugin = (pname) => {
-      let preq = new XMLHttpRequest();
-      preq.open('GET', pname + '/gedview.json', true);
-      preq.overrideMimeType('application/json');
-      preq.addEventListener("error", ex => {
+      fetch(pname + '/gedview.json').then(r=>{
+        if(r.ok)
+          return r.json();
+      }).then(parsed=>{
+        let data = new PluginData();
+        Object.assign(data, parsed);
+        data.name = pname;
+        nextPlugins[pname] = data;
+        decrementCounter();        
+      }).catch(e=>{
         decrementCounter();
       });
-      preq.addEventListener("load", resp => {
-        if (resp.target.status === 200) {
-          let parsed = JSON.parse(preq.responseText);
-          let data = new PluginData();
-          Object.assign(data, parsed);
-          data.name = pname;
-          nextPlugins[pname] = data;
-        }
-        decrementCounter();
-      });
-      preq.send();
     };
     for (let name of names) {
       queryPlugin(name);
