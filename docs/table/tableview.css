@@ -1,0 +1,22 @@
+/* 
+    Created on : Jun 29, 2024, 3:18:34 PM
+    Author     : nigjo
+*/
+body{
+  font-family: sans-serif;
+}
+table{
+  border:1px solid black;
+  border-collapse: collapse;
+  td{
+    text-align: left;
+    &:nth-child(5),&:nth-child(6){
+      font-family: Consolas,monospace;
+      text-align: right;
+    }
+  }
+  td,th{
+    border:1px solid gray;
+    padding:.25em;
+  }
+}
