@@ -9,19 +9,21 @@
   --rectWidth:11rem;
   --rectSpace:.25rem;
   --border:.2rem;
-  --size:16pt;
+  --size:12pt;
   font-size: var(--size);
 }
 body{
   font-family: Seguoe UI, sans-serif;
   font-size:initial;
   display: inline-block;
+  margin:0px;
 }
 main{
   font-size: var(--size);
 }
 footer{
   font-size:10pt;
+  margin-right: .5em;
   color:gray;
   a {
     text-decoration: none;
