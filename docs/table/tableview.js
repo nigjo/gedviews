@@ -1,4 +1,9 @@
 class FamilyTable {
+
+  constructor() {
+    this.visited = [];
+  }
+
   /**
    * @param {Family} fam
    * @param {Gedcom} ged 
@@ -6,6 +11,7 @@ class FamilyTable {
   printGedviewFamily(fam, ged) {
     const tab = document.createElement('table');
     tab.class = "familytable";
+    tab.id = "fam"+fam.id;
     console.debug('TABLE', fam);
     const head = document.createElement('thead');
     const row = document.createElement('tr');
@@ -28,18 +34,19 @@ class FamilyTable {
     tab.append(head);
 
     const body = document.createElement('tbody');
+    this.visited = [];
     this.addFamily(body, fam);
-    
-    while(body.childElementCount<20){
+
+    while (body.childElementCount < 20) {
       const row = document.createElement('tr');
       for (var i = 0; i < 8; i++) {
         let cell = document.createElement('td');
         row.append(cell);
       }
-      row.children[0].textContent = body.children.length+1;
+      row.children[0].textContent = body.children.length + 1;
       body.append(row);
     }
-    
+
     tab.append(body);
 
     document.getElementById('content').replaceChildren(tab);
@@ -51,6 +58,9 @@ class FamilyTable {
    * @returns {Number} ID des Eintrags
    */
   addIndividual(parent, indi) {
+    if(!indi){
+      return false;
+    }
     const row = document.createElement('tr');
     const id = parent.children.length + 1;
 
@@ -59,7 +69,7 @@ class FamilyTable {
     row.append(colId);
 
     const names = this.findNames(indi);
-    console.debug(names);
+    //console.debug(names);
 
     const colGivn = document.createElement('td');
     row.append(colGivn);
@@ -69,11 +79,11 @@ class FamilyTable {
     row.append(colBirt);
     if ("birth" in names) {
       colGivn.textContent = names.birth.givn;
-      if ("married" in names){
+      if ("married" in names) {
         colSurn.textContent = names.married.surn;
         colBirt.textContent = names.birth.surn;
-      }else{
-        colSurn.textContent = names.birth.surn;        
+      } else {
+        colSurn.textContent = names.birth.surn;
       }
     }
 
@@ -155,17 +165,29 @@ class FamilyTable {
    * @param {Number} wife
    */
   addFamily(parent, fam, husb, wife) {
+    if (this.visited.includes(fam.id)) {
+      return;
+    }
+    this.visited.push(fam.id);
+
     if (!husb)
       husb = this.addIndividual(parent, fam.getHusband());
     if (!wife)
       wife = this.addIndividual(parent, fam.getWife());
 
     if (wife && husb) {
-      parent.children[husb - 1].children[7].textContent = wife;
-      parent.children[wife - 1].children[7].textContent = husb;
+      const addPartner = (rowId, partnerId) => {
+        const cell = parent.children[rowId - 1].children[7];
+        if (cell.textContent) {
+          cell.textContent += ',' + partnerId;
+        } else
+          cell.textContent = partnerId;
+      };
+      addPartner(husb, wife);
+      addPartner(wife, husb);
     }
 
-    let childFams = [];
+    let moreFamilies = [];
     /**
      * @type Idividual
      */
@@ -179,14 +201,33 @@ class FamilyTable {
         parent.children[cId - 1].children[6].textContent = husb;
       }
       let cfam = child.getFamily();
-      if (cfam) {
+      if (cfam && !this.visited.includes(cfam.id))  {
         let ch = cfam.getHusband() === child ? cId : null;
         let cw = cfam.getWife() === child ? cId : null;
-        childFams.push(() => this.addFamily(parent, cfam, ch, cw));
+        moreFamilies.push(() => this.addFamily(parent, cfam, ch, cw));
       }
     }
 
-    childFams.forEach(cb => cb());
+    if (husb) {
+      const h = fam.getHusband();
+      for (const myfam of h.getFamilies()) {
+        if (!this.visited.includes(myfam.id)) {
+          console.log(h.getIndiName(), myfam.id);
+          moreFamilies.push(() => this.addFamily(parent, myfam, husb, null));
+        }
+      }
+    }
+    if (wife) {
+      const w = fam.getWife();
+      for (const myfam of w.getFamilies()) {
+        if (!this.visited.includes(myfam.id)) {
+          console.log(w.getIndiName(), myfam.id);
+          moreFamilies.push(() => this.addFamily(parent, myfam, null, wife));
+        }
+      }
+    }
+
+    moreFamilies.forEach(cb => cb());
   }
 }
 
