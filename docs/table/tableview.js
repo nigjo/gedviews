@@ -37,7 +37,8 @@ class FamilyTable {
     this.visited = [];
     this.addFamily(body, fam);
 
-    while (body.childElementCount < 20) {
+    while (body.childElementCount % 22 > 0
+            && body.childElementCount % 45 > 0) {
       const row = document.createElement('tr');
       for (var i = 0; i < 8; i++) {
         let cell = document.createElement('td');

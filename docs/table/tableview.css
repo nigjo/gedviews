@@ -22,3 +22,20 @@ table{
     padding:.25em;
   }
 }
+@media print{
+  header{
+    display:none;
+  }
+  @media (orientation: portrait){
+    /*portrait*/
+    tr:nth-child(45n){
+      page-break-after: always;
+    }
+  }
+  @media (orientation: landscape){
+    /*portrait*/
+    tr:nth-child(22n){
+      page-break-after: always;
+    }
+  }
+}
