@@ -13,6 +13,8 @@ table{
     &:nth-child(5),&:nth-child(6){
       font-family: Consolas,monospace;
       text-align: right;
+      white-space: nowrap;
+      font-size:.9em;
     }
   }
   td,th{
