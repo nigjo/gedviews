@@ -21,10 +21,12 @@ body{
 main{
   font-size: var(--size);
 }
-footer{
-  font-size:10pt;
+footer {
+  font-size: 10pt;
   margin-right: .5em;
-  color:gray;
+  color: gray;
+  opacity: .25;
+  text-align: right;
   a {
     text-decoration: none;
     color:inherit;
@@ -32,7 +34,6 @@ footer{
   a:hover {
     text-decoration: underline;
   }
-  text-align: right;
 }
 
 #content {
