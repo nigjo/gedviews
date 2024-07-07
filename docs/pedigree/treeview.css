@@ -100,7 +100,7 @@ footer{
     content:'\26AE';
   }
   &:before{
-    content:'\26AF';
+    content:'';
     font-size:1.25rem;
     position: absolute;
     left:40%;
@@ -143,6 +143,7 @@ footer{
     width:0px;
     display: inline-block;
     box-sizing: border-box;
+    /*! text-align: left; */
   }
   &.famc:after{
     content:'';
@@ -181,25 +182,27 @@ footer{
   content:'geb. '
 }
 .date{
-  font-size: .8em;
+  font-size: .9em;
   letter-spacing: .1em;
   height:var(--line);
-  width: 9em;
-  text-align: left;
+  width: 7rem;
+  text-align: right;
   /*! border:1px dotted gray; */
   box-sizing: border-box;
   margin: auto;
   span{
     width:100%;
+    display: inline-block;
+    position: relative;
+    &:not(:empty):before{
+      position: absolute;
+      left: 0px;
+    }
   }
 }
 .dateOfBirth:not(:empty):before{
   content:'*';
-  width:1rem;
-  display: inline-block;
 }
 .dateOfDeath:not(:empty):before{
   content:'†';
-  width:1rem;
-  display: inline-block;
 } 
