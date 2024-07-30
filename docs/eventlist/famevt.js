@@ -62,6 +62,14 @@ class FamilyEvents {
           eventname=events[rec.tag];
         else
           eventname=rec.tag;
+        let type = rec.getFirstSubRecord('TYPE');
+        if(type){
+          eventname+=', ';
+          if (type.value in events)
+            eventname += events[type.value];
+          else
+            eventname += type.value;
+        }
         //document.body.append(eventname);
         let row = document.createElement("tr");
         let cellEvt = document.createElement("td");
