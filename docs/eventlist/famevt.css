@@ -3,3 +3,20 @@
     Author     : nigjo
 */
 
+table{
+  border:1px solid black;
+  border-collapse: collapse;
+  td{
+    text-align: left;
+    &:nth-child(2){
+      font-family: Consolas,monospace;
+      text-align: right;
+      white-space: nowrap;
+      font-size:.9em;
+    }
+  }
+  td,th{
+    border:1px solid gray;
+    padding:.25em;
+  }
+}
