@@ -72,14 +72,20 @@ class FamilyEvents {
         row.append(cellDate);
         let cellIndis = document.createElement("td");
         let list = '?';
+        let names = '';
         if (hid > 0) {
           list = hid;
+          names = fam.getHusband().getIndiName();
           if (wid > 0) {
             list += '+' + wid;
+            names += ' & '+fam.getWife().getIndiName();
           }
-        } else if (wid > 0)
+        } else if (wid > 0) {
+          names = fam.getWife().getIndiName();
           list = wid;
+        }
         cellIndis.textContent = list;
+        cellIndis.title = names;
         row.append(cellIndis);
         let cellPlace = document.createElement("td");
         cellPlace.className = 'place';
