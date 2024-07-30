@@ -15,13 +15,31 @@ class FamilyEvents {
     //document.body.append(fam.id);
     console.log("update");
 
+    //console.log(events);
+    if (!events) {
+      loader.then(() => this.addBaseFamily(fam));
+    } else
+      this.addBaseFamily(fam);
+  }
+
+  addBaseFamily(fam) {
     this.visited = [];
     this.indis = new Map();
-    console.log(events);
-    if (!events) {
-      loader.then(() => this.addFamily(fam));
-    } else
-      this.addFamily(fam);
+
+    this.addFamily(fam);
+    
+    let tbody = document.getElementById('events');
+    while(tbody.children.length<10){
+      let row = document.createElement("tr");
+      let cell = document.createElement("td");
+      
+      cell.textContent=' ';
+      row.append(cell);
+      row.append(document.createElement("td"));
+      row.append(document.createElement("td"));
+      row.append(document.createElement("td"));
+      tbody.append(row);
+    }
   }
 
   addFamily(fam) {
