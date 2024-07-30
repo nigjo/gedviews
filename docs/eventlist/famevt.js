@@ -108,6 +108,14 @@ class FamilyEvents {
     }
 
     fam.getChildren().forEach(c => this.addFamily(c.getFamily()));
+    if(hid>0){
+      fam.getHusband().getFamilies()
+              .forEach(f=>this.addFamily(f));
+    }
+    if(wid>0){
+      fam.getWife().getFamilies()
+              .forEach(f=>this.addFamily(f));
+    }
   }
 
   #register(indi) {
