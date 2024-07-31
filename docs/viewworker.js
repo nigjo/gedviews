@@ -16,7 +16,7 @@
 
 /* global self, caches, Promise, fetch */
 
-//Cache name in format "gedview-<year00><dayofyear000>-<hour00><minute00>"
+//Cache name in format "gedviews-<year00><dayofyear000>-<hour00><minute00>"
 //update on file changes
 self.currentCache = "gedviews-24213-0920";
 
