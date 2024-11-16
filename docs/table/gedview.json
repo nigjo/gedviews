@@ -1,7 +1,7 @@
 {
-  "caption": "Tabelle",
+  "caption": "Liste",
   "resources": [
-    "stammbaum.js",
-    "stammbaum.css"
+    "tableview.js",
+    "tableview.css"
   ]
 }
