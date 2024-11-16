@@ -147,6 +147,7 @@ class IndexPage {
       let target = window.gvplugins.getTarget(this.defaultPlugin)
               || 'selection/index.html';
       view.src = target + '?' + viewfam.id.replace(/@/g, '');
+      document.querySelector('#famidmarker').dataset.famid = viewfam.id;
     } else {
       view.src = this.startPage;
       delete document.querySelector('#famidmarker').dataset.famid;
@@ -160,11 +161,24 @@ class IndexPage {
     return false;
   }
 
-  static updateView(targetLocation) {
+  static updateView(target) {
     console.log(IndexPage.LOGGER, "updateView");
+
+    let targetLocation;
+    if (target instanceof URL) {
+      targetLocation = target;
+    } else {
+      targetLocation = new URL(target);
+    }
+
     let fam = document.querySelector('#famidmarker').dataset.famid;
-    let nextLoc = targetLocation.replace(/\?.*/, '')
-            + '?' + (fam ? fam.replace(/@/g, '') : '');
+    let query = new URLSearchParams();
+    if (fam) {
+      query.set('fam', fam.replace(/@/g, ''));
+    }
+
+    targetLocation.search = query;
+    let nextLoc = targetLocation.toString();
     if (nextLoc !== document.querySelector('#view').contentWindow.location.href) {
       console.log(IndexPage.LOGGER, "set next view to", nextLoc);
       document.querySelector('#view').src = nextLoc;
