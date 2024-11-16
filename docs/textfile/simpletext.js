@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* global GedViews */
+import {GedViews} from '../gedviews.js';
 
 var System = {
   out: {

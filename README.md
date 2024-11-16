@@ -53,13 +53,14 @@ The `ged` parameter is a link to the current `Gedcom` instance.
 
 ### basic scripts
 
-Every plugin must include at least two script files.
+Every plugin must import at least the first of these two script files.
 
-    <script src="../gedcomjs/gedcom.js"></script>
-    <script src="../gedviewer.js"></script>
+    import {GedViews} from '../gedviews.js';
+    //import {Gedcom, Individual, Family} from "../gedcomjs/gedcom.js";
+ 
+At the end of each
 
-The `gedviewer.js` file will handle the stored GEDCOM file and the call
-to the entry point.
+    GedViews.setPage(new MyNewPlugin());
 
 
 ### Switching the current family

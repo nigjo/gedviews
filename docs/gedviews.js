@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 /* global printGedviewFamily, Family, HTMLElement */
-
-"use strict";
-class GedViews {
+import {Gedcom, Family} from './gedcomjs/gedcom.js';
+export class GedViews {
 
   constructor() {
   }
@@ -101,7 +100,7 @@ class GedViews {
   }
 
   static _loadStoredData() {
-    window.addEventListener('DOMContentLoaded', () => {
+    const loader = () => {
       var storedData = window.localStorage.getItem('GEDview.gedfile');
       if (storedData) {
         var ged = new Gedcom();
@@ -111,8 +110,12 @@ class GedViews {
         window.dispatchEvent(new CustomEvent('gedcomLoaded', {detail: ged}));
         return;
       }
-    });
+    };
     window.addEventListener('gedcomLoaded', GedViews._gedcomLoadedHandler);
+    if (document.readyState !== 'loaded')
+      window.addEventListener('DOMContentLoaded', loader);
+    else
+      loader();
   }
 
   static _getHash(message) {
@@ -198,5 +201,11 @@ class GedViews {
     }
   }
 }
+
+window.addEventListener('message', (event) => {
+  console.log('GedViews', event)
+  //GedViews.setPage(event.detail);
+},'http://gedviews.nigjo.de/')
+console.log('GedViews', 'init');
 
 GedViews._loadStoredData();

@@ -19,9 +19,9 @@ limitations under the License.
     <title>Family Selection</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../gedcomjs/gedcom.js"></script>
-    <script src="../gedviews.js"></script>
-    <script src="FamSelector.js"></script>
+<!--    <script src="../gedcomjs/gedcom.js"></script>
+    <script src="../gedviews.js"></script>-->
+    <script type="module" src="FamSelector.js"></script>
     <style>body {font-family:sans-serif;}
       main{display:flex;flex-direction:column;max-height:calc(100vh - 1em);}
       .famcontainer{flex-basis: 100%;overflow-y:auto;}
@@ -40,15 +40,6 @@ limitations under the License.
         main:before{content:"Familienliste";margin:.5em 0;font-size:150%;}
       }
     </style>
-    <script>
-      GedViews.setPage(new FamSelector());
-      function updateSelection(context) {
-        let searchval = context.value;
-        sessionStorage.removeItem('gedview.search.scolltop');
-        let famid = searchval.substring(0, searchval.lastIndexOf('-'));
-        GedViews.switchFamily(famid, false);
-      }
-    </script>
   </head>
   <body>
     <main>

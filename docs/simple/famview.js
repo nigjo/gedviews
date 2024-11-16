@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 /* global GedViews */
+import {GedViews} from '../gedviews.js';
 
 gvlocale.register("famview", null, {
   title: "Familienansicht",

@@ -23,10 +23,9 @@ limitations under the License.
     <link rel="stylesheet" href="res/base.css"/>
     <link rel="apple-touch-icon" href="res/ScetchTree-192.png">
     <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
-    <link rel="manifest" href="./pwa.json">
-    <script src="gedcomjs/gedcom.js"></script>
-    <script src="gedviews.js"></script>
-    <script src="res/base.js"></script>
+    <!--<link rel="manifest" href="./pwa.json">-->
+    <script type="module" src="gedviews.js"></script>
+    <script type="module" src="res/base.js"></script>
     <script src="res/plugins.js"></script>
   </head>
   <body>
@@ -57,7 +56,7 @@ limitations under the License.
                           ondrop="GedViews.getPage().handleDragging(event);"
                           ondragover="GedViews.getPage().handleDragging(event);"
                           ondragleave="GedViews.getPage().handleDragging(event);"
-                          >Datei wählen<input type="file" onchange="GedViews.getPage().viewfile(event)" name="dropfile"></label>
+                          >Datei wählen<input id="fileselector" type="file" onchange="GedViews.getPage().viewfile(event)" name="dropfile"></label>
           </li>
         </ul>
         <ul id="viewselect"></ul>
@@ -68,11 +67,22 @@ limitations under the License.
         </ul>
       </nav>
       <main>
-        <iframe id="view" src="welcome.html" onload="GedViews.getPage().updateSelection(event)"></iframe>
+        <iframe id="view" src="welcome.html"></iframe>
       </main>
       <footer><span>GEDCOM Views by Nigjo</span>
         <span id="version"></span>
       </footer>
     </div>
+    <script type="module">
+      import {GedViews} from './gedviews.js';
+      document.getElementById('fileselector')
+              .addEventListener('change', event =>
+                GedViews.getPage().viewfile(event));
+      document.getElementById('view')
+              .addEventListener('load', event =>
+                GedViews.getPage().updateSelection(event));
+      window.GedViews = GedViews;
+      console.debug('events initialized');
+    </script>
   </body>
 </html>

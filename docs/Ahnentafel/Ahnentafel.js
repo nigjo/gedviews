@@ -16,6 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {Gedcom, Individual, Family} from "../gedcomjs/gedcom.js";
+import {GedViews} from '../gedviews.js';
+
 class FamilyTreePoster {
 
   printGedviewFamily(fam) {

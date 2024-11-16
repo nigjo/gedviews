@@ -15,11 +15,17 @@
  */
 
 /* global GedViews */
+import {GedViews} from '../gedviews.js';
 
 class ServiceManager {
   static LOGGER = "ServiceManager";
   constructor() {
-    let self = this;
+    if(!location.search || !location.search.includes('debug')){
+      this.registerServiceWorker();
+    }
+  }
+  registerServiceWorker(){
+    const self = this;
     navigator.serviceWorker.register('./viewworker.js').then((reg) => {
 
       // registration worked

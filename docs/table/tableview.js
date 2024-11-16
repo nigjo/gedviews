@@ -1,3 +1,5 @@
+import {GedViews} from '../gedviews.js';
+
 class FamilyTable {
 
   constructor() {

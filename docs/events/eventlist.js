@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-/* global Individual, Family */
+import {Gedcom, Individual, Family} from "../gedcomjs/gedcom.js";
+import {GedViews} from '../gedviews.js';
 
 class GedEventsPage {
   printGedviewFamily(fam, ged) {
@@ -133,7 +134,7 @@ class GedEventsPage {
             case "MARR":type.append("⚭");break;
             default:type.append("?");break;
           }
-                  //.append(item.type);
+          //.append(item.type);
           listItem.append(" ");
         }
         if (item.rec instanceof Individual) {

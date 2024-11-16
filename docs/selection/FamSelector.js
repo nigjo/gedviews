@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 /* global GedViews */
+//import {Gedcom, Individual, Family} from "../gedcomjs/gedcom.js";
+import {GedViews} from '../gedviews.js';
 
 class FamSelector {
 
@@ -182,3 +184,12 @@ class FamSelector {
     return storageData;
   }
 }
+
+GedViews.setPage(new FamSelector());
+
+window.updateSelection = function(context) {
+  let searchval = context.value;
+  sessionStorage.removeItem('gedview.search.scolltop');
+  let famid = searchval.substring(0, searchval.lastIndexOf('-'));
+  GedViews.switchFamily(famid, false);
+};
