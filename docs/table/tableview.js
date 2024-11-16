@@ -9,9 +9,11 @@ class FamilyTable {
    * @param {Gedcom} ged 
    */
   printGedviewFamily(fam, ged) {
+    const result = document.createDocumentFragment();
     const tab = document.createElement('table');
+    result.append(tab);
     tab.class = "familytable";
-    tab.id = "fam"+fam.id;
+    tab.id = "fam" + fam.id;
     console.debug('TABLE', fam);
     const head = document.createElement('thead');
     const row = document.createElement('tr');
@@ -38,7 +40,7 @@ class FamilyTable {
     this.addFamily(body, fam);
 
     while (body.childElementCount % 22 > 0
-            && body.childElementCount % 45 > 0) {
+            && body.childElementCount % 40 > 0) {
       const row = document.createElement('tr');
       for (var i = 0; i < 8; i++) {
         let cell = document.createElement('td');
@@ -50,7 +52,53 @@ class FamilyTable {
 
     tab.append(body);
 
-    document.getElementById('content').replaceChildren(tab);
+    /** @type Record */
+    const gData = ged.root.getPath(["HEAD", "DATA"]);
+    console.debug("DATA", gData);
+    if (gData) {
+      let footer = document.querySelector('footer');
+      if (!footer) {
+        footer = document.createElement('footer');
+        document.body.append(footer);
+      }
+      // Info von HEAD.DATA eintragen falls vorhanden.
+      footer.append('Datenquelle: ');
+      if (gData.value.startsWith('http')) {
+        const link = document.createElement('a');
+        link.textContent = gData.value;
+        link.href = gData.value;
+        footer.append(link);
+      } else {
+        footer.append(gData.value);
+      }
+    }
+
+    // Info aus SUBM unter die Tabelle
+    const gSubm = ged.root.getPath(["HEAD", "SUBM", "NAME"]);
+    console.debug("SUBM", gSubm);
+    if (gSubm) {
+      let footer = document.querySelector('footer');
+      if (!footer) {
+        footer = document.createElement('footer');
+        document.body.append(footer);
+      } else {
+        footer.append(', ');
+      }
+
+      footer.append('Contact: ');
+      const mail = gSubm.parent.getFirstSubRecord('EMAIL');
+      console.debug("MAIL", mail);
+      if (mail) {
+        const link = document.createElement('a');
+        link.textContent = gSubm.value + ' <'+mail.value+'>';
+        link.href = 'mailto:' + mail.value;
+        footer.append(link);
+      } else {
+        footer.append(gSubm.value);
+      }
+    }
+
+    document.getElementById('content').replaceChildren(result);
   }
 
   /**
@@ -59,7 +107,7 @@ class FamilyTable {
    * @returns {Number} ID des Eintrags
    */
   addIndividual(parent, indi) {
-    if(!indi){
+    if (!indi) {
       return false;
     }
     const row = document.createElement('tr');
@@ -202,7 +250,7 @@ class FamilyTable {
         parent.children[cId - 1].children[6].textContent = husb;
       }
       let cfam = child.getFamily();
-      if (cfam && !this.visited.includes(cfam.id))  {
+      if (cfam && !this.visited.includes(cfam.id)) {
         let ch = cfam.getHusband() === child ? cId : null;
         let cw = cfam.getWife() === child ? cId : null;
         moreFamilies.push(() => this.addFamily(parent, cfam, ch, cw));
