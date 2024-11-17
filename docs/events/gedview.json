@@ -1,6 +1,6 @@
 {
   "target": "index.html",
-  "caption": "Ereignisse",
+  "caption": "Aktuell",
   "resources": [
     "eventlist.js"
   ]
