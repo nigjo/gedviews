@@ -1,0 +1,8 @@
+{
+  "caption": "Ereignisse",
+  "resources": [
+    "famevt.js",
+    "famevt.css",
+    "events.json"
+  ]
+}
