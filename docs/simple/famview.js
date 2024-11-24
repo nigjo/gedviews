@@ -65,43 +65,43 @@ class FamilyView {
 
     let husb = fam.getHusband();
     if (husb) {
-      this.addIndi(husb, "parents", gvlocale.get("famview.husb"));
+      this.addIndi(husb, "parents", "famview.husb");
       let famc = husb.getParentFamily();
       if (famc) {
-        this.addIndi(famc.getHusband(), "grandparents",
-                gvlocale.get("famview.granddad"), true);
-        this.addIndi(famc.getWife(), "grandparents",
-                gvlocale.get("famview.granny"), true);
+        this.addIndi(famc.getHusband(), "grandparents", "famview.granddad", true);
+        this.addIndi(famc.getWife(), "grandparents", "famview.granny", true);
       } else {
-        this.addIndi(false, "grandparents", gvlocale.get("famview.granddad"));
-        this.addIndi(false, "grandparents", gvlocale.get("famview.granny"));
+        this.addIndi(false, "grandparents", "famview.granddad");
+        this.addIndi(false, "grandparents", "famview.granny");
       }
     }
     let wife = fam.getWife();
     if (wife) {
-      this.addIndi(wife, "parents", gvlocale.get("famview.wife"));
+      this.addIndi(wife, "parents", "famview.wife");
       let famc = wife.getParentFamily();
       if (famc) {
-        this.addIndi(famc.getHusband(), "grandparents", gvlocale.get("famview.granddad"), true);
-        this.addIndi(famc.getWife(), "grandparents", gvlocale.get("famview.granny"), true);
+        this.addIndi(famc.getHusband(), "grandparents", "famview.granddad", true);
+        this.addIndi(famc.getWife(), "grandparents", "famview.granny", true);
       } else {
-        this.addIndi(false, "grandparents", gvlocale.get("famview.granddad"));
-        this.addIndi(false, "grandparents", gvlocale.get("famview.granny"));
+        this.addIndi(false, "grandparents", "famview.granddad");
+        this.addIndi(false, "grandparents", "famview.granny");
       }
     }
 
     let CHILs = fam.getChildren();
     for (let i = 0; i < CHILs.length; i++) {
-      this.addIndi(CHILs[i], "children",
-              gvlocale.get("famview.num_child", i + 1), true);
+      let child = this.addIndi(CHILs[i], "children",
+              "famview.num_child", true);
+      child.querySelector("h2").dataset.gvlocaleArg1 = i + 1;
     }
   }
 
-  addIndi(indi, container, title, findOwnFamily = false) {
+  addIndi(indi, container, titleKey, findOwnFamily = false) {
     let div = document.getElementById("indi").content.cloneNode(true);
     document.getElementById(container).append(div);
     let child = document.getElementById(container).lastElementChild;
-    child.querySelector("h2").append(title);
+    child.querySelector("h2").append(gvlocale.get(titleKey));
+    child.querySelector("h2").dataset.gvlocale = titleKey;
     if (indi) {
       let allPaths = child.querySelectorAll("*[data-gedpath]");
       for (var i = 0; i < allPaths.length; i++) {
@@ -115,7 +115,7 @@ class FamilyView {
               let content = indi.getPath(elsePath);
               if (content) {
                 def.replaceChildren(content.toLocaleString());
-              }else{
+              } else {
                 def.replaceChildren('');
               }
               continue;
