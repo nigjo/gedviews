@@ -39,13 +39,13 @@ footer{
   }
   @media (orientation: portrait){
     /*portrait*/
-    tr:nth-child(45n){
+    tr:nth-child(42n){
       page-break-after: always;
     }
   }
   @media (orientation: landscape){
     /*portrait*/
-    tr:nth-child(22n){
+    tr:nth-child(20n){
       page-break-after: always;
     }
   }
