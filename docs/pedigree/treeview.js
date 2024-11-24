@@ -160,6 +160,9 @@ function createFamily(fam) {
       if (c.getFirstSubRecord('FAMS')) {
         atLeastOneFamily = true;
         let firstfam = c.getFamilies()[0];
+        if (!firstfam) {
+          throw "unable to find family for " + c.toGedString();
+        }
         let famDiv = createFamily(firstfam);
         famDiv.querySelector('#' + getIndiId(c)).classList.add('famc');
         childlist.append(famDiv);
@@ -182,8 +185,8 @@ function createFamily(fam) {
   return content;
 }
 
-class PedigeePage{
-  printGedviewFamily(fam, ged){
+class PedigeePage {
+  printGedviewFamily(fam, ged) {
     updateFamily(fam);
   }
 }
@@ -197,7 +200,7 @@ function updateFamily(fam) {
    */
   //const fam = window.treedata.ged.getFamily(id);
   console.log(fam);
-  
+
   const content = document.createDocumentFragment();
 
   content.append(createFamily(fam));
