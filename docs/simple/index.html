@@ -32,13 +32,19 @@ limitations under the License.
         <div class="indi">
           <div class="row"><h2></h2></div>            
           <div class="row">
+            <span data-gedpath-def="NAME-SURN" data-gedpath-else="NAME">
             <span data-gedpath="NAME-SURN"></span>, <span data-gedpath="NAME-GIVN"></span>
+            </span>
           </div><div class="row">
             <span class="label"><span data-gvlocale="famview.born">geboren</span>:</span>
-            <span data-gedpath="BIRT-DATE"></span> in <span data-gedpath="BIRT-PLAC"></span>
+            <span data-gedpath-def="BIRT-DATE">
+            <span data-gedpath="BIRT-DATE"></span><span data-gedpath-def="BIRT-PLAC">  in <span data-gedpath="BIRT-PLAC"></span>
+            </span></span>
           </div><div class="row">
             <span class="label"><span data-gvlocale="famview.died">gestorben</span>:</span>
-            <span data-gedpath="DEAT-DATE"></span> in <span data-gedpath="DEAT-PLAC"></span>
+            <span data-gedpath-def="DEAT-DATE">
+            <span data-gedpath="DEAT-DATE"></span><span data-gedpath-def="DEAT-PLAC"> in <span data-gedpath="DEAT-PLAC"></span>
+            </span></span>
           </div>
         </div>
       </template>

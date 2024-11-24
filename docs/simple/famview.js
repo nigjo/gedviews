@@ -15,7 +15,6 @@
  */
 /* global GedViews */
 import {GedViews} from '../gedviews.js';
-
 gvlocale.register("famview", null, {
   title: "Familienansicht",
   husb: "Vater",
@@ -24,8 +23,8 @@ gvlocale.register("famview", null, {
   granny: "Großmutter",
   num_child: "{0}. Kind",
   testtext: "Das {1}. Kind ({0})",
-  born:"geboren",
-  died:"gestorben"
+  born: "geboren",
+  died: "gestorben"
 });
 gvlocale.register("famview", "en", {
   title: "Family Overview",
@@ -34,8 +33,8 @@ gvlocale.register("famview", "en", {
   granddad: "Grandfather",
   granny: "Grandmother",
   num_child: "Child #{0}",
-  born:"born",
-  died:"died"
+  born: "born",
+  died: "died"
 });
 
 class FamilyView {
@@ -104,9 +103,28 @@ class FamilyView {
     let child = document.getElementById(container).lastElementChild;
     child.querySelector("h2").append(title);
     if (indi) {
-      let allPaths = child.querySelectorAll("span[data-gedpath]");
+      let allPaths = child.querySelectorAll("*[data-gedpath]");
       for (var i = 0; i < allPaths.length; i++) {
         let path = allPaths[i].dataset.gedpath.split('-');
+        const def = allPaths[i].closest('*[data-gedpath-def]');
+        if (def) {
+          const defPath = def.dataset.gedpathDef.split('-');
+          if (!indi.getPath(defPath)) {
+            if ('gedpathElse' in def.dataset) {
+              const elsePath = def.dataset.gedpathElse.split('-');
+              let content = indi.getPath(elsePath);
+              if (content) {
+                def.replaceChildren(content.toLocaleString());
+              }else{
+                def.replaceChildren('');
+              }
+              continue;
+            }
+            def.style.display = 'none';
+            def.style.width = '0px';
+            continue;
+          }
+        }
         let content = indi.getPath(path);
         if (content) {
           allPaths[i].append(content.toLocaleString());
