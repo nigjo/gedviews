@@ -15,8 +15,25 @@
  */
 import {Gedcom, Individual, Family} from "../gedcomjs/gedcom.js";
 import {GedViews} from '../gedviews.js';
+import '../gvlocale.js';
+gvlocale.register('book', null, {
+  husb: "Ehemann",
+  wife: "Ehefrau",
+  moreInfo:'Weitere Informationen',
+  nthChild: "{0}. Kind",
+  parents: "Eltern",
+  children: "Kinder"
+});
+
+const locales = [
+  gvlocale.registerFile('book', 'en', 'lang_en.json')
+];
 
 class FamilyBookPage {
+  
+  constructor(){
+    console.log('BOOK', 'init');
+  }
 
   applyAttributes(copy, viewdata) {
     for (var key in viewdata) {
@@ -61,6 +78,8 @@ class FamilyBookPage {
   createParent(indi2, type, caption, hints) {
     var copy = this.getTemplate('gedview-parent');
     copy.firstElementChild.setAttribute('data-type', type);
+    copy.firstElementChild.setAttribute('data-caption', 
+    gvlocale.get('book.parents'));
     if (type !== 'wife') {
       this.removeAttribute(copy, 'fams-marr-date');
       this.removeAttribute(copy, 'fams-marr-plac');
@@ -78,6 +97,8 @@ class FamilyBookPage {
 
     var acaption = copy.querySelector('*[data-key="name"]>.attrCaption');
     acaption.textContent = caption + ': ';
+
+    //gvlocale.updateTemplate(copy);
 
     return copy;
   }
@@ -102,11 +123,18 @@ class FamilyBookPage {
     }
 
     copy.firstElementChild.setAttribute('data-num', num);
+    copy.firstElementChild.setAttribute('data-caption', gvlocale.get('book.children'));
 
     this.applyAttributes(copy, viewdata);
 
     var acaption = copy.querySelector('*[data-key="name"]>.attrCaption');
-    acaption.textContent = num + '. Kind: ';
+    var text = document.createElement('span');
+    //TODO: span benötigt!
+    text.dataset.gvlocale="book.nthChild";
+    text.dataset.gvlocaleArg1=num;
+    text.textContent = "Kind";
+    acaption.replaceChildren(text);
+    acaption.append(': ');
 
     return copy;
   }
@@ -195,10 +223,10 @@ class FamilyBookPage {
     this.moreInformations = [];
 
     parentdiv.appendChild(this.createParent(fam.getHusband(),
-            'husb', 'Ehemann'));
+            'husb', gvlocale.get('book.husb')));
     this.findMarriages(fam.getHusband(), fam.id);
     parentdiv.appendChild(this.createParent(fam.getWife(),
-            'wife', 'Ehefrau'));
+            'wife', gvlocale.get('book.wife')));
     this.findMarriages(fam.getWife(), fam.id);
 
     var childdiv = page.appendChild(document.createElement('div'));
@@ -234,7 +262,10 @@ class FamilyBookPage {
     notediv.classList.add('note');
     var caption = notediv.appendChild(document.createElement('span'));
     caption.classList.add('attrCaption');
-    caption.append('Sonstige Informationen:');
+    let moreInfos = document.createElement('span');
+    moreInfos.textContent = gvlocale.get('book.moreInfo');
+    caption.append(moreInfos);
+    caption.append(':');
     for (let entry of this.moreInformations) {
       let line = notediv.appendChild(document.createElement("p"));
       if ("fam" in entry) {
@@ -305,4 +336,7 @@ class FamilyBookPage {
   }
 }
 
-GedViews.setPage(new FamilyBookPage());
+//set page if all locales are loaded
+Promise.all(locales).then(() =>
+  GedViews.setPage(new FamilyBookPage())
+);

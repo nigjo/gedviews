@@ -132,7 +132,7 @@ header>h1[data-famid]:after{
 }
 .gedview-page[data-num="1"] .gedview-child:first-child:before{
   background-color:lightgray;
-  content:'Kinder';
+  content: attr(data-caption);
   width:100%;
   font-size:1.5em;
 }
@@ -151,10 +151,10 @@ header>h1[data-famid]:after{
   main{font-size:inherit;}
   .gedview-child,.gedview-child{z-index:-1}
   .gedview-parent:first-child:before{
-    content:'Eltern';
+    content: attr(data-caption);
   }
   .gedview-child:first-child:before{
-    content:'Kinder';
+    content: attr(data-caption);
     border-bottom:1px solid gray;
     box-sizing:border-box;
   }

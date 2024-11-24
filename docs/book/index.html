@@ -16,7 +16,7 @@ limitations under the License.
 -->
 <html>
   <head>
-    <title>Familienbogen</title>
+    <title data-gvlocale="book.title">Familienbogen</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="book.css"/>
@@ -24,12 +24,12 @@ limitations under the License.
   </head>
   <body>
     <header>
-      <h1>Familienbogen</h1>
+      <h1 data-gvlocale="book.title">Familienbogen</h1>
     </header>
     <template id="gedview-title">
       <div class="gedview-page gedview-titlepage">
         <div class="centerer">
-          <p class="title">Familienbuch</p>
+          <p class="title" data-gvlocale="book.caption">Familienbuch</p>
           <p data-key="husb-name"></p>
           <p>-</p>
           <p data-key="wife-name"></p>
@@ -38,30 +38,30 @@ limitations under the License.
     </template>
     <template id="gedview-parent">
       <div class="gedview-parent">
-        <div class="gedview-attr" data-key="name" data-view="full"><span class="attrCaption">Name: </span></div>
-        <div class="gedview-attr" data-key="birt-date" data-view="quart"><span class="attrCaption">Geburtsdatum: </span></div>
-        <div class="gedview-attr" data-key="birt-plac" data-view="threequart"><span class="attrCaption">Geburtsort: </span></div>
-        <div class="gedview-attr" data-key="deat-date" data-view="quart"><span class="attrCaption">Sterbedatum: </span></div>
-        <div class="gedview-attr" data-key="deat-plac" data-view="threequart"><span class="attrCaption">Sterbeort: </span></div>
-        <div class="gedview-attr" data-key="famc-husb-name" data-linkto="famc"><span class="attrCaption">Vater: </span></div>
-        <div class="gedview-attr" data-key="famc-wife-name" data-linkto="famc"><span class="attrCaption">Mutter: </span></div>
-        <div class="gedview-attr" data-key="note" data-view="full"><span class="attrCaption">Notizen: </span></div>
-        <div class="gedview-attr" data-key="fams-marr-date" data-view="quart"><span class="attrCaption">Hochzeitsdatum: </span></div>
-        <div class="gedview-attr" data-key="fams-marr-plac" data-view="threequart"><span class="attrCaption">Hochzeitsort: </span></div>
+        <div class="gedview-attr" data-key="name" data-view="full"><span class="attrCaption"><span data-gvlocale="book.name">Name</span>: </span></div>
+        <div class="gedview-attr" data-key="birt-date" data-view="quart"><span class="attrCaption"><span data-gvlocale="book.birthdate">Geburtsdatum</span>: </span></div>
+        <div class="gedview-attr" data-key="birt-plac" data-view="threequart"><span class="attrCaption"><span data-gvlocale="book.birthplace">Geburtsort</span>: </span></div>
+        <div class="gedview-attr" data-key="deat-date" data-view="quart"><span class="attrCaption"><span data-gvlocale="book.deatplace">Sterbedatum</span>: </span></div>
+        <div class="gedview-attr" data-key="deat-plac" data-view="threequart"><span class="attrCaption"><span data-gvlocale="book.deatplace">Sterbeort</span>: </span></div>
+        <div class="gedview-attr" data-key="famc-husb-name" data-linkto="famc"><span class="attrCaption"><span data-gvlocale="book.father">Vater</span>: </span></div>
+        <div class="gedview-attr" data-key="famc-wife-name" data-linkto="famc"><span class="attrCaption"><span data-gvlocale="book.mother">Mutter</span>: </span></div>
+        <div class="gedview-attr" data-key="note" data-view="full"><span class="attrCaption"><span data-gvlocale="book.notes">Notizen</span>: </span></div>
+        <div class="gedview-attr" data-key="fams-marr-date" data-view="quart"><span class="attrCaption"><span data-gvlocale="book.marrdate">Hochzeitsdatum</span>: </span></div>
+        <div class="gedview-attr" data-key="fams-marr-plac" data-view="threequart"><span class="attrCaption"><span data-gvlocale="book.marrplace">Hochzeitsort</span>: </span></div>
       </div>
     </template>
     <template id="gedview-child">
       <div class="gedview-child" data-num="">
-        <div class="gedview-attr" data-key="name" data-view="threequart"><span class="attrCaption">Name: </span></div>
-        <div class="gedview-attr" data-key="sex" data-view="quart"><span class="attrCaption">Geschlecht: </span></div>
-        <div class="gedview-attr" data-key="birt-date" data-view="quart"><span class="attrCaption">Geburtsdatum: </span></div>
-        <div class="gedview-attr" data-key="birt-plac" data-view="threequart"><span class="attrCaption">Geburtsort: </span></div>
-        <div class="gedview-attr" data-key="deat-date" data-view="quart"><span class="attrCaption">Sterbedatum: </span></div>
-        <div class="gedview-attr" data-key="deat-plac" data-view="threequart"><span class="attrCaption">Sterbeort: </span></div>
-        <div class="gedview-attr" data-key="fams-marr-date" data-linkto="fams" data-view="quart"><span class="attrCaption">Hochzeitsdatum: </span></div>
-        <div class="gedview-attr" data-key="fams-marr-plac" data-linkto="fams" data-view="threequart"><span class="attrCaption">Hochzeitsort: </span></div>
-        <div class="gedview-attr" data-key="fams-spou-name" data-linkto="fams" data-view="full"><span class="attrCaption">Ehepartner/in: </span></div>
-        <div class="gedview-attr" data-key="note" data-view="full"><span class="attrCaption">Notizen: </span></div>
+        <div class="gedview-attr" data-key="name" data-view="threequart"><span class="attrCaption"><span data-gvlocale="book.name">Name</span>: </span></div>
+        <div class="gedview-attr" data-key="sex" data-view="quart"><span class="attrCaption"><span data-gvlocale="book.sex">Geschlecht</span>: </span></div>
+        <div class="gedview-attr" data-key="birt-date" data-view="quart"><span class="attrCaption"><span data-gvlocale="book.birthdate">Geburtsdatum</span>: </span></div>
+        <div class="gedview-attr" data-key="birt-plac" data-view="threequart"><span class="attrCaption"><span data-gvlocale="book.birthplace">Geburtsort</span>: </span></div>
+        <div class="gedview-attr" data-key="deat-date" data-view="quart"><span class="attrCaption"><span data-gvlocale="book.deatplace">Sterbedatum</span>: </span></div>
+        <div class="gedview-attr" data-key="deat-plac" data-view="threequart"><span class="attrCaption"><span data-gvlocale="book.deatplace">Sterbeort</span>: </span></div>
+        <div class="gedview-attr" data-key="fams-marr-date" data-linkto="fams" data-view="quart"><span class="attrCaption"><span data-gvlocale="book.marrdate">Hochzeitsdatum</span>: </span></div>
+        <div class="gedview-attr" data-key="fams-marr-plac" data-linkto="fams" data-view="threequart"><span class="attrCaption"><span data-gvlocale="book.marrplace">Hochzeitsort</span>: </span></div>
+        <div class="gedview-attr" data-key="fams-spou-name" data-linkto="fams" data-view="full"><span class="attrCaption"><span data-gvlocale="book.spouce">Ehepartner/in</span>: </span></div>
+        <div class="gedview-attr" data-key="note" data-view="full"><span class="attrCaption"><span data-gvlocale="book.notes">Notizen</span>: </span></div>
       </div>
     </template><template id="gedview-note">
       <div class="note"></div>
