@@ -60,15 +60,15 @@ function createIndividual(indi) {
   const names = {};
   for (var item of nameRecs) {
     const typeRec = item.getFirstSubRecord('TYPE');
-    const nameParts = item.value.match(/(.*?) \/(.*?)\//);
+    const nameParts = item.value.match(/(.*? ?)\/(.*?)\//);
     if (typeRec) {
       names[typeRec.value.toLowerCase()] = {
-        givn: item.getSubValue('GIVN', nameParts ? nameParts[1] : '?'),
+        givn: item.getSubValue('GIVN', nameParts ? nameParts[1].trim() : '?'),
         surn: item.getSubValue('SURN', nameParts ? nameParts[2] : '?')
       };
     } else {
       names[0] = {
-        givn: item.getSubValue('GIVN', nameParts ? nameParts[1] : '?'),
+        givn: item.getSubValue('GIVN', nameParts ? nameParts[1].trim() : '?'),
         surn: item.getSubValue('SURN', nameParts ? nameParts[2] : '?')
       };
     }
