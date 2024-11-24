@@ -93,6 +93,7 @@ export class GedViews {
 
   static setPage(GedviewPage) {
     window.gedviewPage = GedviewPage;
+    document.dispatchEvent(new CustomEvent('pageUpdate'));
   }
 
   static getPage() {
@@ -111,7 +112,15 @@ export class GedViews {
         return;
       }
     };
-    window.addEventListener('gedcomLoaded', GedViews._gedcomLoadedHandler);
+    Promise.all([
+      new Promise(ok => window.addEventListener('gedcomLoaded', ok)),
+      new Promise(ok => document.addEventListener('pageUpdate', ok))
+    ]).then(handlers => {
+      GedViews._gedcomLoadedHandler(handlers[0]);
+      if ('gvlocale' in window) {
+        gvlocale.localizePage();
+      }
+    });
     if (document.readyState !== 'loaded')
       window.addEventListener('DOMContentLoaded', loader);
     else
@@ -203,9 +212,9 @@ export class GedViews {
 }
 
 window.addEventListener('message', (event) => {
-  console.log('GedViews', event)
+  console.log('GedViews', event);
   //GedViews.setPage(event.detail);
-},'http://gedviews.nigjo.de/')
+}, 'http://gedviews.nigjo.de/');
 console.log('GedViews', 'init');
 
 GedViews._loadStoredData();
